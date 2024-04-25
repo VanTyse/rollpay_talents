@@ -8,7 +8,6 @@ import {
   CreateExternalInvoice,
   CreateInternalInvoice,
 } from "./CreateInvoiceModals"
-import SendEmail from "@/components/general/SendEmail"
 import Image from "next/image"
 import { Project } from "@/lib/types"
 import { projects } from "@/lib/mockData"
@@ -38,7 +37,7 @@ export default function HomePage() {
   }
   return (
     <main className="">
-      <header className="flex items-center justify-between bg-white px-4 pb-3 pt-6 lg:bg-inherit lg:px-0 lg:pb-0 lg:pt-0">
+      <header className="flex items-center justify-between bg-white px-4 pb-3 pt-6 lg:mb-6 lg:bg-inherit lg:px-0 lg:pb-0 lg:pt-0">
         <div className="flex lg:hidden">
           <div
             className="flex cursor-pointer items-center gap-2"
@@ -123,14 +122,6 @@ export default function HomePage() {
           Upcoming Payments
         </h1>
         <div className="rounded-2xl bg-white px-4 py-4 md:px-6">
-          {/* <div className="flex h-[140px] w-full flex-col items-center justify-center md:h-[250px]">
-            <h1 className="text-rp-grey-1100 mb-1 text-center font-semibold">
-              No upcoming payments
-            </h1>
-            <h3 className="text-center text-xs">
-              Your upcoming payments will appear here
-            </h3>
-          </div> */}
           {Array(3)
             .fill(null)
             .map((_, index) => (

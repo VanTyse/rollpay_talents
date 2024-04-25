@@ -1,4 +1,4 @@
-import { Paperwork, Project } from "./types"
+import { Paperwork, Payment, Project } from "./types"
 
 export const projects: Project[] = [
   {
@@ -43,5 +43,88 @@ export const paperworks: Paperwork[] = [
     updated_at: new Date().toDateString(),
     last_opened: new Date().toDateString(),
     file_url: "",
+  },
+  {
+    title: "Rollpay Arica Policy 4",
+    created_at: new Date().toDateString(),
+    updated_at: new Date().toDateString(),
+    last_opened: new Date().toDateString(),
+    file_url: "",
+  },
+  {
+    title: "Rollpay Arica Policy 5",
+    created_at: new Date().toDateString(),
+    updated_at: new Date().toDateString(),
+    last_opened: new Date().toDateString(),
+    file_url: "",
+  },
+  {
+    title: "Rollpay Arica Policy 6",
+    created_at: new Date().toDateString(),
+    updated_at: new Date().toDateString(),
+    last_opened: new Date().toDateString(),
+    file_url: "",
+  },
+  {
+    title: "Rollpay Arica Policy 7",
+    created_at: new Date().toDateString(),
+    updated_at: new Date().toDateString(),
+    last_opened: new Date().toDateString(),
+    file_url: "",
+  },
+]
+
+export const payments: Payment[] = [
+  {
+    amount: 20000,
+    status: "pending",
+    category: "production",
+    created_at: new Date().toDateString(),
+    invoice: {
+      title: "INV 001",
+      created_at: new Date().toDateString(),
+      updated_at: new Date().toDateString(),
+      last_opened: new Date().toDateString(),
+      file_url: "",
+    },
+  },
+  {
+    amount: 230000,
+    status: "pending",
+    category: "legal",
+    created_at: new Date().toDateString(),
+    invoice: {
+      title: "INV 002",
+      created_at: new Date().toDateString(),
+      updated_at: new Date().toDateString(),
+      last_opened: new Date().toDateString(),
+      file_url: "",
+    },
+  },
+  {
+    amount: 180000,
+    status: "success",
+    category: "accomodation",
+    created_at: new Date().toDateString(),
+    invoice: {
+      title: "INV 003",
+      created_at: new Date().toDateString(),
+      updated_at: new Date().toDateString(),
+      last_opened: new Date().toDateString(),
+      file_url: "",
+    },
+  },
+  {
+    amount: 40000,
+    status: "failed",
+    category: "salary",
+    created_at: new Date().toDateString(),
+    invoice: {
+      title: "INV 004",
+      created_at: new Date().toDateString(),
+      updated_at: new Date().toDateString(),
+      last_opened: new Date().toDateString(),
+      file_url: "",
+    },
   },
 ]

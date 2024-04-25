@@ -29,3 +29,17 @@ export interface Paperwork {
   last_opened: string
   file_url: string
 }
+
+export interface Payment {
+  amount: number
+  status: "pending" | "success" | "failed"
+  category:
+    | "accomodation"
+    | "transportation"
+    | "logistics"
+    | "salary"
+    | "legal"
+    | "production"
+  created_at: string
+  invoice: Paperwork
+}

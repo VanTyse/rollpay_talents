@@ -10,7 +10,7 @@ export default function BottomMavigation() {
   return (
     <nav className="fixed bottom-0 left-0 z-10 w-full rounded-t-3xl bg-white px-6 pb-10 pt-4 shadow-bottom_nav lg:hidden">
       <div className="flex items-center justify-between">
-        {nav_items.map((item) => {
+        {nav_items.map((item, index) => {
           const active =
             (currentPath === "/app" && item.href !== "/app") ||
             (currentPath !== "/app" && item.href === "/app")
@@ -20,6 +20,7 @@ export default function BottomMavigation() {
             <Link
               href={item.href}
               className={`flex flex-col items-center gap-1.5 ${active ? "text-rp-blue-dark" : "text-rp-grey-900"}`}
+              key={index}
             >
               <div
                 className={`${active ? "text-rp-green-100" : "text-rp-grey-900"}`}

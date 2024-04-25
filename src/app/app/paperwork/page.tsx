@@ -5,7 +5,7 @@ import { paperworks } from "@/lib/mockData"
 
 export default function PaperworkPage() {
   return (
-    <main>
+    <main className="pb-32 md:pb-0">
       <header className="mb-4 flex items-start justify-between pt-6 md:mb-4 md:pb-3 lg:bg-inherit lg:px-4">
         <div>
           <h1 className="mb-1 font-space_grotesk text-xl font-bold text-rp-grey-200 md:text-[30px]">

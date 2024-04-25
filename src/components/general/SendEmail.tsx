@@ -55,7 +55,7 @@ export default function ({
         <div className="mb-4">
           <h2 className="mb-1.5 text-sm font-medium text-rp-grey-300">To</h2>
           <div
-            className="relative flex min-h-[40px] w-full flex-wrap items-center gap-3 rounded-2xl border-2 border-rp-grey-border px-3.5 py-2.5 shadow-input shadow-input"
+            className="relative flex min-h-[40px] w-full flex-wrap items-center gap-3 rounded-2xl border-2 border-rp-grey-border px-3.5 py-2.5 shadow-input"
             onClick={() => setShowProjects((x) => !x)}
           >
             {selectedprojects.map((project, index) => {
