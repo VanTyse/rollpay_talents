@@ -1,43 +1,45 @@
 "use client"
-import { useMemo, useState } from "react"
-import { projects } from "@/lib/mockData"
+import { useContext, useMemo, useState } from "react"
+
 import alphabetToNumber from "@/lib/utils/alphabetToNumber"
 import { twMerge } from "tailwind-merge"
 import Icon from "../Icons/Icon"
 import Modal from "../general/Modal"
 import { Project } from "@/lib/types"
+import { ProjectContext } from "@/lib/context/ProjectContext"
 
 export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState(projects[0])
+  const { selectedProject, updateSelectedProject, projects } =
+    useContext(ProjectContext)
+
   const [showProjectOptions, setShowProjectOptions] = useState(false)
   const selectProject = (project: Project) => {
-    setSelectedProject(project)
+    updateSelectedProject && updateSelectedProject(project)
     setShowProjectOptions(false)
   }
-  return (
-    <div>
-      <div
-        className="mb-6 flex cursor-pointer items-center gap-2"
-        onClick={() => setShowProjectOptions(true)}
-      >
-        <ProfileLetter
-          name={selectedProject.project_name}
-          className="rounded-lg"
-        />
-        <div className="flex items-center">
-          <p className="text-rp-grey-1100 font-bold">
-            {selectedProject.project_name}
-          </p>
-          <Icon name="caret_down" />
+  if (selectedProject)
+    return (
+      <div>
+        <div
+          className="mb-6 flex cursor-pointer items-center gap-2"
+          onClick={() => setShowProjectOptions(true)}
+        >
+          <ProfileLetter name={selectedProject.name} className="rounded-lg" />
+          <div className="flex items-center">
+            <p className="font-bold text-rp-grey-1100">
+              {selectedProject.name}
+            </p>
+            <Icon name="caret_down" />
+          </div>
         </div>
+        <ProjectOptionsModal
+          projects={projects}
+          show={showProjectOptions}
+          selectProject={selectProject}
+          closeModal={() => setShowProjectOptions(false)}
+        />
       </div>
-      <ProjectOptionsModal
-        show={showProjectOptions}
-        selectProject={selectProject}
-        closeModal={() => setShowProjectOptions(false)}
-      />
-    </div>
-  )
+    )
 }
 
 export const ProfileLetter = ({
@@ -70,9 +72,11 @@ export const ProfileLetter = ({
 
 const ProjectOptionsModal = ({
   show,
+  projects,
   closeModal,
   selectProject,
 }: {
+  projects: Project[]
   show: boolean
   closeModal: () => void
   selectProject: (project: Project) => void
@@ -82,14 +86,13 @@ const ProjectOptionsModal = ({
       <div className="absolute top-[220px] flex w-[360px] flex-col gap-4 rounded-lg bg-white px-4 py-6">
         {projects.map((project) => (
           <div
+            key={project.id}
             className="flex cursor-pointer items-center justify-between"
             onClick={() => selectProject(project)}
           >
             <div className="flex items-center gap-4">
-              <ProfileLetter name={project.project_name} />
-              <p className="text-rp-grey-1100 font-bold">
-                {project.project_name}
-              </p>
+              <ProfileLetter name={project.name} />
+              <p className="font-bold text-rp-grey-1100">{project.name}</p>
             </div>
             <Icon name="three_dot_menu" />
           </div>

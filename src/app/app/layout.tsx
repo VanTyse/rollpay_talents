@@ -11,7 +11,7 @@ export default function AppLayout({
     <div className="grid h-screen overflow-hidden bg-rp-grey-700 lg:grid-cols-[minmax(280px,18%)_1fr]">
       <Sidebar />
       <div className="overflow-y-auto p-0 lg:px-4">
-        <div className="px-4 py-4 lg:px-0 lg:py-6">{children}</div>
+        <div className="">{children}</div>
         <BottomMavigation />
       </div>
     </div>

@@ -3,17 +3,17 @@
 import Image from "next/image"
 import Icon from "../Icons/Icon"
 import { ProfileLetter } from "./Projects"
-import { projects } from "@/lib/mockData"
+
 import { Project } from "@/lib/types"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { ProjectContext } from "@/lib/context/ProjectContext"
 
 export default function Header() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(
-    projects[0]
-  )
+  const { projects, selectedProject, updateSelectedProject } =
+    useContext(ProjectContext)
   const [showProjectOptions, setShowProjectOptions] = useState(false)
   const selectProject = (project: Project) => {
-    setSelectedProject(project)
+    updateSelectedProject && updateSelectedProject(project)
     setShowProjectOptions(false)
   }
   return (
@@ -24,16 +24,11 @@ export default function Header() {
           // onClick={() => setShowProjectOptions(true)}
         >
           {selectedProject && (
-            <ProfileLetter
-              name={selectedProject.project_name}
-              className="rounded-lg"
-            />
+            <ProfileLetter name={selectedProject.name} className="rounded-lg" />
           )}
           <div className="flex items-center">
-            <p className="text-rp-grey-1100 text-xl font-bold">
-              {selectedProject
-                ? selectedProject.project_name
-                : "No projects yet"}
+            <p className="text-xl font-bold text-rp-grey-1100">
+              {selectedProject ? selectedProject.name : "No projects yet"}
             </p>
             <Icon name="caret_down" />
           </div>

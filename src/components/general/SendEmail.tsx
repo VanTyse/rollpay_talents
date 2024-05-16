@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import Icon from "../Icons/Icon"
 import Modal from "./Modal"
 import { Project } from "@/lib/types"
-import { projects } from "@/lib/mockData"
+
 import { ProfileLetter } from "../layouts/Projects"
 import TextArea from "../forms/TextArea"
 import Checkbox from "./Checkbox"
 import Button from "./Button"
+import { ProjectContext } from "@/lib/context/ProjectContext"
 
 interface Props {
   title?: string
@@ -24,7 +25,7 @@ export default function ({
   const [showProjects, setShowProjects] = useState(false)
 
   const selectAProject = (project: Project) => {
-    if (selectedprojects.find((p) => p.project_id === project.project_id)) {
+    if (selectedprojects.find((p) => p.id === project.id)) {
       setShowProjects(false)
       return
     } else setSelectedprojects((p) => [...p, project])
@@ -36,9 +37,7 @@ export default function ({
     project: Project
   ) => {
     e.stopPropagation()
-    setSelectedprojects((p) =>
-      p.filter((p) => p.project_id !== project.project_id)
-    )
+    setSelectedprojects((p) => p.filter((p) => p.id !== project.id))
   }
 
   return (
@@ -61,15 +60,15 @@ export default function ({
             {selectedprojects.map((project, index) => {
               return (
                 <div
-                  className="border-rp-green-100 flex w-fit items-center gap-1 rounded-full border p-0.5 px-1"
+                  className="flex w-fit items-center gap-1 rounded-full border border-rp-green-100 p-0.5 px-1"
                   key={index}
                 >
                   <ProfileLetter
-                    name={project.project_name}
+                    name={project.name}
                     className="aspect-square h-5 w-5 rounded-full text-xs"
                   />
                   <h1 className="text-sm font-medium text-rp-grey-300">
-                    {project.project_name}
+                    {project.name}
                   </h1>
                   <button onClick={(e) => removeAproject(e, project)}>
                     <Icon name="close" />
@@ -85,8 +84,8 @@ export default function ({
           <TextArea placeholder="Type here..." className="h-28"></TextArea>
         </div>
         <div className="mb-4 w-full border-[.5px] border-rp-grey-border"></div>
-        <div className="border-rp-green-100 mb-4 flex items-center gap-4 rounded-2xl border px-[18px] py-4">
-          <div className="bg-rp-green-200 flex aspect-square h-10 w-10 items-center justify-center rounded-full">
+        <div className="mb-4 flex items-center gap-4 rounded-2xl border border-rp-green-100 px-[18px] py-4">
+          <div className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-rp-green-200">
             <Icon name="file" />
           </div>
           <div className="flex-1">
@@ -108,9 +107,10 @@ const Projects = ({
 }: {
   selectProject: (project: Project) => void
 }) => {
+  const { projects } = useContext(ProjectContext)
   return (
     <div
-      className=" shadow-large absolute left-2 top-2 min-w-[300px] rounded-2xl bg-white px-4 py-2"
+      className=" absolute left-2 top-2 min-w-[300px] rounded-2xl bg-white px-4 py-2 shadow-large"
       onClick={(e) => e.stopPropagation()}
     >
       {projects.map((project, index) => {
@@ -120,9 +120,9 @@ const Projects = ({
             className="flex cursor-pointer items-center gap-2 py-2"
             onClick={() => selectProject(project)}
           >
-            <ProfileLetter name={project.project_name} />
-            <h1 className="text-rp-grey-1100 text-xs font-semibold">
-              {project.project_name}
+            <ProfileLetter name={project.name} />
+            <h1 className="text-xs font-semibold text-rp-grey-1100">
+              {project.name}
             </h1>
           </div>
         )

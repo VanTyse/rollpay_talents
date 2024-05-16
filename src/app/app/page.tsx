@@ -3,19 +3,28 @@
 import Icon from "@/components/Icons/Icon"
 import Button from "@/components/general/Button"
 import CreateInvoiceOptionsModal from "./createInvoiceOptionsModal"
-import { useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import {
   CreateExternalInvoice,
   CreateInternalInvoice,
 } from "./CreateInvoiceModals"
 import Image from "next/image"
 import { Project } from "@/lib/types"
-import { projects } from "@/lib/mockData"
+
 import { ProfileLetter } from "@/components/layouts/Projects"
+import RequestPaymentModal from "./payments/RequestPaymentModal"
+import { AuthContext } from "@/lib/context/AuthContext"
+import Avatar from "@/components/general/Avatar"
+import { ProjectContext } from "@/lib/context/ProjectContext"
+import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContex"
+import formatDateString from "@/lib/utils/formatDateString"
+import Link from "next/link"
 
 type InvoiceType = { external: boolean } | { internal: boolean }
 
 export default function HomePage() {
+  const { userDetails } = useContext(AuthContext)
+
   const [showCreateInvoiceOptionsModal, setShowCreateInvoiceOptionsModal] =
     useState(false)
   const showCreateInvoiceOptions = () => setShowCreateInvoiceOptionsModal(true)
@@ -24,20 +33,37 @@ export default function HomePage() {
     internal: false,
   })
 
+  const [showRequestPaymentModal, setShowRequestPaymentModal] = useState(false)
+
   const selectInvoiceType = (invoiceType: InvoiceType) =>
     setSelectedInvoiceType((s) => ({ ...s, ...invoiceType }))
 
-  const [selectedProject, setSelectedProject] = useState<Project | null>(
-    projects[0]
+  const { selectedProject } = useContext(ProjectContext)
+
+  const { paymentRequests } = useContext(PaymentRequestContext)
+
+  const successfullPayments = useMemo(() => {
+    return paymentRequests.filter((p) => p.status.toLowerCase() === "approved")
+  }, [paymentRequests])
+
+  const pendingPayments = useMemo(() => {
+    return paymentRequests.filter((p) => p.status.toLowerCase() === "pending")
+  }, [paymentRequests])
+
+  const upcomingPaymentRequests = useMemo(() => {
+    return pendingPayments
+      .sort((a, b) => (new Date(a.dueDate) < new Date(b.dueDate) ? 1 : -1))
+      .slice(0, 3)
+  }, [pendingPayments])
+
+  const projectEarnings = useMemo(
+    () => successfullPayments.reduce((acc, curr) => acc + +curr.amount, 0),
+    [successfullPayments]
   )
-  const [showProjectOptions, setShowProjectOptions] = useState(false)
-  const selectProject = (project: Project) => {
-    setSelectedProject(project)
-    setShowProjectOptions(false)
-  }
+
   return (
-    <main className="">
-      <header className="flex items-center justify-between bg-white px-4 pb-3 pt-6 lg:mb-6 lg:bg-inherit lg:px-0 lg:pb-0 lg:pt-0">
+    <main className="px-4 py-4 lg:px-0 lg:py-6">
+      <header className="mb-6 flex items-center justify-between bg-white px-4 pb-3 pt-6 lg:mb-6 lg:bg-inherit lg:px-0 lg:pb-0 lg:pt-0">
         <div className="flex lg:hidden">
           <div
             className="flex cursor-pointer items-center gap-2"
@@ -45,36 +71,34 @@ export default function HomePage() {
           >
             {selectedProject && (
               <ProfileLetter
-                name={selectedProject.project_name}
+                name={selectedProject.name}
                 className="rounded-lg"
               />
             )}
             <div className="flex items-center">
-              <p className="text-rp-grey-1100 text-xl font-bold">
-                {selectedProject
-                  ? selectedProject.project_name
-                  : "No projects yet"}
+              <p className="text-xl font-bold text-rp-grey-1100">
+                {selectedProject ? selectedProject.name : "No projects yet"}
               </p>
               <Icon name="caret_down" />
             </div>
           </div>
         </div>
 
-        <h1 className="hidden font-space_grotesk text-[30px] font-bold text-rp-grey-200 lg:block">
-          Hi, Ayomide
+        <h1 className="hidden font-space_grotesk text-[30px] font-bold capitalize text-rp-grey-200 lg:block">
+          Hi, {userDetails?.firstName} {userDetails?.lastName}
         </h1>
         <div className="flex items-center gap-10">
           <Icon name="bell" />
-          <Image
-            width={40}
-            height={40}
-            src={"/images/avatar.png"}
-            alt="avatar"
-          />
+          {userDetails && (
+            <Avatar
+              avatar={userDetails.avatar}
+              firstName={userDetails.firstName}
+            />
+          )}
         </div>
       </header>
 
-      <div className="text-rp-grey-1200 relative mb-4 flex flex-col gap-2 rounded-2xl bg-rp-primary px-4 py-6 md:gap-16 md:px-6 md:py-10">
+      <div className="relative mb-4 flex flex-col gap-2 rounded-2xl bg-rp-primary px-4 py-6 text-rp-grey-1200 md:gap-16 md:px-6 md:py-10">
         <div className="flex items-center justify-between">
           <h1 className="text-xs md:text-base">Project Earnings</h1>
           <div className="relative z-10">
@@ -82,7 +106,7 @@ export default function HomePage() {
           </div>
         </div>
         <h1 className="text-xl font-semibold text-rp-grey-600 md:text-2xl lg:text-3xl">
-          N30,000,000
+          N{projectEarnings.toLocaleString()}
         </h1>
         <img
           src="/images/logo_icon_blue.png"
@@ -96,21 +120,24 @@ export default function HomePage() {
           onClick={showCreateInvoiceOptions}
         >
           <div className="flex items-center gap-3">
-            <div className="border-rp-green-100 flex aspect-square h-10 w-10 items-center justify-center rounded-full border">
+            <div className="flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-rp-green-100">
               <Icon name="create_invoice_icon" />
             </div>
-            <span className="text-rp-grey-1100 font-semibold">
+            <span className="font-semibold text-rp-grey-1100">
               Create Invoice
             </span>
           </div>
           <Icon name="caret_right" />
         </button>
-        <button className="flex w-full items-center justify-between rounded-2xl bg-white p-4 md:basis-1/2">
+        <button
+          className="flex w-full items-center justify-between rounded-2xl bg-white p-4 md:basis-1/2"
+          onClick={() => setShowRequestPaymentModal(true)}
+        >
           <div className="flex items-center gap-3">
-            <div className="border-rp-green-100 flex aspect-square h-10 w-10 items-center justify-center rounded-full border">
+            <div className="flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-rp-green-100">
               <Icon name="request_payment_icon" />
             </div>
-            <span className="text-rp-grey-1100 font-semibold">
+            <span className="font-semibold text-rp-grey-1100">
               Request Payment
             </span>
           </div>
@@ -122,55 +149,60 @@ export default function HomePage() {
           Upcoming Payments
         </h1>
         <div className="rounded-2xl bg-white px-4 py-4 md:px-6">
-          {Array(3)
-            .fill(null)
-            .map((_, index) => (
-              <div
-                className="border-b-[.5px] border-rp-grey-500 py-2 last-of-type:border-none md:py-4"
-                key={index}
-              >
-                <h1 className="text-rp-grey-1100 mb-1 font-semibold">
-                  15,000,000.00
-                </h1>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs ">Due 24th March, 2024</h3>
-                  <Button variant="neutral" className="decoration-rp-green-100">
-                    <span className="text-rp-green-100 text-xs font-semibold">
-                      View
-                    </span>
-                  </Button>
-                </div>
+          {upcomingPaymentRequests.map((payment, index) => (
+            <div
+              className="border-b-[.5px] border-rp-grey-500 py-2 last-of-type:border-none md:py-4"
+              key={index}
+            >
+              <h1 className="mb-1 font-semibold text-rp-grey-1100">
+                N{Number(payment.amount).toLocaleString()}
+              </h1>
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs capitalize">
+                  Due {formatDateString(new Date(payment.dueDate))}
+                </h3>
+                <Button variant="neutral" className="decoration-rp-green-100">
+                  <span className="text-xs font-semibold text-rp-green-100">
+                    View
+                  </span>
+                </Button>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </div>
       <div>
         <h1 className="mb-2 font-space_grotesk text-lg font-bold">
-          Payment Requests
+          Notifications
         </h1>
         <div className="rounded-2xl bg-white px-4 py-4 md:px-6">
-          <div className="border-b-[.5px] border-rp-grey-500 py-2">
+          <div className="py-2">
             <h1 className="mb-3 text-xs font-medium">02/03/24</h1>
             <p className="mb-3 text-sm">
               Kindly provide your Taxpayer ID. This helps us ensure compliance
               and provide you with the best possible support.
             </p>
-            <Button
-              variant="neutral"
-              className="decoration-rp-green-100 text-rp-green-100 text-xs font-semibold"
-            >
-              Fill Tax Payer ID
-            </Button>
+            <Link href="/app/settings/payment">
+              <Button
+                variant="neutral"
+                className="text-xs font-semibold text-rp-green-100 decoration-rp-green-100"
+              >
+                Fill Tax Payer ID
+              </Button>
+            </Link>
           </div>
-          <div className="py-2">
-            <h1 className="mb-3 text-xs font-medium">02/03/24</h1>
-            <p className="mb-3 text-sm">
-              Your payment request ‘Hotel Booking’ has been approved
-            </p>
-            <h3 className="text-xs font-semibold text-rp-grey-200">
-              Due 24th March, 2024
-            </h3>
-          </div>
+          {successfullPayments.length > 0 ? (
+            <div className="border-t-[.5px] border-rp-grey-500 py-2 ">
+              <h1 className="mb-3 text-xs font-medium">02/03/24</h1>
+              <p className="mb-3 text-sm">
+                Your payment request ‘{successfullPayments[0].subject}’ has been
+                approved
+              </p>
+              <h3 className="text-xs font-semibold text-rp-grey-200">
+                Due {formatDateString(new Date(successfullPayments[0].dueDate))}
+              </h3>
+            </div>
+          ) : null}
         </div>
       </div>
       <CreateInvoiceOptionsModal
@@ -186,6 +218,10 @@ export default function HomePage() {
       <CreateInternalInvoice
         show={selectedInvoiceType.internal}
         closeModal={() => selectInvoiceType({ internal: false })}
+      />
+      <RequestPaymentModal
+        show={showRequestPaymentModal}
+        closeModal={() => setShowRequestPaymentModal(false)}
       />
     </main>
   )

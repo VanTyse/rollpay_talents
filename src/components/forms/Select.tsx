@@ -15,7 +15,10 @@ export default function Select({ label, ...props }: SelectProps) {
           {label}
         </label>
       )}
-      <AntdSelect className="block w-full border-rp-grey-400 px-3.5 py-2.5 text-rp-grey-700 shadow-input focus:border-rp-primary" />
+      <AntdSelect
+        className="block w-full border-rp-grey-400 font-sans text-rp-grey-700 shadow-input focus:border-rp-primary"
+        {...props}
+      />
     </div>
   )
 }

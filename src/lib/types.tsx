@@ -6,9 +6,11 @@ export interface IconPropTypes extends SVGProps<SVGSVGElement> {
   height?: number
 }
 
-export interface TextareaProps extends React.HTMLProps<HTMLTextAreaElement> {
+export interface TextareaProps
+  extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   error?: { message: string } | null
   label?: string
+  cols?: number
 }
 
 export interface InputProps
@@ -18,28 +20,108 @@ export interface InputProps
 }
 
 export interface Project {
-  project_id: string
-  project_name: string
+  id: string
+  name: string
+  description: string
+  startDate: string
+  endDate: string
+  status: string
+  createdAt: string
+  updatedAt: string
+  role: string
+  talentId: string
+  userId: string
+  companyId: string
+  // earned_amount: number
+  // remaining_balance: number
 }
-
 export interface Paperwork {
-  title: string
-  created_at: string
-  updated_at: string
-  last_opened: string
-  file_url: string
+  id: string
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  name: string
+  url: string
+  description: string
+  status: string
+  companyId: string
+  type: string
+  size: string | null
+  paperworkId: string
+  deleted_at: string | null
 }
 
 export interface Payment {
-  amount: number
-  status: "pending" | "success" | "failed"
-  category:
-    | "accomodation"
-    | "transportation"
-    | "logistics"
-    | "salary"
-    | "legal"
-    | "production"
-  created_at: string
-  invoice: Paperwork
+  id: string
+  createdAt: string
+  updatedAt: string
+  deletedAt: null
+  subject: string
+  categoryId: string
+  talentId: string
+  companyId: string
+  projectId: string
+  amount: string
+  dueDate: string
+  attachments: {
+    link: string
+    mime: string
+  }[]
+  status: "pending" | "approved" | "declined"
+  description: string
+  vat: null
+  userId: string
+  deleted_at: string | null
+  user: {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+  }
+  category: {
+    id: string
+    name: string
+  }
+  talent: {
+    id: string
+    userId: string
+    departmentId: null
+    role: string
+    companyId: string
+    user: {
+      id: string
+      email: string
+      firstName: string
+      lastName: string
+    }
+  }
+}
+
+export interface Invoice {
+  id: string
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  service: string
+  clientEmail: string
+  clientName: string
+  clientPhone: string
+  clientAddress: string
+  userId: string
+  invoiceNumber: string | null
+  description: string
+  amount: string
+  paymentRefrence: string
+  dueDate: string
+  status: string
+  paidAt: string
+  notes: string
+  currency: string
+  deleted_at: string | null
+}
+
+
+export interface FAQ {
+  question: string
+  answer: string
 }

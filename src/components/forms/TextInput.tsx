@@ -18,7 +18,7 @@ const TextInput = ({ className, label, error, ...props }: InputProps) => {
         {...props}
         type={props.type || "text"}
         className={twMerge(
-          `block w-full rounded-lg border-2 border-rp-grey-400 px-3.5 py-2.5 text-sm text-rp-grey-100
+          `block w-full rounded-lg border-2 border-rp-grey-400 px-3.5 py-2.5 text-sm text-rp-grey-100 font-medium
         shadow-input hover:border-rp-primary focus:border-rp-primary focus:outline-none disabled:placeholder:text-rp-grey-500 ${
           error?.message && "!border-rp-error-500"
         }focus:border-rp-primary bg-inherit outline-none`,

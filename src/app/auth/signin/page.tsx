@@ -3,10 +3,46 @@
 import Icon from "@/components/Icons/Icon"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
+import { signIn } from "next-auth/react"
 import Link from "next/link"
-import { twMerge } from "tailwind-merge"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
+
+export interface ISignIn {
+  email: string
+  password: string
+}
 
 export default function SignInPage() {
+  const router = useRouter()
+  const [values, setValues] = useState({ email: "", password: "" })
+  const [isLoading, setIsLoading] = useState(false)
+  const handleSignIn = async () => {
+    const { email, password } = values
+    setIsLoading(true)
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl: "/",
+        redirect: false,
+        type: "admin",
+      })
+
+      console.log(res)
+
+      if (res?.ok) {
+        router.push(res.url!)
+        setIsLoading(false)
+      } else {
+        toast.error(res?.error)
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2">
       <div className="flex min-h-screen flex-col overflow-auto">
@@ -17,7 +53,7 @@ export default function SignInPage() {
           <div className="mx-auto w-full lg:max-w-[360px]">
             <h1
               className={
-                "font-space_grotesk text-rp-grey-200 mb-2 text-2xl font-bold md:mb-3 md:text-4xl"
+                "mb-2 font-space_grotesk text-2xl font-bold text-rp-grey-200 md:mb-3 md:text-4xl"
               }
             >
               Sign In
@@ -25,17 +61,33 @@ export default function SignInPage() {
             <h3 className="mb-8">Welcome back</h3>
             <form onClick={(e) => e.preventDefault()}>
               <fieldset className="mb-5 lg:mb-4">
-                <TextInput label={"Email"} id="signin-email" required />
+                <TextInput
+                  label={"Email"}
+                  id="signin-email"
+                  required
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, email: e.target.value }))
+                  }
+                />
               </fieldset>
               <fieldset className="mb-6">
                 <TextInput
+                  value={values.password}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, password: e.target.value }))
+                  }
                   label={"Password"}
                   type="password"
-                  id="signin-email"
+                  id="signin-password"
                   required
                 />
               </fieldset>
-              <Button variant="primary" className="mb-4 w-full">
+              <Button
+                variant="primary"
+                className="mb-4 w-full"
+                disabled={isLoading}
+                onClick={handleSignIn}
+              >
                 Sign In
               </Button>
               <Button variant="secondary" className="mb-8 w-full">

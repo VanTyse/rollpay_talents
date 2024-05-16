@@ -18,6 +18,7 @@ const theme: ThemeConfig = {
     Select: {
       zIndexPopup: 9999,
       controlHeight: 40,
+      optionSelectedColor: "#001F3F",
     },
     Checkbox: {
       colorPrimary: "#001F3F",

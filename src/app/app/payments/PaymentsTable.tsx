@@ -2,6 +2,10 @@ import Icon from "@/components/Icons/Icon"
 import Table, { HeaderItem } from "@/components/general/Table"
 import { Payment } from "@/lib/types"
 import formatDateString from "@/lib/utils/formatDateString"
+import PaymentDetailsModal from "./PaymentDetailsModal"
+import { useContext, useState } from "react"
+import { IconType } from "@/components/Icons/Icons"
+import { UtilsContext } from "@/lib/context/UtilsContext"
 
 interface Props {
   payments: Payment[]
@@ -17,7 +21,7 @@ export default function PaymentsTable({ payments }: Props) {
     {
       label: "Date",
       sortableBy: false,
-      rowItemProperty: "created_at",
+      rowItemProperty: "createdAt",
     },
     {
       label: "Category",
@@ -36,7 +40,7 @@ export default function PaymentsTable({ payments }: Props) {
         </span>
       ),
       sortableBy: true,
-      rowItemProperty: "invoice",
+      rowItemProperty: "attachments",
     },
   ]
 
@@ -49,42 +53,18 @@ export default function PaymentsTable({ payments }: Props) {
           className="h-auto w-[90%] max-w-[172px]"
         />
         <h1 className="mb-1 text-center font-space_grotesk text-xl font-bold text-rp-grey-200">
-          No Documents Found
+          No Payments Found
         </h1>
         <h1 className="text-sm">
-          All documents for your project will appear here
+          All payments for your project will appear here
         </h1>
       </div>
     )
   return (
     <>
       <div className="block rounded-xl bg-white lg:hidden">
-        {payments.map((Payment, index) => {
-          return (
-            <div
-              key={index}
-              className="flex items-center gap-4 border-b-[.5px] border-rp-grey-500 p-4 first-of-type:rounded-t-xl last-of-type:rounded-b-xl last-of-type:border-none"
-            >
-              <div className="bg-rp-green-200 flex aspect-square h-8 w-8 items-center justify-center rounded-full">
-                <Icon name="file" width={16} height={16} />
-              </div>
-              <div className="flex-1">
-                <div>
-                  <h1 className="mb-1 text-sm font-semibold">
-                    N{Payment.amount}
-                  </h1>
-                </div>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs">
-                    {formatDateString(new Date(Payment.created_at))}
-                  </h3>
-                </div>
-              </div>
-              <button>
-                <Icon name="three_dot_menu" />
-              </button>
-            </div>
-          )
+        {payments.map((payment, index) => {
+          return <MobileRowItem key={index} payment={payment} />
         })}
       </div>
       <div className="hidden lg:block">
@@ -99,23 +79,188 @@ export default function PaymentsTable({ payments }: Props) {
   )
 }
 
-function RowItem({ status, invoice, created_at, category, amount }: Payment) {
+function MobileRowItem({ payment }: { payment: Payment }) {
+  const [showModal, setShowModal] = useState(false)
   return (
-    <tr className="border-rp-grey-1600 [&>td]:py- border-b bg-white text-xs last-of-type:border-none [&>td]:px-6 [&>td]:py-4">
+    <div
+      className="flex items-center gap-4 border-b-[.5px] border-rp-grey-500 p-4 first-of-type:rounded-t-xl last-of-type:rounded-b-xl last-of-type:border-none"
+      onClick={() => setShowModal(true)}
+    >
+      <div className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-rp-green-100 text-white">
+        <CategoryIcon width={24} height={24} category={payment.category} />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center justify-between">
+          <h1 className="mb-1 text-sm font-semibold">
+            N{payment.amount.toLocaleString()}
+          </h1>
+          <h3 className="flex items-center gap-0.5 text-xs capitalize text-[F0FDF4]">
+            <CategoryIcon category={payment.category} width={16} height={16} />
+            {payment.category.name ?? "Uncategorised"}
+          </h3>
+        </div>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs">
+            {formatDateString(new Date(payment.createdAt))}
+          </h3>
+          <h5>
+            <PaymentStatus status={payment.status} />
+          </h5>
+        </div>
+      </div>
+      <PaymentDetailsModal
+        payment={payment}
+        show={showModal}
+        closeModal={() => setShowModal(false)}
+      />
+    </div>
+  )
+}
+
+function RowItem(payment: Payment) {
+  const { status, attachments, createdAt, category, amount } = payment
+  const invoice = attachments[0]
+  const [showModal, setShowModal] = useState(false)
+  const { downloadFile } = useContext(UtilsContext)
+  return (
+    <tr
+      className="[&>td]:py- border-b border-rp-grey-1600 bg-white text-xs last-of-type:border-none hover:cursor-pointer [&>td]:px-6 [&>td]:py-4"
+      onClick={() => setShowModal(true)}
+    >
       <td className="font-medium text-rp-grey-200">
         {amount.toLocaleString()}
       </td>
-      <td className="capitalize">{formatDateString(new Date(created_at))}</td>
-      <td>{category}</td>
-      <td>{status}</td>
+      <td className="capitalize">{formatDateString(new Date(createdAt))}</td>
       <td>
-        <div className="flex items-center gap-3 font-medium text-rp-grey-200">
-          <div className="bg-rp-green-200 flex aspect-square h-8 w-8 items-center justify-center rounded-full">
-            <Icon name="file" width={16} height={16} />
-          </div>
-          {invoice.title}
-        </div>
+        <Category category={category} />
       </td>
+      <td>
+        <PaymentStatus status={status} />
+      </td>
+      <td
+        onClick={(e) => {
+          e.stopPropagation()
+          downloadFile && downloadFile(invoice!.link)
+        }}
+      >
+        {invoice && (
+          <div className="group flex items-center gap-3 font-medium text-rp-grey-200">
+            <div className="flex aspect-square h-8 w-8 items-center justify-center rounded-full bg-rp-green-200">
+              <Icon name="file" width={16} height={16} />
+            </div>
+            <span className="group-hover:underline">{invoice?.link}</span>
+          </div>
+        )}
+      </td>
+      <PaymentDetailsModal
+        payment={payment}
+        show={showModal}
+        closeModal={() => setShowModal(false)}
+      />
     </tr>
+  )
+}
+
+function Category({ category }: Pick<Payment, "category">) {
+  const textColor =
+    category.name === "accomodation"
+      ? "#C11574"
+      : category.name === "legal"
+        ? "#027A48"
+        : category.name === "transportation"
+          ? "#5925DC"
+          : category.name === "logistics"
+            ? "#3538CD"
+            : category.name === "production"
+              ? "#9C2A10"
+              : category.name === "salary"
+                ? "#6941C6"
+                : "#344054"
+  const backColor =
+    category.name === "accomodation"
+      ? "#FDF2FA"
+      : category.name === "legal"
+        ? "#ECFDF3"
+        : category.name === "transportation"
+          ? "#EEF4FF"
+          : category.name === "logistics"
+            ? "#EEF4FF"
+            : category.name === "production"
+              ? "#FFFAEB"
+              : category.name === "salary"
+                ? "#EFF8FF"
+                : "#F2F4F7"
+  const dotColor =
+    category.name === "accomodation"
+      ? "#EE46BC"
+      : category.name === "legal"
+        ? "#32D583"
+        : category.name === "transportation"
+          ? "#9B8AFB"
+          : category.name === "logistics"
+            ? "#6172F3"
+            : category.name === "production"
+              ? "#FD853A"
+              : category.name === "salary"
+                ? "#2E90FA"
+                : " "
+  return (
+    <div
+      style={{ background: backColor, color: textColor }}
+      className="flex w-fit items-center gap-1.5 rounded-full py-0.5 pl-1.5 pr-2 font-medium capitalize"
+    >
+      {category && (
+        <div
+          className="aspect-square h-1.5 w-1.5 rounded-full"
+          style={{ background: dotColor }}
+        ></div>
+      )}
+      {category.name ?? "Uncategorised"}
+    </div>
+  )
+}
+
+function CategoryIcon({
+  category,
+  width,
+  height,
+}: Pick<Payment, "category"> & { width: number; height: number }) {
+  const category_name: IconType =
+    category.name === "accomodation"
+      ? "payment_accomodation"
+      : category.name === "salary"
+        ? "payment_salary"
+        : category.name === "transportation"
+          ? "payment_transportation"
+          : "payment_others"
+  return <Icon name={category_name} width={width} height={height} />
+}
+
+const PaymentStatus = ({ status }: Pick<Payment, "status">) => {
+  const dotColor =
+    status === "approved"
+      ? "#22C55E"
+      : status === "declined"
+        ? "#EF4444"
+        : status === "pending"
+          ? "#F59E0B"
+          : ""
+
+  const statusText =
+    status === "pending"
+      ? "pending"
+      : status === "declined"
+        ? "declined"
+        : status === "approved"
+          ? "paid"
+          : null
+  return (
+    <div className="flex items-center gap-1.5 text-xs capitalize text-[#1F2937] md:text-sm">
+      <div
+        className="aspect-square h-1.5 w-1.5 rounded-full"
+        style={{ background: dotColor }}
+      ></div>
+      {statusText}
+    </div>
   )
 }

@@ -20,7 +20,7 @@ export default function DatePicker({ label, ...props }: DatePickerProps) {
         </label>
       )}
       <AntDDatePicker
-        className="block w-full border-rp-grey-400 px-3.5 py-2.5 text-rp-grey-700 shadow-input focus:border-rp-primary "
+        className="block w-full border-rp-grey-400 font-sans text-rp-grey-100 shadow-input focus:border-rp-primary "
         placeholder={props.placeholder ?? ""}
         {...props}
       />

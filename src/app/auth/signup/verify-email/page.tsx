@@ -3,20 +3,53 @@
 import Icon from "@/components/Icons/Icon"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
+import { AuthContext } from "@/lib/context/AuthContext"
+import useAxios from "@/lib/hooks/useAxios"
 import Link from "next/link"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useContext, useState } from "react"
 import AuthCode from "react-auth-code-input"
+import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
 
 export default function VerifyEmailPage() {
+  const { signUpData } = useContext(AuthContext)
   const [isOTP, setIsOTP] = useState(false)
   const [otp, setOtp] = useState("")
   const handleUpdatePin = async (value: string) => {
     setOtp(value)
   }
 
-  const handleVerification = () => {
-    setIsOTP(true)
+  const axios = useAxios({})
+  const handleVerification = async () => {
+    try {
+      const { data } = await axios.post(`/auth/verify/email`, {
+        otp,
+        otpId: signUpData?.data.otpId,
+      })
+
+      toast.success("Email verified. You can login now.")
+
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const resendOtp = async () => {
+    setOtp("")
+    try {
+      const { data } = await axios.post("/auth/resend/otp", {
+        email: signUpData?.data.user.email,
+        phone: signUpData?.data.user.phone,
+      })
+
+      console.log(data)
+      toast.success("Please check your email")
+      setIsOTP(true)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   if (isOTP)
@@ -33,7 +66,7 @@ export default function VerifyEmailPage() {
               </div>
               <h1
                 className={
-                  "font-space_grotesk text-rp-grey-200 mb-3 text-center text-2xl font-bold md:text-4xl"
+                  "mb-3 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200 md:text-4xl"
                 }
               >
                 Email verified
@@ -42,7 +75,7 @@ export default function VerifyEmailPage() {
                 Your email has been successfully verified
               </h3>
 
-              <Link href={"/auth/signup/create-password"}>
+              <Link href={"/auth/signin"}>
                 <Button variant="primary" className="mb-8 w-full">
                   Continue
                 </Button>
@@ -51,7 +84,7 @@ export default function VerifyEmailPage() {
                 Didn’t receive the email?{" "}
                 <Button
                   variant="neutral"
-                  className="text-rp-purple-300 mx-auto inline-block text-sm font-medium"
+                  className="mx-auto inline-block text-sm font-medium text-rp-purple-300"
                 >
                   Click to resend
                 </Button>
@@ -77,18 +110,18 @@ export default function VerifyEmailPage() {
         </div>
         <div className="flex flex-1 flex-col px-4 md:justify-center">
           <div className="mx-auto w-full max-w-[360px]">
-            <div className="bg-rp-grey-500 border-rp-grey-600 mx-auto w-fit rounded-full border-[10px] p-2 text-black">
+            <div className="mx-auto w-fit rounded-full border-[10px] border-rp-grey-600 bg-rp-grey-500 p-2 text-black">
               <Icon name="envelope" width={28} height={28} />
             </div>
             <h1
               className={
-                "font-space_grotesk text-rp-grey-200 mb-3 text-center text-2xl font-bold md:text-4xl"
+                "mb-3 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200 md:text-4xl"
               }
             >
               Check your email
             </h1>
             <h3 className="mb-8 text-center">
-              We sent a verification link to olivia@gmail.com
+              We sent a verification link to {signUpData?.data?.user?.email}
             </h3>
             <AuthCode
               ariaLabel="transaction pin"
@@ -96,10 +129,10 @@ export default function VerifyEmailPage() {
               containerClassName={twMerge(
                 "flex items-center justify-center lg:gap-3 mb-8 max-w-[250px] md:max-w-none mx-auto gap-2"
               )}
-              length={4}
+              length={6}
               disabled={false}
               inputClassName={
-                "rounded-lg text-center mx-auto border border-rp-purple-100 focus:border-4 focus:border-rp-purple-200 w-14 lg:w-20 h-14 lg:h-20 focus:outline-none flex items-center justify-center text-rp-blue-dark text-4xl lg:text-5xl"
+                "rounded-lg text-center mx-auto border border-rp-purple-100 focus:border-4 focus:border-rp-purple-200 w-12 lg:w-16 aspect-square h-12 lg:h-16 focus:outline-none flex items-center justify-center text-rp-blue-dark text-4xl lg:text-3xl"
               }
               onChange={handleUpdatePin}
             />
@@ -114,7 +147,8 @@ export default function VerifyEmailPage() {
               Didn’t receive the email?{" "}
               <Button
                 variant="neutral"
-                className="text-rp-purple-300 mx-auto inline-block text-sm font-medium"
+                className="mx-auto inline-block text-sm font-medium text-rp-purple-300"
+                onClick={resendOtp}
               >
                 Click to resend
               </Button>

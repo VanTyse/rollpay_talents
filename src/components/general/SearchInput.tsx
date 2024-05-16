@@ -6,12 +6,15 @@ interface SearchInputProps extends InputProps {
   containerClassname?: string
 }
 
-export default function SearchInput(props: SearchInputProps) {
+export default function SearchInput({
+  containerClassname,
+  ...props
+}: SearchInputProps) {
   return (
     <div
       className={twMerge(
         "flex items-center gap-2 rounded-md border border-rp-grey-border px-3 py-2.5 focus-within:border-rp-primary",
-        props.containerClassname
+        containerClassname
       )}
     >
       <div className="min-w-[20px]">

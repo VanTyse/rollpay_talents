@@ -3,26 +3,36 @@
 import Icon from "@/components/Icons/Icon"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
+import useAxios from "@/lib/hooks/useAxios"
 import Link from "next/link"
 import { useState } from "react"
 
 export default function ForgotPasswordPage() {
   const [emailSent, setEmailSent] = useState(false)
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
-  const sendEmail = () => {
-    setEmailSent(true)
+  const axios = useAxios({})
+
+  const sendEmail = async () => {
+    try {
+      const { data } = await axios.post("/auth/forgot/password/link", { email })
+      setEmailSent(true)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   if (emailSent)
     return (
       <main className="px-4 py-12 md:py-24">
         <div className="mx-auto max-w-[360px]">
-          <div className="bg-rp-grey-700 border-rp-grey-600 mx-auto mb-6 w-fit rounded-full border-[10px] p-2 text-black">
+          <div className="mx-auto mb-6 w-fit rounded-full border-[10px] border-rp-grey-600 bg-rp-grey-700 p-2 text-black">
             <Icon name="envelope" width={28} height={28} />
           </div>
           <h1
             className={
-              "font-space_grotesk text-rp-grey-200 mb-3 text-center text-2xl font-bold md:text-4xl"
+              "mb-3 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200 md:text-4xl"
             }
           >
             Check your email
@@ -43,7 +53,7 @@ export default function ForgotPasswordPage() {
             Didn’t receive the email?{" "}
             <Button
               variant="neutral"
-              className="text-rp-blue-dark mx-auto inline-block text-sm font-medium"
+              className="mx-auto inline-block text-sm font-medium text-rp-blue-dark"
             >
               Click to resend
             </Button>
@@ -64,12 +74,12 @@ export default function ForgotPasswordPage() {
   return (
     <main className="px-4 py-12 md:py-24">
       <div className="mx-auto max-w-[360px]">
-        <div className="bg-rp-grey-700 border-rp-grey-600 mx-auto mb-6 w-fit rounded-full border-[10px] p-2 text-black">
+        <div className="mx-auto mb-6 w-fit rounded-full border-[10px] border-rp-grey-600 bg-rp-grey-700 p-2 text-black">
           <Icon name="key" width={28} height={28} />
         </div>
         <h1
           className={
-            "font-space_grotesk text-rp-grey-200 mb-3 text-center text-2xl font-bold md:text-4xl"
+            "mb-3 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200 md:text-4xl"
           }
         >
           Forgot Password?
@@ -85,6 +95,8 @@ export default function ForgotPasswordPage() {
               id="signin-email"
               placeholder="Enter your email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </fieldset>
 
@@ -92,8 +104,9 @@ export default function ForgotPasswordPage() {
             variant="primary"
             className="mb-8 w-full font-medium"
             onClick={sendEmail}
+            disabled={isLoading}
           >
-            Reset Password
+            {isLoading ? "Loading..." : "Reset Password"}
           </Button>
         </form>
         <p className="text-center text-sm">

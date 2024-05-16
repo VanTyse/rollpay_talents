@@ -1,130 +1,38 @@
-import { Paperwork, Payment, Project } from "./types"
+import { FAQ } from "./types"
 
-export const projects: Project[] = [
+export const faqs: FAQ[] = [
   {
-    project_id: "928928021",
-    project_name: "Tinsel",
+    question: "What is Request Payment?",
+    answer:
+      "You can easily request payment for your services on a project directly through Rollpay, and get paid.",
   },
   {
-    project_id: "928928022",
-    project_name: "Super Story",
+    question: "What does the “Create invoice” button do?",
+    answer:
+      "Allows you to create invoices for projects you are a part of on the platform, and outside Rollpay. ",
   },
   {
-    project_id: "928928023",
-    project_name: "House of Cards",
-  },
-]
-
-export const paperworks: Paperwork[] = [
-  {
-    title: "Rollpay Arica Policy",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
+    question: "What is paperwork? ",
+    answer: `You can access project-related documents like contracts in the "Paperwork" section. `,
   },
   {
-    title: "Rollpay Arica Policy 1",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
+    question: "Why do we ask for Tax Payer ID? ",
+    answer:
+      "You are required to provide your Tax Payer ID for tax withholding and remitting purposes. (if applicable)",
   },
   {
-    title: "Rollpay Arica Policy 2",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
+    question: " Is Rollpay A Savings Platform?",
+    answer:
+      "Rollpay is designed for project management and payments. Funds are seamlessly transferred to your linked bank account upon disbursement. Funds are not stored on the platform.",
   },
   {
-    title: "Rollpay Arica Policy 3",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
+    question: "Can I be On Multiple Projects simultaneously and get paid? ",
+    answer:
+      "Yes! You can simultaneously be a talent on multiple Rollpay projects and receive separate payments for each.",
   },
   {
-    title: "Rollpay Arica Policy 4",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
-  },
-  {
-    title: "Rollpay Arica Policy 5",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
-  },
-  {
-    title: "Rollpay Arica Policy 6",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
-  },
-  {
-    title: "Rollpay Arica Policy 7",
-    created_at: new Date().toDateString(),
-    updated_at: new Date().toDateString(),
-    last_opened: new Date().toDateString(),
-    file_url: "",
-  },
-]
-
-export const payments: Payment[] = [
-  {
-    amount: 20000,
-    status: "pending",
-    category: "production",
-    created_at: new Date().toDateString(),
-    invoice: {
-      title: "INV 001",
-      created_at: new Date().toDateString(),
-      updated_at: new Date().toDateString(),
-      last_opened: new Date().toDateString(),
-      file_url: "",
-    },
-  },
-  {
-    amount: 230000,
-    status: "pending",
-    category: "legal",
-    created_at: new Date().toDateString(),
-    invoice: {
-      title: "INV 002",
-      created_at: new Date().toDateString(),
-      updated_at: new Date().toDateString(),
-      last_opened: new Date().toDateString(),
-      file_url: "",
-    },
-  },
-  {
-    amount: 180000,
-    status: "success",
-    category: "accomodation",
-    created_at: new Date().toDateString(),
-    invoice: {
-      title: "INV 003",
-      created_at: new Date().toDateString(),
-      updated_at: new Date().toDateString(),
-      last_opened: new Date().toDateString(),
-      file_url: "",
-    },
-  },
-  {
-    amount: 40000,
-    status: "failed",
-    category: "salary",
-    created_at: new Date().toDateString(),
-    invoice: {
-      title: "INV 004",
-      created_at: new Date().toDateString(),
-      updated_at: new Date().toDateString(),
-      last_opened: new Date().toDateString(),
-      file_url: "",
-    },
+    question: "Pricing and Fees",
+    answer:
+      "For pricing information, please visit the Rollpay website (link to the pricing page)",
   },
 ]

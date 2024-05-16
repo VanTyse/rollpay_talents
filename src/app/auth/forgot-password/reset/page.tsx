@@ -4,13 +4,46 @@ import Icon from "@/components/Icons/Icon"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
 import Link from "next/link"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import useAxios from "@/lib/hooks/useAxios"
+import { AuthContext } from "@/lib/context/AuthContext"
 
 export default function SetPasswordPage() {
   const [passwordReset, setPasswordReset] = useState(false)
+  const [values, setValues] = useState({ password: "", confirmPassword: "" })
+  const searchParams = useSearchParams()
+  const { updateSession } = useContext(AuthContext)
 
-  const resetPassword = () => {
-    setPasswordReset(true)
+  const token = searchParams.get("token")
+
+  const [tokens, setTokens] = useState<{
+    refresh: string
+    access: string
+  } | null>(null)
+
+  const axios = useAxios({})
+  const router = useRouter()
+
+  const resetPassword = async () => {
+    const { password, confirmPassword } = values
+    try {
+      const { data } = await axios.post("/auth/reset/password/link", {
+        token,
+        password,
+        confirmPassword,
+      })
+      setPasswordReset(true)
+      const tokens = data.data.tokens
+      setTokens(tokens)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleMagicalSignIn = () => {
+    tokens && updateSession && updateSession(tokens)
+    router.push("/app")
   }
 
   if (passwordReset)
@@ -22,7 +55,7 @@ export default function SetPasswordPage() {
           </div>
           <h1
             className={
-              "font-space_grotesk text-rp-grey-200 mb-3 text-center text-2xl font-bold md:text-4xl"
+              "mb-3 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200 md:text-4xl"
             }
           >
             Password reset
@@ -32,11 +65,13 @@ export default function SetPasswordPage() {
             in magically.
           </h3>
 
-          <Link href={"/app"}>
-            <Button variant="primary" className="mb-8 w-full font-medium">
-              Continue
-            </Button>
-          </Link>
+          <Button
+            variant="primary"
+            className="mb-8 w-full font-medium"
+            onClick={handleMagicalSignIn}
+          >
+            Continue
+          </Button>
 
           <Link href={"/auth/signin"} className="block text-center text-sm">
             <Button
@@ -53,12 +88,12 @@ export default function SetPasswordPage() {
   return (
     <main className="px-4 py-12 md:py-24">
       <div className="mx-auto max-w-[360px]">
-        <div className="bg-rp-grey-700 border-rp-grey-600 mx-auto mb-6 w-fit rounded-full border-[10px] p-2 text-black">
+        <div className="mx-auto mb-6 w-fit rounded-full border-[10px] border-rp-grey-600 bg-rp-grey-700 p-2 text-black">
           <Icon name="key" width={28} height={28} />
         </div>
         <h1
           className={
-            "font-space_grotesk text-rp-grey-200 mb-3 text-center text-2xl font-bold md:text-4xl"
+            "mb-3 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200 md:text-4xl"
           }
         >
           Password reset
@@ -74,6 +109,10 @@ export default function SetPasswordPage() {
               className="mb-2"
               type="password"
               required
+              value={values.password}
+              onChange={(e) =>
+                setValues((v) => ({ ...v, password: e.target.value }))
+              }
             />
             <span className="text-xs">
               Password must be at least 8 characters.
@@ -86,6 +125,10 @@ export default function SetPasswordPage() {
               type="password"
               className="mb-2"
               required
+              value={values.password}
+              onChange={(e) =>
+                setValues((v) => ({ ...v, confirmPassword: e.target.value }))
+              }
             />
           </fieldset>
 

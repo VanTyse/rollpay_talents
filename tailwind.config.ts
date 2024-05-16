@@ -18,10 +18,14 @@ const config: Config = {
             100: "#00B881",
             200: "#ECFDF3",
             400: "#86EFAC",
+            500: "#DCFCE7",
           },
           blue: {
             DEFAULT: "#3E54D3",
             dark: "#001F3F",
+          },
+          red: {
+            100: "#EF4444",
           },
           grey: {
             100: "#667085",
@@ -40,7 +44,9 @@ const config: Config = {
             1300: "#F9FAFB",
             1400: "#F2F4F7",
             1500: "#374151",
-            1600: "#E4E7EC"
+            1600: "#E4E7EC",
+            1700: "#4B5563",
+            1800: "#1F2937",
           },
           purple: {
             100: "#9B9DFD",

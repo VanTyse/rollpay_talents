@@ -1,7 +1,9 @@
 import Icon from "@/components/Icons/Icon"
 import Table, { HeaderItem } from "@/components/general/Table"
+import { UtilsContext } from "@/lib/context/UtilsContext"
 import { Paperwork } from "@/lib/types"
 import formatDateString from "@/lib/utils/formatDateString"
+import { useContext } from "react"
 
 interface Props {
   paperworks: Paperwork[]
@@ -16,17 +18,17 @@ export default function PaperworkTable({ paperworks }: Props) {
         </span>
       ),
       sortableBy: true,
-      rowItemProperty: "title",
+      rowItemProperty: "name",
     },
     {
       label: "Date Uploaded",
       sortableBy: false,
-      rowItemProperty: "created_at",
+      rowItemProperty: "createdAt",
     },
     {
       label: "Last opened",
       sortableBy: false,
-      rowItemProperty: "last_opened",
+      rowItemProperty: "updatedAt",
     },
   ]
 
@@ -55,16 +57,13 @@ export default function PaperworkTable({ paperworks }: Props) {
               key={index}
               className="flex items-center gap-4 border-b-[.5px] border-rp-grey-500 p-4 first-of-type:rounded-t-xl last-of-type:rounded-b-xl last-of-type:border-none"
             >
-              <div className="bg-rp-green-200 flex aspect-square h-8 w-8 items-center justify-center rounded-full">
+              <div className="flex aspect-square h-8 w-8 items-center justify-center rounded-full bg-rp-green-200">
                 <Icon name="file" width={16} height={16} />
               </div>
               <div className="flex-1">
-                <h1 className="mb-1 text-sm font-semibold">
-                  {paperwork.title}
-                </h1>
+                <h1 className="mb-1 text-sm font-semibold">{paperwork.name}</h1>
                 <h3 className="text-xs">
-                  Last updated{" "}
-                  {formatDateString(new Date(paperwork.updated_at))}
+                  Last updated {formatDateString(new Date(paperwork.updatedAt))}
                 </h3>
               </div>
               <button>
@@ -86,19 +85,26 @@ export default function PaperworkTable({ paperworks }: Props) {
   )
 }
 
-function RowItem({ title, created_at, last_opened }: Paperwork) {
+function RowItem({ name, createdAt, updatedAt }: Paperwork) {
+  const { downloadFile } = useContext(UtilsContext)
   return (
-    <tr className="border-rp-grey-1600 [&>td]:py- border-b bg-white text-xs last-of-type:border-none [&>td]:px-6 [&>td]:py-4">
-      <td className="font-medium text-rp-grey-200">
+    <tr className="[&>td]:py- border-b border-rp-grey-1600 bg-white text-xs last-of-type:border-none [&>td]:px-6 [&>td]:py-4">
+      <td
+        className="cursor-pointer font-medium text-rp-grey-200"
+        onClick={(e) => {
+          e.stopPropagation()
+          downloadFile && downloadFile(name)
+        }}
+      >
         <div className="flex items-center gap-3">
-          <div className="bg-rp-green-200 flex aspect-square h-8 w-8 items-center justify-center rounded-full">
+          <div className="flex aspect-square h-8 w-8 items-center justify-center rounded-full bg-rp-green-200">
             <Icon name="file" width={16} height={16} />
           </div>
-          {title}
+          {name}
         </div>
       </td>
-      <td className="capitalize">{formatDateString(new Date(created_at))}</td>
-      <td className="capitalize">{formatDateString(new Date(last_opened))}</td>
+      <td className="capitalize">{formatDateString(new Date(createdAt))}</td>
+      <td className="capitalize">{formatDateString(new Date(updatedAt))}</td>
 
       <td>
         <button className="px-2">
