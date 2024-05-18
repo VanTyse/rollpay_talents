@@ -132,12 +132,13 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
     error: "/404",
   },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role
     async jwt({ user, token }: any) {
       const accessTokenexpires = new Date(token?.token_expire_date)
       const currentDate = new Date(Date.now())
-      console.log(accessTokenexpires)
+
       if (user) {
         token = {
           ...user,
