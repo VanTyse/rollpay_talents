@@ -50,7 +50,7 @@ export const ProfileLetter = ({
   className?: string
 }) => {
   const colors = ["#111827", "#F79009", "#4B4EFC"]
-  const letter = name.charAt(0).toLowerCase()
+  const letter = name && name.charAt(0).toLowerCase()
   const number = alphabetToNumber(letter) - 1
 
   const color = useMemo(() => {

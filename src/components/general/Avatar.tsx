@@ -13,7 +13,7 @@ export default function Avatar({
   else
     return (
       <div className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-rp-green-mint text-lg font-bold text-white">
-        {firstName.charAt(0).toUpperCase()}
+        {firstName && firstName?.charAt(0).toUpperCase()}
       </div>
     )
 }
