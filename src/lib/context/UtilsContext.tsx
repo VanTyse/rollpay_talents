@@ -11,6 +11,7 @@ type ContextType = {
   faqs: FAQ[]
   downloadFile?: (
     fileName: string,
+    download: boolean,
     callBack?: (err: any, data: string | null) => void
   ) => void
 }
@@ -88,14 +89,18 @@ export const UtilsContextProvider = ({
 
   const downloadFile = async (
     fileName: string,
+    download: boolean,
     callback?: (err: any, data: string | null) => void
   ) => {
     try {
       const { data } = await axios(
         `/utilities/file-upload?fileName=${fileName}`
       )
-      anchorRef.current!.href = data.data
-      anchorRef.current?.click()
+      if (download) {
+        anchorRef.current!.href = data.data
+        anchorRef.current?.click()
+      }
+
       callback && callback(null, data.data)
     } catch (error) {
       console.log(error)

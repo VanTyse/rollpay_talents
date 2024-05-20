@@ -6,7 +6,7 @@ import RequestPaymentModal from "./RequestPaymentModal"
 import { useContext, useState } from "react"
 import Button from "@/components/general/Button"
 import Icon from "@/components/Icons/Icon"
-import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContex"
+import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
 
 export default function Payments() {
   const { paymentRequests } = useContext(PaymentRequestContext)

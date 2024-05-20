@@ -40,7 +40,7 @@ export default function NotificationsSettingsPage() {
         </div>
         <div className="flex flex-col gap-4 border-b border-b-rp-grey-1600 py-4">
           <h1 className="font-medium text-rp-grey-300">
-            A request is accepted
+            A request is rejected
           </h1>
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
@@ -55,7 +55,7 @@ export default function NotificationsSettingsPage() {
         </div>
         <div className="flex flex-col gap-4 py-4">
           <h1 className="font-medium text-rp-grey-300">
-            A request is accepted
+            I'm added to a project
           </h1>
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">

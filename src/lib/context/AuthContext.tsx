@@ -1,11 +1,11 @@
 "use client"
 
-import { SessionProvider, useSession } from "next-auth/react"
+import { useSession } from "@/app/auth/useSession"
 import { createContext, useEffect, useMemo, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Session } from "next-auth"
+import authController, { Session } from "@/app/auth/base"
 
-type UpdateSession = (data?: any) => Promise<Session | null>
+type UpdateSession = (data: Session) => void
 
 type ContextType = {
   accessToken: string | null
@@ -23,7 +23,7 @@ export const AuthContext = createContext<ContextType>({
   userDetails: null,
 })
 
-interface UserDetails {
+export interface UserDetails {
   id: string
   firstName: string
   lastName: string
@@ -32,10 +32,10 @@ interface UserDetails {
   phoneCode: string | null
   phone: string
   avatar: string | null
-  sex: null
+  sex: "male" | "female" | null
   emailVerified: boolean
   phoneVerified: boolean
-  region: null
+  region: string | null
 }
 
 export interface SignUpData {
@@ -57,7 +57,7 @@ export const AuthContextProvider = ({
   children: React.ReactNode
 }) => {
   const router = useRouter()
-  const { data: session, update: updateSession } = useSession()
+  const { session } = useSession()
   const [accessToken, setAccessToken] = useState(session?.access ?? null)
   const [refreshToken, setRefreshToken] = useState(session?.refresh ?? null)
   const [signUpData, setSignUpData] = useState<SignUpData | null>(null)
@@ -68,15 +68,17 @@ export const AuthContextProvider = ({
     if (session?.refresh) setRefreshToken(session.refresh)
 
     if (session?.access && session?.refresh) {
-      const { access, refresh, ...userDetails } = session
-      setUserDetails(userDetails as unknown as UserDetails)
+      const { user } = session
+      setUserDetails(user)
     }
-    // console.log("session =>", session)
-  }, [session])
+    console.log("session =>", session)
+  }, [session, session?.access])
 
   const updateSignUpData = (data: SignUpData) => {
     setSignUpData(data)
   }
+
+  const updateSession = authController.updateUserSession
 
   return (
     <AuthContext.Provider

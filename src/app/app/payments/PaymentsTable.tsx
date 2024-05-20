@@ -128,7 +128,8 @@ function RowItem(payment: Payment) {
       onClick={() => setShowModal(true)}
     >
       <td className="font-medium text-rp-grey-200">
-        {amount.toLocaleString()}
+        <h1 className="font-semibold">{payment.subject}</h1>
+        <h3 className="mt-1">{amount.toLocaleString()}</h3>
       </td>
       <td className="capitalize">{formatDateString(new Date(createdAt))}</td>
       <td>
@@ -140,7 +141,7 @@ function RowItem(payment: Payment) {
       <td
         onClick={(e) => {
           e.stopPropagation()
-          downloadFile && downloadFile(invoice!.link)
+          downloadFile && downloadFile(invoice!.link, true)
         }}
       >
         {invoice && (

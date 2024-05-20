@@ -2,15 +2,61 @@
 
 import Icon from "@/components/Icons/Icon"
 import Link from "next/link"
-import { useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import ProjectsTable from "./ProjectsTable"
 import { ProjectContext } from "@/lib/context/ProjectContext"
+import useAxios from "@/lib/hooks/useAxios"
+import { Project, ProjectWithBalance } from "@/lib/types"
+import { Payment as PaymentRequest } from "@/lib/types"
 
 export default function OverviewPage() {
   const [selectedTab, setSelectedTab] = useState<"projects" | "invoices">(
     "projects"
   )
   const { projects } = useContext(ProjectContext)
+  const axios = useAxios({})
+
+  const fetchPaymentRequests = async (project: Project) => {
+    try {
+      const { data } = await axios(`/projects/${project?.id}/payment-requests`)
+      return data.data as PaymentRequest[]
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const [projectsWithBalance, setProjectsWithBalance] = useState<
+    ProjectWithBalance[]
+  >([])
+
+  const getAllProjectsithBalance = () =>
+    Promise.all(
+      projects.map(async (project) => {
+        try {
+          const paymentRequests = (await fetchPaymentRequests(project)) ?? []
+          const earned_amount = paymentRequests.reduce(
+            (acc, curr) =>
+              curr.status === "approved" ? +curr.amount + acc : acc,
+            0
+          )
+
+          const remaining_balance = paymentRequests.reduce(
+            (acc, curr) =>
+              curr.status === "pending" ? +curr.amount + acc : acc,
+            0
+          )
+
+          return { ...project, earned_amount, remaining_balance }
+        } catch (error) {
+          console.log(error)
+          return { ...project, earned_amount: 0, remaining_balance: 0 }
+        }
+      })
+    )
+
+  useEffect(() => {
+    getAllProjectsithBalance().then((p) => setProjectsWithBalance(p))
+  }, [projects])
 
   return (
     <main
@@ -94,7 +140,7 @@ export default function OverviewPage() {
         ) : selectedTab === "projects" ? (
           <div className="bg-white py-6 md:px-2">
             {" "}
-            <ProjectsTable projects={projects} />
+            <ProjectsTable projects={projectsWithBalance} />
           </div>
         ) : null}
       </div>

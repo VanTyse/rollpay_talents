@@ -30,7 +30,7 @@ export const nav_items: NavItem[] = [
   {
     name: "settings",
     icon_name: "settings",
-    href: "/app/settings",
+    href: "/app/settings/profile",
   },
 ]
 
@@ -60,3 +60,8 @@ export const settings_nav_items: SettingsNavItem[] = [
     href: "/app/settings/change-password",
   },
 ]
+
+export const CUSTOM_EVENTS = {
+  UPDATE_SESSION: "UPDATE_SESSION",
+  LOGOUT: "LOGOUT",
+} as const

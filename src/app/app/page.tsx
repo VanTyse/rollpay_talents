@@ -16,7 +16,7 @@ import RequestPaymentModal from "./payments/RequestPaymentModal"
 import { AuthContext } from "@/lib/context/AuthContext"
 import Avatar from "@/components/general/Avatar"
 import { ProjectContext } from "@/lib/context/ProjectContext"
-import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContex"
+import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
 import formatDateString from "@/lib/utils/formatDateString"
 import Link from "next/link"
 

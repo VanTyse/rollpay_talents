@@ -35,6 +35,11 @@ export interface Project {
   // earned_amount: number
   // remaining_balance: number
 }
+
+export interface ProjectWithBalance extends Project {
+  earned_amount: number
+  remaining_balance: number
+}
 export interface Paperwork {
   id: string
   createdAt: string
@@ -119,7 +124,6 @@ export interface Invoice {
   currency: string
   deleted_at: string | null
 }
-
 
 export interface FAQ {
   question: string

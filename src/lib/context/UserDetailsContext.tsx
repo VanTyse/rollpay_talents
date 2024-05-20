@@ -23,6 +23,7 @@ interface UserAccount {
   routingNumber: string
   swiftCode: string
   iban: string
+  taxId: string
   deleted_at: string | null
 }
 

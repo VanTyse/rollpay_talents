@@ -93,7 +93,7 @@ function RowItem({ name, createdAt, updatedAt }: Paperwork) {
         className="cursor-pointer font-medium text-rp-grey-200"
         onClick={(e) => {
           e.stopPropagation()
-          downloadFile && downloadFile(name)
+          downloadFile && downloadFile(name, true)
         }}
       >
         <div className="flex items-center gap-3">

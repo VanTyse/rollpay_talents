@@ -20,6 +20,7 @@ const DragandDrop = ({ style, ...props }: UploadProps) => {
         ...style,
       }}
       className="!bg-white"
+      {...props}
     >
       {props.file ? (
         <Preview file={props.file} setFile={props.setFile} />
@@ -44,13 +45,13 @@ const Preview = ({
         src={URL.createObjectURL(file)}
         alt=""
       />
-      <div
+      {/* <div
         className="mx-auto flex w-fit cursor-pointer items-center gap-4"
         onClick={() => setFile(null)}
       >
         <p className="text-xs text-[#525C76]">Replace</p>
-        {/* <Icon name="RefreshRightSquare" /> */}
-      </div>
+        <Icon name="RefreshRightSquare" />
+      </div> */}
     </div>
   )
 }

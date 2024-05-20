@@ -915,5 +915,6 @@ const Icons = {
   plus,
   export_icon,
   tick,
+  caret_up,
 }
 export default Icons

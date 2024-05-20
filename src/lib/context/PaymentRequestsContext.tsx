@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react"
 import useAxios from "../hooks/useAxios"
@@ -14,11 +15,15 @@ import { Payment as PaymentRequest } from "../types"
 
 type ContextType = {
   paymentRequests: PaymentRequest[]
+  earned_amount: number
+  remaining_balance: number
   refresh?: () => void
 }
 
 export const PaymentRequestContext = createContext<ContextType>({
   paymentRequests: [],
+  earned_amount: 0,
+  remaining_balance: 0,
 })
 
 export const PaymentRequestContextProvider = ({
@@ -43,6 +48,20 @@ export const PaymentRequestContextProvider = ({
     }
   }, [selectedProject])
 
+  const earned_amount = useMemo(() => {
+    return paymentRequests.reduce(
+      (acc, curr) => (curr.status === "approved" ? +curr.amount + acc : acc),
+      0
+    )
+  }, [])
+
+  const remaining_balance = useMemo(() => {
+    return paymentRequests.reduce(
+      (acc, curr) => (curr.status === "pending" ? +curr.amount + acc : acc),
+      0
+    )
+  }, [])
+
   useEffect(() => {
     if (!selectedProject) return
     fetchPaymentRequests().then((paymentRequests) => {
@@ -57,6 +76,8 @@ export const PaymentRequestContextProvider = ({
     <PaymentRequestContext.Provider
       value={{
         paymentRequests,
+        earned_amount,
+        remaining_balance,
         refresh,
       }}
     >

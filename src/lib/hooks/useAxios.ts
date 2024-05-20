@@ -1,5 +1,7 @@
+"use client"
+
 import axios, { AxiosHeaders } from "axios"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { AuthContext } from "../context/AuthContext"
 
 type AxiosRequestHeaders = Record<string, string | number | boolean>
@@ -11,16 +13,20 @@ const useAxios = ({
   baseURL?: string
   headers?: AxiosRequestHeaders
 }) => {
-  const { accessToken, refreshToken } = useContext(AuthContext)
+  const { accessToken } = useContext(AuthContext)
 
-  const axiosInstance = axios.create({
-    baseURL,
-    timeout: 20000,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      ...headers,
-    },
-  })
+  const axiosInstance = useMemo(
+    () =>
+      axios.create({
+        baseURL,
+        timeout: 20000,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          ...headers,
+        },
+      }),
+    [accessToken]
+  )
 
   return axiosInstance
 }

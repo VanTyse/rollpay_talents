@@ -3,11 +3,11 @@
 import Icon from "@/components/Icons/Icon"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
-import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useSession } from "../useSession"
 
 export interface ISignIn {
   email: string
@@ -18,25 +18,24 @@ export default function SignInPage() {
   const router = useRouter()
   const [values, setValues] = useState({ email: "", password: "" })
   const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useSession()
+
   const handleSignIn = async () => {
     const { email, password } = values
     setIsLoading(true)
     try {
-      const res = await signIn("credentials", {
+      const res = await signIn({
         email,
         password,
-        callbackUrl: "/",
-        redirect: false,
-        type: "admin",
       })
 
       console.log(res)
 
       if (res?.ok) {
-        router.push(res.url!)
+        router.push("/")
         setIsLoading(false)
       } else {
-        toast.error(res?.error)
+        // toast.error(res?.error)
         setIsLoading(false)
       }
     } catch (error) {

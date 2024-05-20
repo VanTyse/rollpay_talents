@@ -1,3 +1,5 @@
+"use client"
+
 import Icon from "@/components/Icons/Icon"
 import { UtilsContext } from "@/lib/context/UtilsContext"
 import Link from "next/link"
@@ -18,37 +20,50 @@ export default function SettingsHelpPage() {
         </h1>
       </div>
 
-      <div className="rounded-xl bg-white"></div>
+      <div className="rounded-xl bg-white px-4 md:px-6 md:py-6">
+        <Questions />
+      </div>
     </main>
   )
 }
 
-// const Questions = () => {
-//   const { faqs } = useContext(UtilsContext)
-//   const [expandQuestionIndex, setExpandQuestionIndex] = useState(-1)
+const Questions = () => {
+  const { faqs } = useContext(UtilsContext)
+  const [expandQuestionIndex, setExpandQuestionIndex] = useState(-1)
 
-//   const questionClick = (index: number) => {
-//     if (expandQuestionIndex === index) setExpandQuestionIndex(-1)
-//     else setExpandQuestionIndex(index)
-//   }
-//   return (
-//     <div>
-//       {faqs.map((faq, index) => (
-//         <div
-//           onClick={() => questionClick(index)}
-//           className="flex flex-col gap-2"
-//         >
-//           <div className="flex justify-between">
-//             <h1 className={`flex-1`}>{faq.question}</h1>
-//             {expandQuestionIndex === index ? (
-//               <Icon name="" />
-//             ) : (
-//               <Icon name="caret_down" />
-//             )}
-//           </div>
-//           <h3>{faq.answer}</h3>
-//         </div>
-//       ))}
-//     </div>
-//   )
-// }
+  const questionClick = (index: number) => {
+    if (expandQuestionIndex === index) setExpandQuestionIndex(-1)
+    else setExpandQuestionIndex(index)
+  }
+  return (
+    <div>
+      {faqs.map((faq, index) => (
+        <div
+          onClick={() => questionClick(index)}
+          className="flex flex-col gap-2 border-b p-4 last-of-type:border-b-0"
+        >
+          <div className="flex cursor-pointer justify-between">
+            <h1
+              className={`flex-1 ${index === expandQuestionIndex && "font-bold text-rp-grey-1100"}`}
+            >
+              {faq.question}
+            </h1>
+            {expandQuestionIndex === index ? (
+              <Icon name="caret_up" />
+            ) : (
+              <div className="rotate-180">
+                <Icon name="caret_up" />
+              </div>
+            )}
+          </div>
+          <h3
+            onClick={(e) => e.stopPropagation()}
+            className={`transition-all ${index === expandQuestionIndex ? "max-h-[1000px] pt-4" : "max-h-0"} overflow-hidden`}
+          >
+            {faq.answer}
+          </h3>
+        </div>
+      ))}
+    </div>
+  )
+}

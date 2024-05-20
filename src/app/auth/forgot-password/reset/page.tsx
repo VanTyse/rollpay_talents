@@ -8,12 +8,14 @@ import { useContext, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import useAxios from "@/lib/hooks/useAxios"
 import { AuthContext } from "@/lib/context/AuthContext"
+import { useSession } from "../../useSession"
 
 export default function SetPasswordPage() {
   const [passwordReset, setPasswordReset] = useState(false)
   const [values, setValues] = useState({ password: "", confirmPassword: "" })
   const searchParams = useSearchParams()
   const { updateSession } = useContext(AuthContext)
+  const { session } = useSession()
 
   const token = searchParams.get("token")
 
@@ -34,7 +36,7 @@ export default function SetPasswordPage() {
         confirmPassword,
       })
       setPasswordReset(true)
-      const tokens = data.data.tokens
+      const tokens = data.data.tokens as { access: string; refresh: string }
       setTokens(tokens)
     } catch (error) {
       console.log(error)
@@ -42,7 +44,10 @@ export default function SetPasswordPage() {
   }
 
   const handleMagicalSignIn = () => {
-    tokens && updateSession && updateSession(tokens)
+    tokens &&
+      session &&
+      updateSession &&
+      updateSession({ ...session, ...tokens })
     router.push("/app")
   }
 

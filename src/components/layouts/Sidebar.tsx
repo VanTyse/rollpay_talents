@@ -10,11 +10,12 @@ import Image from "next/image"
 import Avatar from "../general/Avatar"
 import { useContext } from "react"
 import { AuthContext } from "@/lib/context/AuthContext"
+import { useSession } from "@/app/auth/useSession"
 
 export default function Sidebar() {
   const currentPath = usePathname()
   const { userDetails } = useContext(AuthContext)
-
+  const { logout } = useSession()
 
   return (
     <aside className="hidden h-dvh flex-col justify-between bg-white lg:flex">
@@ -68,9 +69,9 @@ export default function Sidebar() {
               </h3>
             </div>
           </div>
-          <Link href={"/auth/signin"} className="hover:cursor-pointer">
+          <button onClick={logout}>
             <Icon name="logout" />
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

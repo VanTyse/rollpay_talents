@@ -9,6 +9,7 @@ import {
 } from "react"
 import useAxios from "../hooks/useAxios"
 import { AuthContext } from "./AuthContext"
+import { useSession } from "@/app/auth/useSession"
 
 interface Project {
   id: string
@@ -73,6 +74,7 @@ export const ProjectContextProvider = ({
 }) => {
   const { accessToken } = useContext(AuthContext)
   const axios = useAxios({})
+  const { session } = useSession()
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [company, setCompany] = useState<Company | null>(null)
@@ -101,7 +103,7 @@ export const ProjectContextProvider = ({
       setProjects(projects)
       setSelectedProject(projects[0])
     })
-  }, [])
+  }, [session])
 
   useEffect(() => {
     if (!selectedProject) return

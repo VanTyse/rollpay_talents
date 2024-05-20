@@ -1,5 +1,6 @@
 "use client"
 
+import { useSession } from "@/app/auth/useSession"
 import Icon from "@/components/Icons/Icon"
 import DatePicker from "@/components/forms/DatePicker"
 import Select from "@/components/forms/Select"
@@ -16,6 +17,7 @@ interface ModalProps {
 }
 
 export function LogoutModal({ show, closeModal }: ModalProps) {
+  const { logout } = useSession()
   return (
     <Modal show={show} closeModal={closeModal}>
       <div className="fixed left-1/2 w-dvw max-w-[376px] -translate-x-1/2 overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[90dvh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-8">
@@ -31,14 +33,15 @@ export function LogoutModal({ show, closeModal }: ModalProps) {
         >
           <Button
             variant="primary"
-            className="text-rp-grey-1700 w-full basis-1/2 border-rp-grey-700 bg-rp-grey-700"
+            className="w-full basis-1/2 border-rp-grey-700 bg-rp-grey-700 text-rp-grey-1700"
             onClick={closeModal}
           >
             Go Back
           </Button>
           <Button
             variant="primary"
-            className="bg-rp-red-100 border-rp-red-100s w-full basis-1/2"
+            className="border-rp-red-100s w-full basis-1/2 bg-rp-red-100"
+            onClick={logout}
           >
             Log Out
           </Button>

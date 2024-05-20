@@ -25,7 +25,7 @@ import {
 import newAxios from "axios"
 import { toast } from "sonner"
 import validateObject from "@/lib/utils/validateObject"
-import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContex"
+import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -140,10 +140,6 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
     }
     setCreating("pending")
     handleFileUploadToS3().then((res) => {
-      console.log(
-        formValues,
-        formValues.amount.replaceAll("N", "").replaceAll(",", "")
-      )
       axios
         .post(`/payment-requests`, {
           ...formValues,
