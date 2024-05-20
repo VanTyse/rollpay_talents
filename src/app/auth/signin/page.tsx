@@ -35,11 +35,12 @@ export default function SignInPage() {
         router.push("/")
         setIsLoading(false)
       } else {
-        // toast.error(res?.error)
+        toast.error(res?.error)
         setIsLoading(false)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error)
+      toast.error(error.message)
     }
   }
   return (

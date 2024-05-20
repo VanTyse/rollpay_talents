@@ -1,6 +1,7 @@
 import CookiesHandler from "@/app/auth/cookie-handler"
 import { CUSTOM_EVENTS } from "@/lib/constants"
 import { SignUpData } from "@/lib/context/AuthContext"
+import axios from "axios"
 
 import { useRouter } from "next/navigation"
 
@@ -38,21 +39,12 @@ const signIn = async (credentials: { email: string; password: string }) => {
     const { email, password } = credentials
     const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`
 
-    const res = await fetch(api, {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-
+    const { data } = await axios.post(api, { email, password })
     let token_expire_date = new Date(Date.now() + 55 * 60 * 1000).toUTCString()
 
-    const response = await res.json()
-    const signInData = response as SignUpData
+    const signInData = data as SignUpData
 
-    if (response.status == 200 || response.status == 201) {
+    if (data.status == 200 || data.status == 201) {
       const sessionData = {
         user: signInData.data.user,
         access: signInData.data.tokens.accessToken,
@@ -66,6 +58,7 @@ const signIn = async (credentials: { email: string; password: string }) => {
       return { ok: false, error: "Invalid Credentials" }
     }
   } catch (error: any) {
+    console.log(error)
     throw new Error(error)
   }
 }
