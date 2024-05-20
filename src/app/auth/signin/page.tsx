@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { useSession } from "../useSession"
+import useAxios from "@/lib/hooks/useAxios"
 
 export interface ISignIn {
   email: string
@@ -19,9 +20,21 @@ export default function SignInPage() {
   const [values, setValues] = useState({ email: "", password: "" })
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useSession()
+  const axios = useAxios({})
 
   const handleSignIn = async () => {
     const { email, password } = values
+
+    // try {
+    //   const { data } = await axios.post(
+    //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
+    //     { email, password }
+    //   )
+
+    //   console.log(data)
+    // } catch (error) {
+    //   console.log(error)
+    // }
     setIsLoading(true)
     try {
       const res = await signIn({
@@ -39,6 +52,7 @@ export default function SignInPage() {
         setIsLoading(false)
       }
     } catch (error: any) {
+      setIsLoading(false)
       console.log(error)
       toast.error(error.message)
     }

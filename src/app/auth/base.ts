@@ -1,3 +1,5 @@
+"use client"
+
 import CookiesHandler from "@/app/auth/cookie-handler"
 import { CUSTOM_EVENTS } from "@/lib/constants"
 import { SignUpData } from "@/lib/context/AuthContext"
@@ -39,7 +41,28 @@ const signIn = async (credentials: { email: string; password: string }) => {
     const { email, password } = credentials
     const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`
 
-    const { data } = await axios.post(api, { email, password })
+    const myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
+
+    const raw = JSON.stringify({
+      email: `peteresan567@gmail.com`,
+      password: "Password1!",
+    })
+
+    const requestOptions: RequestInit = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      cache: "reload",
+      credentials: "omit",
+    }
+    const response = await fetch(
+      "https://rollpay-api.filmmakersmart.com/auth/login",
+      requestOptions
+    )
+
+    const data = await response.json()
+
     let token_expire_date = new Date(Date.now() + 55 * 60 * 1000).toUTCString()
 
     const signInData = data as SignUpData
