@@ -9,7 +9,7 @@ import { UserDetailsContextProvider } from "@/lib/context/UserDetailsContext"
 import { UtilsContextProvider } from "@/lib/context/UtilsContext"
 import { ReactNode } from "react"
 import { useSession } from "./auth/useSession"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 export default function Providers({
   children,
@@ -38,10 +38,8 @@ export default function Providers({
 const CheckAuth = ({ children }: { children: ReactNode }) => {
   const { session } = useSession()
   const pathname = usePathname()
-  const router = useRouter()
 
   if ((!session || !session.access) && pathname.startsWith("/app")) {
-    router.push("/auth/signin")
     return <PageLoader />
   } else return children
 }

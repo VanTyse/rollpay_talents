@@ -56,5 +56,9 @@ export const useSession = (): ReturnType => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!session) logout()
+  }, [session])
+
   return { session, signIn, logout, updateSession }
 }
