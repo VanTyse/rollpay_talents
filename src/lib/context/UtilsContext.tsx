@@ -9,11 +9,13 @@ type ContextType = {
   countries: Countries[]
   expenseCategories: ExpenseCategory[]
   faqs: FAQ[]
-  downloadFile?: (
-    fileName: string,
-    download: boolean,
+  downloadFile?: (data: {
+    fileName?: string
+    link?: string | null
+    download: boolean
+    mode: "link" | "name"
     callBack?: (err: any, data: string | null) => void
-  ) => void
+  }) => void
 }
 
 export const UtilsContext = createContext<ContextType>({
@@ -87,24 +89,39 @@ export const UtilsContextProvider = ({
     })
   }, [])
 
-  const downloadFile = async (
-    fileName: string,
-    download: boolean,
+  const downloadFile = async ({
+    fileName,
+    link,
+    mode = "name",
+    callback,
+    download,
+  }: {
+    fileName?: string
+    link?: string | null
+    download: boolean
+    mode: "link" | "name"
     callback?: (err: any, data: string | null) => void
-  ) => {
-    try {
-      const { data } = await axios(
-        `/utilities/file-upload?fileName=${fileName}`
-      )
+  }) => {
+    if (mode === "link" && link) {
       if (download) {
-        anchorRef.current!.href = data.data
+        anchorRef.current!.href = link
         anchorRef.current?.click()
       }
+    } else {
+      try {
+        const { data } = await axios(
+          `/utilities/file-upload?fileName=${fileName}`
+        )
+        if (download) {
+          anchorRef.current!.href = data.data
+          anchorRef.current?.click()
+        }
 
-      callback && callback(null, data.data)
-    } catch (error) {
-      console.log(error)
-      callback && callback(error, null)
+        callback && callback(null, data.data)
+      } catch (error) {
+        console.log(error)
+        callback && callback(error, null)
+      }
     }
   }
 

@@ -4,6 +4,7 @@ import Modal from "@/components/general/Modal"
 import SendEmail from "@/components/general/SendEmail"
 import { AuthContext } from "@/lib/context/AuthContext"
 import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
+import { UtilsContext } from "@/lib/context/UtilsContext"
 import { Invoice } from "@/lib/types"
 import formatDateString from "@/lib/utils/formatDateString"
 import { useContext, useState } from "react"
@@ -12,12 +13,20 @@ interface ModalProps {
   show: boolean
   closeModal: () => void
   invoice: Invoice
+  allowSendEmail: boolean
 }
 
-const InvoiceModal = ({ show, closeModal, invoice }: ModalProps) => {
+const InvoiceModal = ({
+  show,
+  closeModal,
+  allowSendEmail,
+  invoice,
+}: ModalProps) => {
   const [showSendEmail, setShowSendEmail] = useState(false)
   const { userDetails } = useContext(AuthContext)
   const { userAccount } = useContext(UserDetailsContext)
+  const { downloadFile } = useContext(UtilsContext)
+
   return (
     <Modal show={show} closeModal={closeModal}>
       <div
@@ -28,10 +37,20 @@ const InvoiceModal = ({ show, closeModal, invoice }: ModalProps) => {
             <Icon name="left_arrow" />
           </button>
           <div className="flex items-center justify-between gap-4">
-            <button className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-white">
+            {/* <button className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-white">
               <Icon name="edit" />
-            </button>
-            <button className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-white">
+            </button> */}
+            <button
+              className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-white"
+              onClick={() =>
+                downloadFile &&
+                downloadFile({
+                  link: invoice.link ?? null,
+                  mode: "link",
+                  download: true,
+                })
+              }
+            >
               <Icon name="download" />
             </button>
           </div>
@@ -107,20 +126,25 @@ const InvoiceModal = ({ show, closeModal, invoice }: ModalProps) => {
             </div>
           </div>
         </div>
-        <Button
-          variant="primary"
-          className="w-full"
-          onClick={() => setShowSendEmail(true)}
-        >
-          Send To
-        </Button>
+        {allowSendEmail && (
+          <Button
+            variant="primary"
+            className="w-full"
+            onClick={() => setShowSendEmail(true)}
+          >
+            Send To
+          </Button>
+        )}
       </div>
-      <SendEmail
-        show={showSendEmail}
-        closeModal={() => setShowSendEmail(false)}
-        modalClassName="md:bg-inherit"
-        title="Send Invoice"
-      />
+      {allowSendEmail && (
+        <SendEmail
+          show={showSendEmail}
+          closeModal={() => setShowSendEmail(false)}
+          modalClassName="md:bg-inherit"
+          title="Send Invoice"
+          invoice={invoice}
+        />
+      )}
     </Modal>
   )
 }

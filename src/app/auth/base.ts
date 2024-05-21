@@ -38,15 +38,15 @@ const saveSession = (data: Session, expires: Date) => {
   CookiesHandler.setCookie(cookieName, JSON.stringify(data), { expires })
   window.dispatchEvent(new Event(CUSTOM_EVENTS.UPDATE_SESSION))
 
-  const DURATION = 1000
-  interval = setInterval(() => {}, DURATION)
+  const DURATION = 55 * 60 * 1000
+  interval = setInterval(() => {
+    refresh(data)
+  }, DURATION)
 }
 
 const signIn = async (credentials: { email: string; password: string }) => {
   try {
     const { email, password } = credentials
-    const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`
-
     const myHeaders = new Headers()
     myHeaders.append("Content-Type", "application/json")
 
@@ -102,6 +102,7 @@ const getSession = (): Session | null => {
 
 const refresh = async (session: Session) => {
   const { refresh } = session
+  console.log(refresh)
   try {
     const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh/token`
     const myHeaders = new Headers()

@@ -123,6 +123,7 @@ export interface Invoice {
   paidAt: string
   notes: string
   currency: string
+  link: string | null
   deleted_at: string | null
 }
 

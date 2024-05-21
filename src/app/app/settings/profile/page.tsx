@@ -177,7 +177,13 @@ export default function ProfilePage() {
         </h1>
       </div>
       <div className="mb-6 flex justify-center md:hidden">
-        <Image src={"/images/avatar.png"} width={64} height={64} alt="" />
+        {userDetails && (
+          <Avatar
+            firstName={userDetails.firstName}
+            avatar={userDetails.avatar}
+            size={64}
+          />
+        )}
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}

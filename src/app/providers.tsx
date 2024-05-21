@@ -10,28 +10,32 @@ import { UtilsContextProvider } from "@/lib/context/UtilsContext"
 import { ReactNode } from "react"
 import { useSession } from "./auth/useSession"
 import { usePathname } from "next/navigation"
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 export default function Providers({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""
   return (
-    <CheckAuth>
-      <UtilsContextProvider>
-        <AuthContextProvider>
-          <ProjectContextProvider>
-            <PaperworkContextProvider>
-              <UserDetailsContextProvider>
-                <PaymentRequestContextProvider>
-                  {children}
-                </PaymentRequestContextProvider>
-              </UserDetailsContextProvider>
-            </PaperworkContextProvider>
-          </ProjectContextProvider>
-        </AuthContextProvider>
-      </UtilsContextProvider>
-    </CheckAuth>
+    <GoogleOAuthProvider clientId={clientId}>
+      <CheckAuth>
+        <UtilsContextProvider>
+          <AuthContextProvider>
+            <ProjectContextProvider>
+              <PaperworkContextProvider>
+                <UserDetailsContextProvider>
+                  <PaymentRequestContextProvider>
+                    {children}
+                  </PaymentRequestContextProvider>
+                </UserDetailsContextProvider>
+              </PaperworkContextProvider>
+            </ProjectContextProvider>
+          </AuthContextProvider>
+        </UtilsContextProvider>
+      </CheckAuth>
+    </GoogleOAuthProvider>
   )
 }
 

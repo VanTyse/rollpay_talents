@@ -14,6 +14,7 @@ import { ProjectContext } from "@/lib/context/ProjectContext"
 import useAxios from "@/lib/hooks/useAxios"
 import { toast } from "sonner"
 import { Invoice } from "@/lib/types"
+import validateObject from "@/lib/utils/validateObject"
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -61,6 +62,17 @@ export function CreateInternalInvoice({ show, closeModal }: ModalProps) {
   const axios = useAxios({})
 
   const handleCreateInvoice = async () => {
+    const invalidatedKeys = validateObject(values, [
+      "amount",
+      "description",
+      "dueDate",
+      "service",
+    ])
+
+    if (invalidatedKeys.length > 0) {
+      invalidatedKeys.map((key) => toast.warning(`Please provide ${key}`))
+      return
+    }
     try {
       setCreating("pending")
       const { data } = await axios.post("/invoices", {
@@ -72,6 +84,15 @@ export function CreateInternalInvoice({ show, closeModal }: ModalProps) {
       setInvoice(invoice)
       toast.success("Invoice created successfully")
       setCreating("success")
+      setValues({
+        service: "",
+        clientEmail: company?.email,
+        clientName: company?.name,
+        clientPhone: company?.phone,
+        description: "",
+        amount: "",
+        dueDate: "",
+      })
     } catch (error) {
       console.log(error)
       setCreating("failed")
@@ -97,6 +118,7 @@ export function CreateInternalInvoice({ show, closeModal }: ModalProps) {
         show={creating === "success"}
         closeModal={() => setCreating("default")}
         invoice={invoice}
+        allowSendEmail
       />
     )
   return (
@@ -182,12 +204,6 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
 
   const [invoice, setInvoice] = useState<Invoice | null>(null)
 
-  // const { projects } = useContext(ProjectContext)
-  // const projectOptions = useMemo(
-  //   () => projects.map((p) => ({ label: p.name, value: p.id })),
-  //   [projects]
-  // )
-
   const [values, setValues] = useState({
     service: "",
     clientEmail: "",
@@ -204,6 +220,19 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
 
   const axios = useAxios({})
   const handleCreateInvoice = async () => {
+    const invalidatedKeys = validateObject(values, [
+      "amount",
+      "clientEmail",
+      "clientPhone",
+      "description",
+      "dueDate",
+      "service",
+    ])
+
+    if (invalidatedKeys.length > 0) {
+      invalidatedKeys.map((key) => toast.warning(`Please provide ${key}`))
+      return
+    }
     try {
       setCreating("pending")
       const { data } = await axios.post("/invoices", {
@@ -217,8 +246,13 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
       setInvoice(invoice)
       toast.success("Invoice created successfully")
       setCreating("success")
-    } catch (error) {
+    } catch (error: any) {
       console.log(error)
+      toast.error(
+        error?.response?.data?.message ??
+          error?.message ??
+          "something went wrong"
+      )
       setCreating("failed")
     }
   }
@@ -242,6 +276,7 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
         show={creating === "success"}
         closeModal={() => setCreating("default")}
         invoice={invoice}
+        allowSendEmail={false}
       />
     )
 

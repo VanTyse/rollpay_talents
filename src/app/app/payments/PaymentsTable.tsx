@@ -141,7 +141,12 @@ function RowItem(payment: Payment) {
       <td
         onClick={(e) => {
           e.stopPropagation()
-          downloadFile && downloadFile(invoice!.link, true)
+          downloadFile &&
+            downloadFile({
+              fileName: invoice!.link,
+              download: true,
+              mode: "name",
+            })
         }}
       >
         {invoice && (

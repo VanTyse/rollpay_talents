@@ -9,6 +9,8 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { useSession } from "../useSession"
 import useAxios from "@/lib/hooks/useAxios"
+import newAxios from "axios"
+import { googleLogout, useGoogleLogin } from "@react-oauth/google"
 
 export interface ISignIn {
   email: string
@@ -20,6 +22,26 @@ export default function SignInPage() {
   const [values, setValues] = useState({ email: "", password: "" })
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useSession()
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      console.log(codeResponse)
+      try {
+        const { data } = await newAxios.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`,
+          {
+            token: codeResponse.access_token,
+          }
+        )
+
+        console.log(data)
+        // setTimeout(() => googleLogout(), 5000)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  })
+
   const axios = useAxios({})
 
   const handleSignIn = async () => {
@@ -104,7 +126,11 @@ export default function SignInPage() {
               >
                 Sign In
               </Button>
-              <Button variant="secondary" className="mb-8 w-full">
+              <Button
+                variant="secondary"
+                className="mb-8 w-full"
+                onClick={() => loginWithGoogle()}
+              >
                 <div className="flex items-center gap-3">
                   <Icon name="googleicon" />
                   <span>Continue with Google</span>
