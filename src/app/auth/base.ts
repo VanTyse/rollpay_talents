@@ -31,9 +31,15 @@ export interface Session {
 
 const cookieName = "sb_host_am"
 
-const saveSession = (data: Session) => {
-  CookiesHandler.setCookie(cookieName, JSON.stringify(data))
+let interval: ReturnType<typeof setInterval>
+
+const saveSession = (data: Session, expires: Date) => {
+  if (interval) clearInterval(interval)
+  CookiesHandler.setCookie(cookieName, JSON.stringify(data), { expires })
   window.dispatchEvent(new Event(CUSTOM_EVENTS.UPDATE_SESSION))
+
+  const DURATION = 1000
+  interval = setInterval(() => {}, DURATION)
 }
 
 const signIn = async (credentials: { email: string; password: string }) => {
@@ -45,8 +51,8 @@ const signIn = async (credentials: { email: string; password: string }) => {
     myHeaders.append("Content-Type", "application/json")
 
     const raw = JSON.stringify({
-      email: `peteresan567@gmail.com`,
-      password: "Password1!",
+      email,
+      password,
     })
 
     const requestOptions: RequestInit = {
@@ -75,7 +81,7 @@ const signIn = async (credentials: { email: string; password: string }) => {
         token_expire_date,
       }
 
-      saveSession(sessionData)
+      saveSession(sessionData, new Date(token_expire_date))
       return { ok: true, error: false }
     } else {
       return { ok: false, error: "Invalid Credentials" }
@@ -98,15 +104,19 @@ const refresh = async (session: Session) => {
   const { refresh } = session
   try {
     const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh/token`
+    const myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
 
-    const res = await fetch(api, {
+    const raw = JSON.stringify({ refreshToken: refresh })
+
+    const requestOptions: RequestInit = {
       method: "POST",
-      body: JSON.stringify({ refreshToken: refresh }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
+      headers: myHeaders,
+      body: raw,
+      cache: "reload",
+      credentials: "omit",
+    }
+    const res = await fetch(api, requestOptions)
 
     const response = await res.json()
     const newAccessToken = response.data.accessToken

@@ -4,8 +4,8 @@ const getCookie = (name: string) => cookieStore.getCookie(name)
 
 const deleteCookie = (key: string) => cookieStore.deleteCookie(key)
 
-const setCookie = (key: string, value: string) => {
-  cookieStore.setCookie(key, value)
+const setCookie = (key: string, value: string, options?: any) => {
+  cookieStore.setCookie(key, value, options)
 }
 
 // const getCookies = (name: string) => cookieStore.getCookies(name)

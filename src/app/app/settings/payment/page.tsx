@@ -47,7 +47,7 @@ export default function ChangePasswordPage() {
         md:h-auto md:w-auto md:px-0"
     >
       <div className="relative mb-8 flex items-center md:hidden">
-        <Link href="/app/settaxIdgs" className="z-10">
+        <Link href="/app/settings" className="z-10">
           <Icon name="left_arrow" />
         </Link>
         <h1 className="relative -left-6 flex-1 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200">

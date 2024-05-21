@@ -15,6 +15,7 @@ export interface TextareaProps
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
+  containerClassName?: string
   error?: { message: string } | null
   label?: React.ReactElement | string
 }

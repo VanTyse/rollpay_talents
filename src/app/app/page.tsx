@@ -19,11 +19,13 @@ import { ProjectContext } from "@/lib/context/ProjectContext"
 import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
 import formatDateString from "@/lib/utils/formatDateString"
 import Link from "next/link"
+import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
 
 type InvoiceType = { external: boolean } | { internal: boolean }
 
 export default function HomePage() {
   const { userDetails } = useContext(AuthContext)
+  const { userAccount } = useContext(UserDetailsContext)
 
   const [showCreateInvoiceOptionsModal, setShowCreateInvoiceOptionsModal] =
     useState(false)
@@ -62,7 +64,7 @@ export default function HomePage() {
   )
 
   return (
-    <main className="px-4 py-4 lg:px-0 lg:py-6">
+    <main className="px-4 py-4 pb-28 lg:px-0 lg:py-6 lg:pb-8">
       <header className="mb-6 flex items-center justify-between bg-white px-4 pb-3 pt-6 lg:mb-6 lg:bg-inherit lg:px-0 lg:pb-0 lg:pt-0">
         <div className="flex lg:hidden">
           <div
@@ -171,40 +173,47 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      <div>
-        <h1 className="mb-2 font-space_grotesk text-lg font-bold">
-          Notifications
-        </h1>
-        <div className="rounded-2xl bg-white px-4 py-4 md:px-6">
-          <div className="py-2">
-            <h1 className="mb-3 text-xs font-medium">02/03/24</h1>
-            <p className="mb-3 text-sm">
-              Kindly provide your Taxpayer ID. This helps us ensure compliance
-              and provide you with the best possible support.
-            </p>
-            <Link href="/app/settings/payment">
-              <Button
-                variant="neutral"
-                className="text-xs font-semibold text-rp-green-100 decoration-rp-green-100"
-              >
-                Fill Tax Payer ID
-              </Button>
-            </Link>
+      {(!userAccount?.taxId || successfullPayments.length > 0) && (
+        <div>
+          <h1 className="mb-2 font-space_grotesk text-lg font-bold">
+            Notifications
+          </h1>
+          <div className="rounded-2xl bg-white px-4 py-4 md:px-6">
+            {!userAccount?.taxId && (
+              <div className="py-2">
+                <h1 className="mb-3 text-xs font-medium">02/03/24</h1>
+                <p className="mb-3 text-sm">
+                  Kindly provide your Taxpayer ID. This helps us ensure
+                  compliance and provide you with the best possible support.
+                </p>
+                <Link href="/app/settings/payment">
+                  <Button
+                    variant="neutral"
+                    className="text-xs font-semibold text-rp-green-100 decoration-rp-green-100"
+                  >
+                    Fill Tax Payer ID
+                  </Button>
+                </Link>
+              </div>
+            )}
+            {successfullPayments.length > 0 ? (
+              <div className="border-t-[.5px] border-rp-grey-500 py-2 ">
+                <h1 className="mb-3 text-xs font-medium">
+                  {new Date().toLocaleDateString()}
+                </h1>
+                <p className="mb-3 text-sm">
+                  Your payment request ‘{successfullPayments[0].subject}’ has
+                  been approved
+                </p>
+                <h3 className="text-xs font-semibold text-rp-grey-200">
+                  Due{" "}
+                  {formatDateString(new Date(successfullPayments[0].dueDate))}
+                </h3>
+              </div>
+            ) : null}
           </div>
-          {successfullPayments.length > 0 ? (
-            <div className="border-t-[.5px] border-rp-grey-500 py-2 ">
-              <h1 className="mb-3 text-xs font-medium">02/03/24</h1>
-              <p className="mb-3 text-sm">
-                Your payment request ‘{successfullPayments[0].subject}’ has been
-                approved
-              </p>
-              <h3 className="text-xs font-semibold text-rp-grey-200">
-                Due {formatDateString(new Date(successfullPayments[0].dueDate))}
-              </h3>
-            </div>
-          ) : null}
         </div>
-      </div>
+      )}
       <CreateInvoiceOptionsModal
         selectType={selectInvoiceType}
         selectedInvoice={selectedInvoiceType}

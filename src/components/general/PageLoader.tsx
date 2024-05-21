@@ -1,6 +1,19 @@
+"use client"
+
+import authController from "@/app/auth/base"
+import { useSession } from "@/app/auth/useSession"
+import { CUSTOM_EVENTS } from "@/lib/constants"
+import router from "next/router"
+import { useEffect } from "react"
 import { twMerge } from "tailwind-merge"
 
 export default function PageLoader({ className }: { className?: string }) {
+  const { session, logout } = useSession()
+
+  useEffect(() => {
+    if (!session) logout()
+  }, [session])
+
   return (
     <div
       className={twMerge(
