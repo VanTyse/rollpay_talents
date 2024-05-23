@@ -20,6 +20,17 @@ interface User {
   emailVerified: boolean
   phoneVerified: boolean
   region: string | null
+  invoiceMeta: {
+    slogan: string | null
+    companyZip: string | null
+    companyCity: string | null
+    companyName: string | null
+    companyEmail: string | null
+    companyPhone: string | null
+    companyState: string | null
+    companyAddress: string | null
+    companyCountry: string | null
+  } | null
 }
 
 export interface Session {
@@ -102,7 +113,6 @@ const getSession = (): Session | null => {
 
 const refresh = async (session: Session) => {
   const { refresh } = session
-  console.log(refresh)
   try {
     const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh/token`
     const myHeaders = new Headers()

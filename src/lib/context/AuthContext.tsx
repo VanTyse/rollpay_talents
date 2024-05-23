@@ -36,6 +36,17 @@ export interface UserDetails {
   emailVerified: boolean
   phoneVerified: boolean
   region: string | null
+  invoiceMeta: {
+    slogan: string | null
+    companyZip: string | null
+    companyCity: string | null
+    companyName: string | null
+    companyEmail: string | null
+    companyPhone: string | null
+    companyState: string | null
+    companyAddress: string | null
+    companyCountry: string | null
+  } | null
 }
 
 export interface SignUpData {

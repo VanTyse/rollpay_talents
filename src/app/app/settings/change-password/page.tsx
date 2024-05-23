@@ -31,8 +31,6 @@ export default function ChangePasswordPage() {
 
   const axios = useAxios({})
 
-  console.log(values)
-
   const requestOtp = async () => {
     setOtpLoading(true)
 

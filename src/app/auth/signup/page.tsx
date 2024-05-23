@@ -8,6 +8,7 @@ import useAxios from "@/lib/hooks/useAxios"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useContext, useState } from "react"
+import { toast } from "sonner"
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -40,12 +41,15 @@ export default function SignUpPage() {
         const signUpData = data as SignUpData
         updateSignUpData && updateSignUpData(signUpData)
 
-        console.log(signUpData, updateSignUpData)
-
         router.push("/auth/signup/verify-email")
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
         setIsLoading(false)
+        toast.error(
+          error?.response?.data?.message ??
+            error.response?.data?.error?.message ??
+            error?.message
+        )
       }
     }
   }

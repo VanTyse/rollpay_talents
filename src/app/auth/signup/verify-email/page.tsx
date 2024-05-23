@@ -20,6 +20,8 @@ export default function VerifyEmailPage() {
     setOtp(value)
   }
 
+  const router = useRouter()
+
   const axios = useAxios({})
   const handleVerification = async () => {
     try {
@@ -29,8 +31,7 @@ export default function VerifyEmailPage() {
       })
 
       toast.success("Email verified. You can login now.")
-
-      console.log(data)
+      router.push("/auth/signin")
     } catch (error) {
       console.log(error)
     }
@@ -43,8 +44,6 @@ export default function VerifyEmailPage() {
         email: signUpData?.data.user.email,
         phone: signUpData?.data.user.phone,
       })
-
-      console.log(data)
       toast.success("Please check your email")
       setIsOTP(true)
     } catch (error) {

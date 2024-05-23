@@ -189,9 +189,9 @@ export default function HomePage() {
                 <Link href="/app/settings/payment">
                   <Button
                     variant="neutral"
-                    className="text-xs font-semibold text-rp-green-100 decoration-rp-green-100"
+                    className="animate-pulse text-xs font-semibold text-rp-green-100 decoration-rp-green-100"
                   >
-                    Fill Tax Payer ID
+                    Fill Tax Payer ID and other Payment Details!
                   </Button>
                 </Link>
               </div>

@@ -46,7 +46,7 @@ export const useSession = (): ReturnType => {
     const handleLogoutEventChange = () => {
       const sessionData = AuthController.getSession()
       setSession(sessionData)
-      router.push("/auth/signin")
+      if (!pathname.startsWith("/auth")) router.push("/auth/signin")
     }
 
     window.addEventListener(CUSTOM_EVENTS.LOGOUT, handleLogoutEventChange)

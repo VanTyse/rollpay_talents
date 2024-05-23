@@ -24,7 +24,6 @@ export default function SignInPage() {
   const { signIn } = useSession()
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (codeResponse) => {
-      console.log(codeResponse)
       try {
         const { data } = await newAxios.post(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`,
@@ -32,8 +31,6 @@ export default function SignInPage() {
             token: codeResponse.access_token,
           }
         )
-
-        console.log(data)
         // setTimeout(() => googleLogout(), 5000)
       } catch (error) {
         console.log(error)

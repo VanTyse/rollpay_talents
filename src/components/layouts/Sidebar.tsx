@@ -21,9 +21,11 @@ export default function Sidebar() {
     <aside className="hidden h-dvh flex-col justify-between bg-white lg:flex">
       <div>
         <div className="border-b px-6 py-8">
-          <div className="mb-14">
-            <Icon name="logo" />
-          </div>
+          <Link href={"/app"}>
+            <div className="mb-14">
+              <Icon name="logo" />
+            </div>
+          </Link>
           <SearchInput />
         </div>
         <div className="pl-6 pt-8">
