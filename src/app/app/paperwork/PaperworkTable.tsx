@@ -66,9 +66,9 @@ export default function PaperworkTable({ paperworks }: Props) {
                   Last updated {formatDateString(new Date(paperwork.updatedAt))}
                 </h3>
               </div>
-              <button>
+              {/* <button>
                 <Icon name="three_dot_menu" />
-              </button>
+              </button> */}
             </div>
           )
         })}
@@ -78,7 +78,7 @@ export default function PaperworkTable({ paperworks }: Props) {
           headerItems={headerItems}
           rowItems={paperworks}
           RowItem={RowItem}
-          blankColumns={2}
+          blankColumns={0}
         />
       </div>
     </>
@@ -107,7 +107,7 @@ function RowItem({ name, createdAt, updatedAt }: Paperwork) {
       <td className="capitalize">{formatDateString(new Date(createdAt))}</td>
       <td className="capitalize">{formatDateString(new Date(updatedAt))}</td>
 
-      <td>
+      {/* <td>
         <button className="px-2">
           <Icon name="forward" />
         </button>
@@ -116,7 +116,7 @@ function RowItem({ name, createdAt, updatedAt }: Paperwork) {
         <button className="px-2">
           <Icon name="three_dot_menu" />
         </button>
-      </td>
+      </td> */}
     </tr>
   )
 }
