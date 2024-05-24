@@ -16,6 +16,7 @@ export default function VerifyEmailPage() {
   const { signUpData } = useContext(AuthContext)
   const [isOTP, setIsOTP] = useState(false)
   const [otp, setOtp] = useState("")
+  const [loading, setLoading] = useState(false)
   const handleUpdatePin = async (value: string) => {
     setOtp(value)
   }
@@ -24,16 +25,24 @@ export default function VerifyEmailPage() {
 
   const axios = useAxios({})
   const handleVerification = async () => {
+    setLoading(true)
     try {
       const { data } = await axios.post(`/auth/verify/email`, {
         otp,
         otpId: signUpData?.data.otpId,
       })
-
+      setLoading(false)
       toast.success("Email verified. You can login now.")
       router.push("/auth/signin")
-    } catch (error) {
+    } catch (error: any) {
       console.log(error)
+      toast.error(
+        error?.response?.data?.message ??
+          error?.response?.data?.error?.message ??
+          error?.message ??
+          "Something went wrong"
+      )
+      setLoading(false)
     }
   }
 
@@ -46,7 +55,6 @@ export default function VerifyEmailPage() {
       })
 
       toast.success("Please check your email")
-      setIsOTP(true)
     } catch (error) {
       console.log(error)
     }
@@ -140,6 +148,7 @@ export default function VerifyEmailPage() {
               variant="primary"
               className="mb-8 w-full"
               onClick={handleVerification}
+              disabled={otp.length !== 6 || loading}
             >
               Verify email
             </Button>

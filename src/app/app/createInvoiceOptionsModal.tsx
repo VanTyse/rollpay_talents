@@ -2,7 +2,9 @@
 
 import Icon from "@/components/Icons/Icon"
 import Modal from "@/components/general/Modal"
+import { ProjectContext } from "@/lib/context/ProjectContext"
 import { Space_Grotesk } from "next/font/google"
+import { useContext } from "react"
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -31,6 +33,8 @@ export default function CreateInvoiceOptionsModal({
     closeModal()
   }
 
+  const { selectedProject } = useContext(ProjectContext)
+
   return (
     <Modal show={show} closeModal={closeModal}>
       <div className="fixed left-1/2 top-1/2 w-[90%] max-w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 md:py-6">
@@ -40,20 +44,23 @@ export default function CreateInvoiceOptionsModal({
           Select Invoice Type
         </h1>
         <div className="flex flex-col gap-4 md:gap-6">
-          <button
-            className="flex items-center gap-2 rounded-2xl border border-rp-grey-border p-4 text-start md:pr-8"
-            onClick={selectInternal}
-          >
-            <div className="flex-1">
-              <h1 className="mb-1 text-sm font-semibold text-rp-grey-200 md:text-base">
-                For this project
-              </h1>
-              <h3 className="text-xs md:text-sm">
-                Create and send an invoice for services rendered on this project
-              </h3>
-            </div>
-            <Icon name="caret_right" />
-          </button>
+          {selectedProject && (
+            <button
+              className="flex items-center gap-2 rounded-2xl border border-rp-grey-border p-4 text-start md:pr-8"
+              onClick={selectInternal}
+            >
+              <div className="flex-1">
+                <h1 className="mb-1 text-sm font-semibold text-rp-grey-200 md:text-base">
+                  For this project
+                </h1>
+                <h3 className="text-xs md:text-sm">
+                  Create and send an invoice for services rendered on this
+                  project
+                </h3>
+              </div>
+              <Icon name="caret_right" />
+            </button>
+          )}
           <button
             className="flex items-center gap-2 rounded-2xl border border-rp-grey-border p-4 text-start md:pr-8"
             onClick={selectExternal}

@@ -10,21 +10,7 @@ import {
 import useAxios from "../hooks/useAxios"
 import { AuthContext } from "./AuthContext"
 import { useSession } from "@/app/auth/useSession"
-
-interface Project {
-  id: string
-  name: string
-  description: string
-  startDate: string
-  endDate: string
-  status: string
-  createdAt: string
-  updatedAt: string
-  role: string
-  talentId: string
-  userId: string
-  companyId: string
-}
+import { Project } from "../types"
 
 interface Company {
   id: string

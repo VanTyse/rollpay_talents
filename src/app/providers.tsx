@@ -11,6 +11,7 @@ import { ReactNode } from "react"
 import { useSession } from "./auth/useSession"
 import { usePathname } from "next/navigation"
 import { GoogleOAuthProvider } from "@react-oauth/google"
+import { InvoiceContextProvider } from "@/lib/context/InvoiceContext"
 
 export default function Providers({
   children,
@@ -24,13 +25,15 @@ export default function Providers({
         <UtilsContextProvider>
           <AuthContextProvider>
             <ProjectContextProvider>
-              <PaperworkContextProvider>
-                <UserDetailsContextProvider>
-                  <PaymentRequestContextProvider>
-                    {children}
-                  </PaymentRequestContextProvider>
-                </UserDetailsContextProvider>
-              </PaperworkContextProvider>
+              <InvoiceContextProvider>
+                <PaperworkContextProvider>
+                  <UserDetailsContextProvider>
+                    <PaymentRequestContextProvider>
+                      {children}
+                    </PaymentRequestContextProvider>
+                  </UserDetailsContextProvider>
+                </PaperworkContextProvider>
+              </InvoiceContextProvider>
             </ProjectContextProvider>
           </AuthContextProvider>
         </UtilsContextProvider>
@@ -44,6 +47,7 @@ const CheckAuth = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname()
 
   if ((!session || !session.access) && pathname.startsWith("/app")) {
+    console.log(session)
     return <PageLoader />
   } else return children
 }

@@ -24,17 +24,6 @@ interface FormType {
   sex: "male" | "female" | null
   region: string | null
   avatar: string | null
-  invoiceMeta: {
-    companyName: string
-    companyAddress: string
-    companyCity: string
-    companyState: string
-    companyZip: string
-    companyCountry: string
-    companyEmail: string
-    companyPhone: string
-    slogan: string
-  }
 }
 
 export default function ProfilePage() {
@@ -80,17 +69,6 @@ export default function ProfilePage() {
     sex: null,
     region: "",
     avatar: "",
-    invoiceMeta: {
-      companyName: "",
-      companyAddress: "",
-      companyCity: "",
-      companyState: "",
-      companyZip: "",
-      companyCountry: "",
-      companyEmail: "",
-      companyPhone: "",
-      slogan: "",
-    },
   })
 
   useEffect(() => {
@@ -101,17 +79,6 @@ export default function ProfilePage() {
       sex: userDetails.sex,
       region: userDetails.region,
       avatar: userDetails.avatar,
-      invoiceMeta: {
-        companyName: userDetails.invoiceMeta?.companyName ?? "",
-        companyAddress: userDetails.invoiceMeta?.companyAddress ?? "",
-        companyCity: userDetails.invoiceMeta?.companyCity ?? "",
-        companyState: userDetails.invoiceMeta?.companyState ?? "",
-        companyZip: userDetails.invoiceMeta?.companyZip ?? "",
-        companyCountry: userDetails.invoiceMeta?.companyCountry ?? "",
-        companyEmail: userDetails.invoiceMeta?.companyEmail ?? "",
-        companyPhone: userDetails.invoiceMeta?.companyPhone ?? "",
-        slogan: userDetails.invoiceMeta?.slogan ?? "",
-      },
     })
   }, [userDetails])
 
@@ -191,11 +158,7 @@ export default function ProfilePage() {
         md:h-auto md:w-auto md:px-0"
     >
       <div className="mb-8 flex items-center md:hidden">
-        <Link
-          href="/app/settings"
-          onClick={() => console.log("clicked")}
-          className="relative z-10"
-        >
+        <Link href="/app/settings" className="relative z-10">
           <Icon name="left_arrow" />
         </Link>
         <h1 className="relative -left-6 flex-1 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200">
@@ -291,180 +254,7 @@ export default function ProfilePage() {
             />
           </fieldset>
         </div>
-
-        <div className="flex flex-col gap-6 border-b border-b-rp-grey-1600 pb-6 md:px-4">
-          <div>
-            <h1
-              className={`mb-1 !font-space_grotesk text-xl font-medium text-rp-grey-200 ${shouldInvoicePulse && "animate-pulse"}`}
-            >
-              Invoice Meta Details
-            </h1>
-            <h3 className="mb-3 ">
-              Please fill this in order to create invoices.
-            </h3>
-          </div>
-
-          {/* Company Name and Country */}
-          <div className="flex flex-col gap-6 md:flex-row">
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Company name"}
-                value={formValues.invoiceMeta.companyName}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyName: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-            <fieldset className="basis-1/2">
-              <Select
-                showSearch
-                label={"Company Country"}
-                options={countriesOptions}
-                filterOption={filterOption}
-                defaultValue={formValues.invoiceMeta.companyCountry}
-                value={formValues.invoiceMeta.companyCountry}
-                onSelect={(value) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyCountry: value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-          </div>
-
-          {/* Company Email and Phone */}
-
-          <div className="flex flex-col gap-6 md:flex-row">
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Company Email"}
-                value={formValues.invoiceMeta.companyEmail}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyEmail: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Company Phone"}
-                value={formValues.invoiceMeta.companyPhone}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyPhone: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-          </div>
-          {/* Company City and State */}
-
-          <div className="flex flex-col gap-6 md:flex-row">
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Company city"}
-                value={formValues.invoiceMeta.companyCity}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyCity: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Company state"}
-                value={formValues.invoiceMeta.companyState}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyState: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-          </div>
-
-          <fieldset className="basis-1/2">
-            <TextInput
-              label={"Company Address"}
-              value={formValues.invoiceMeta.companyAddress}
-              onChange={(e) =>
-                setFormValues((v) => ({
-                  ...v,
-                  invoiceMeta: {
-                    ...v.invoiceMeta,
-                    companyAddress: e.target.value,
-                  },
-                }))
-              }
-            />
-          </fieldset>
-
-          {/* Company Zip and Slogan */}
-
-          <div className="flex flex-col gap-6 md:flex-row">
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Company zip"}
-                value={formValues.invoiceMeta.companyZip}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      companyZip: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-            <fieldset className="basis-1/2">
-              <TextInput
-                label={"Slogan"}
-                value={formValues.invoiceMeta.slogan}
-                onChange={(e) =>
-                  setFormValues((v) => ({
-                    ...v,
-                    invoiceMeta: {
-                      ...v.invoiceMeta,
-                      slogan: e.target.value,
-                    },
-                  }))
-                }
-              />
-            </fieldset>
-          </div>
-
-          {/* Company Address */}
-        </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end pr-4">
           <div className="flex gap-6">
             <Button
               variant="secondary"
@@ -477,7 +267,7 @@ export default function ProfilePage() {
               disabled={loading}
               onClick={handleUpdateUserDetails}
             >
-              Save changes
+              {loading ? "Loading..." : "Save changes"}
             </Button>
           </div>
         </div>

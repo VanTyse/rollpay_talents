@@ -49,8 +49,6 @@ export default function SignInPage() {
         password,
       })
 
-      console.log(res)
-
       if (res?.ok) {
         router.push("/")
         setIsLoading(false)

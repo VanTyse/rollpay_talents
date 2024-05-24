@@ -1,9 +1,11 @@
 "use client"
 import { createContext, useEffect, useState } from "react"
 import useAxios from "../hooks/useAxios"
+import { useSession } from "@/app/auth/useSession"
 
 type ContextType = {
   userAccount: UserAccount | null
+  forceRefresh?: () => void
 }
 
 export const UserDetailsContext = createContext<ContextType>({
@@ -33,6 +35,8 @@ export const UserDetailsContextProvider = ({
   children: React.ReactNode
 }) => {
   const [userAccount, setUserAccount] = useState<UserAccount | null>(null)
+  const [refreshCount, setRefreshCount] = useState(0)
+  const { session } = useSession()
 
   const axios = useAxios({})
 
@@ -50,12 +54,15 @@ export const UserDetailsContextProvider = ({
       if (!userAccount) return
       setUserAccount(userAccount)
     })
-  }, [])
+  }, [refreshCount, session])
+
+  const forceRefresh = () => setRefreshCount((x) => x + 1)
 
   return (
     <UserDetailsContext.Provider
       value={{
         userAccount,
+        forceRefresh,
       }}
     >
       {children}

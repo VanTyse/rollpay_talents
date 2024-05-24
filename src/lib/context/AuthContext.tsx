@@ -82,7 +82,6 @@ export const AuthContextProvider = ({
       const { user } = session
       setUserDetails(user)
     }
-    console.log("session =>", session)
   }, [session, session?.access])
 
   const updateSignUpData = (data: SignUpData) => {

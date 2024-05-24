@@ -41,7 +41,10 @@ const PasswordInput = ({
           className="flex flex-1 focus:outline-none"
           type={inputType || "text"}
         />
-        <div onClick={() => setShowPassword((x) => !x)}>
+        <div
+          onClick={() => setShowPassword((x) => !x)}
+          className="hover:cursor-pointer"
+        >
           {!showPassword ? <Icon name="eye" /> : <Icon name="eye_slashed" />}
         </div>
       </div>

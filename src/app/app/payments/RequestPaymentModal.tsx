@@ -26,6 +26,7 @@ import newAxios from "axios"
 import { toast } from "sonner"
 import validateObject from "@/lib/utils/validateObject"
 import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
+import { useRouter } from "next/navigation"
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -85,6 +86,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
   }, [formValues.amount])
 
   const axios = useAxios({})
+  const router = useRouter()
 
   const handleFileUpload = async () => {
     if (file) {
@@ -155,6 +157,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
           setCreating("success")
           toast.success("Payment Request initiated successfully")
           refresh && refresh()
+          router.push('/app/payments')
         })
         .catch((err) => {
           console.error(err)

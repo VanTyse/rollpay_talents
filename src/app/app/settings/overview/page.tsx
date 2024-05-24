@@ -8,12 +8,17 @@ import { ProjectContext } from "@/lib/context/ProjectContext"
 import useAxios from "@/lib/hooks/useAxios"
 import { Project, ProjectWithBalance } from "@/lib/types"
 import { Payment as PaymentRequest } from "@/lib/types"
+import { InvoiceContext } from "@/lib/context/InvoiceContext"
+import InvoiceTable from "./InvoicesTable"
+import SearchInput from "@/components/general/SearchInput"
 
 export default function OverviewPage() {
   const [selectedTab, setSelectedTab] = useState<"projects" | "invoices">(
     "projects"
   )
   const { projects } = useContext(ProjectContext)
+  const { invoices, query, setQuery } = useContext(InvoiceContext)
+
   const axios = useAxios({})
 
   const fetchPaymentRequests = async (project: Project) => {
@@ -28,6 +33,12 @@ export default function OverviewPage() {
   const [projectsWithBalance, setProjectsWithBalance] = useState<
     ProjectWithBalance[]
   >([])
+
+  const projectsEarnings = useMemo(
+    () =>
+      projectsWithBalance.reduce((acc, curr) => acc + +curr.earned_amount, 0),
+    [projectsWithBalance]
+  )
 
   const getAllProjectsithBalance = () =>
     Promise.all(
@@ -58,6 +69,11 @@ export default function OverviewPage() {
     getAllProjectsithBalance().then((p) => setProjectsWithBalance(p))
   }, [projects])
 
+  const completedProjectsAmount = useMemo(
+    () => projects.filter((p) => p.status === "completed").length,
+    [projects]
+  )
+
   return (
     <main
       className="bg-red fixed left-0 top-0 z-10 h-[calc(100lvh-105px)] w-dvw overflow-auto rounded-2xl bg-white px-4 py-6 md:static md:h-auto md:w-auto
@@ -80,7 +96,7 @@ export default function OverviewPage() {
             </div>
           </div>
           <h1 className="text-xl font-semibold text-rp-grey-600 md:text-2xl lg:text-3xl">
-            N30,000,000
+            N{projectsEarnings.toLocaleString()}
           </h1>
           <img
             src="/images/logo_icon_blue.png"
@@ -93,19 +109,20 @@ export default function OverviewPage() {
             <div className="flex flex-col gap-4">
               <h3 className="text-xs md:text-base">Projects</h3>
               <h1 className="text-2xl font-semibold text-rp-grey-600 md:text-2xl md:text-[40px]">
-                1
+                {projects.length ?? 0}
               </h1>
             </div>
             <div className="flex flex-col gap-4">
               <h3 className="text-xs md:text-base">Departments</h3>
               <h1 className="text-2xl font-semibold text-rp-grey-600 md:text-2xl md:text-[40px]">
-                18
+                4
+                {/* TODO: get back to figuring out how to get the departments that a talent belongs to */}
               </h1>
             </div>
             <div className="flex flex-col gap-4">
               <h3 className="text-xs md:text-base">Completed Projects</h3>
               <h1 className="text-2xl font-semibold text-rp-grey-600 md:text-2xl md:text-[40px]">
-                2
+                {completedProjectsAmount ?? 0}
               </h1>
             </div>
           </div>
@@ -136,10 +153,20 @@ export default function OverviewPage() {
       </div>
       <div>
         {selectedTab === "invoices" ? (
-          <div></div>
+          <div className="rounded-t-xl bg-white py-4">
+            <div className="md:px-6">
+              <SearchInput
+                value={query}
+                onChange={(e) => setQuery && setQuery(e.target.value)}
+                className="block w-full bg-inherit focus:outline-none"
+                containerClassname="w-full rounded-full mb-4 bg-white"
+                placeholder="Search your invoices"
+              />
+            </div>
+            <InvoiceTable invoices={invoices} />
+          </div>
         ) : selectedTab === "projects" ? (
           <div className="bg-white py-6 md:px-2">
-            {" "}
             <ProjectsTable projects={projectsWithBalance} />
           </div>
         ) : null}

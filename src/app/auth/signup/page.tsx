@@ -6,6 +6,7 @@ import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
 import { AuthContext, SignUpData } from "@/lib/context/AuthContext"
 import useAxios from "@/lib/hooks/useAxios"
+import validateObject from "@/lib/utils/validateObject"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useContext, useState } from "react"
@@ -28,6 +29,39 @@ export default function SignUpPage() {
     if (updateSignUpData) {
       setIsLoading(true)
       const { email, password, phone, firstName, lastName, phoneCode } = values
+
+      const invalidatedFields = validateObject(values, [
+        "email",
+        "password",
+        "phone",
+        "firstName",
+        "lastName",
+        "phoneCode",
+      ])
+
+      if (invalidatedFields.length > 0) {
+        console.log(invalidatedFields)
+        invalidatedFields.map((f) => toast.error(`Please provide ${f}`))
+        setIsLoading(false)
+        console.log(email)
+        return
+      }
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$/
+
+      if (!passwordRegex.test(password)) {
+        setIsLoading(false)
+
+        return toast.error(
+          <div>
+            <span className="mb-1 block">
+              Password must contain at least one uppercase letter, one lowercase
+              letter, one digit, and a special character.
+            </span>
+            <span>Its length must be between 8 and 30 characters.</span>
+          </div>
+        )
+      }
       try {
         const { data } = await axios.post(`/auth/register`, {
           email,

@@ -1,23 +1,37 @@
 "use client"
 
 import Icon from "@/components/Icons/Icon"
+import Select from "@/components/forms/Select"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
 import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
+import { UtilsContext } from "@/lib/context/UtilsContext"
 import useAxios from "@/lib/hooks/useAxios"
 import Link from "next/link"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
 
 export default function ChangePasswordPage() {
   const [loading, setLoading] = useState(false)
-  const { userAccount } = useContext(UserDetailsContext)
+  const { userAccount, forceRefresh } = useContext(UserDetailsContext)
+  const { banks } = useContext(UtilsContext)
   const [values, setValues] = useState({
     accountNumber: userAccount?.accountNumber,
     accountName: userAccount?.accountName,
     bankName: userAccount?.bankName,
     taxId: userAccount?.taxId,
   })
+
+  const bankOptions = useMemo(() => {
+    return banks.map((bank) => ({
+      value: bank.name,
+      label: bank.name,
+    }))
+  }, [])
+
+  // Filter `option.label` to match the user type `input`
+  const filterOption = (input: string, option: any) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
 
   useEffect(() => {
     if (userAccount)
@@ -36,6 +50,7 @@ export default function ChangePasswordPage() {
       const { data } = await axios.patch("/user/user-account", { ...values })
       toast.success("Account details updated successfully")
       setLoading(false)
+      forceRefresh && forceRefresh()
     } catch (error) {
       console.log(error)
       setLoading(false)
@@ -88,13 +103,19 @@ export default function ChangePasswordPage() {
             />
           </fieldset>
           <fieldset className="basis-1/2">
-            <TextInput
+            <Select
+              showSearch
               label={"Bank"}
-              type="text"
-              className="text-rp-grey-1100"
+              className="font-semibold text-rp-grey-1100"
+              options={bankOptions}
+              filterOption={filterOption}
+              defaultValue={values.bankName}
               value={values.bankName}
-              onChange={(e) =>
-                setValues((v) => ({ ...v, bankName: e.target.value }))
+              onSelect={(value) =>
+                setValues((v) => ({
+                  ...v,
+                  bankName: value,
+                }))
               }
             />
           </fieldset>

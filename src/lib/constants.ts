@@ -37,20 +37,24 @@ export const nav_items: NavItem[] = [
 export const settings_nav_items: SettingsNavItem[] = [
   {
     name: "profile",
-    href: "/app/settings/profile",
+    href: "/app/settings",
   },
   {
     name: "overview",
     href: "/app/settings/overview",
   },
   {
+    name: "invoice meta",
+    href: "/app/settings/invoice-meta",
+  },
+  {
     name: "payment",
     href: "/app/settings/payment",
   },
-  {
-    name: "notifications",
-    href: "/app/settings/notifications",
-  },
+  // {
+  //   name: "notifications",
+  //   href: "/app/settings/notifications",
+  // },
   {
     name: "help",
     href: "/app/settings/help",

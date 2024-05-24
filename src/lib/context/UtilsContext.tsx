@@ -9,6 +9,7 @@ type ContextType = {
   countries: Countries[]
   expenseCategories: ExpenseCategory[]
   faqs: FAQ[]
+  banks: Bank[]
   downloadFile?: (data: {
     fileName?: string
     link?: string | null
@@ -22,6 +23,7 @@ export const UtilsContext = createContext<ContextType>({
   countries: [],
   expenseCategories: [],
   faqs: [],
+  banks: [],
 })
 
 interface ExpenseCategory {
@@ -44,6 +46,24 @@ interface Countries {
   phonecode: number
 }
 
+interface Bank {
+  id: 302
+  name: "9mobile 9Payment Service Bank"
+  slug: "9mobile-9payment-service-bank-ng"
+  code: "120001"
+  longcode: "120001"
+  gateway: ""
+  pay_with_bank: false
+  supports_transfer: true
+  active: true
+  country: "Nigeria"
+  currency: "NGN"
+  type: "nuban"
+  is_deleted: false
+  createdAt: "2022-05-31T06:50:27.000Z"
+  updatedAt: "2022-06-23T09:33:55.000Z"
+}
+
 export const UtilsContextProvider = ({
   children,
 }: {
@@ -54,6 +74,7 @@ export const UtilsContextProvider = ({
     []
   )
   const [faqs, setFaqs] = useState<FAQ[]>(questions)
+  const [banks, setBanks] = useState<Bank[]>([])
   const anchorRef = useRef<HTMLAnchorElement>(null)
 
   const axios = useAxios({})
@@ -75,6 +96,16 @@ export const UtilsContextProvider = ({
       console.log(error)
     }
   }
+
+  const fetchBanks = async () => {
+    try {
+      const { data } = await axios(`/utilities/banks`)
+      return data.data as Bank[]
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchCountries().then((countries) => {
       if (!countries) return
@@ -86,6 +117,13 @@ export const UtilsContextProvider = ({
     fetchExpenseCategories().then((expenseCategories) => {
       if (!expenseCategories) return
       setExpenseCategories(expenseCategories)
+    })
+  }, [])
+
+  useEffect(() => {
+    fetchBanks().then((banks) => {
+      if (!banks) return
+      setBanks(banks)
     })
   }, [])
 
@@ -102,6 +140,7 @@ export const UtilsContextProvider = ({
     mode: "link" | "name"
     callback?: (err: any, data: string | null) => void
   }) => {
+    console.log("downloading")
     if (mode === "link" && link) {
       if (download) {
         anchorRef.current!.href = link
@@ -131,6 +170,7 @@ export const UtilsContextProvider = ({
         countries,
         expenseCategories,
         faqs,
+        banks,
         downloadFile,
       }}
     >

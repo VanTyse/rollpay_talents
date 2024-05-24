@@ -26,15 +26,13 @@ export interface Project {
   description: string
   startDate: string
   endDate: string
-  status: string
+  status: "active" | "inactive" | "completed"
   createdAt: string
   updatedAt: string
   role: string
   talentId: string
   userId: string
   companyId: string
-  // earned_amount: number
-  // remaining_balance: number
 }
 
 export interface ProjectWithBalance extends Project {
@@ -129,5 +127,5 @@ export interface Invoice {
 
 export interface FAQ {
   question: string
-  answer: string
+  answer: string | React.ReactNode
 }

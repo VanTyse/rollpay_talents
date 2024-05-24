@@ -15,6 +15,7 @@ import useAxios from "@/lib/hooks/useAxios"
 import { toast } from "sonner"
 import { Invoice } from "@/lib/types"
 import validateObject from "@/lib/utils/validateObject"
+import { InvoiceContext } from "@/lib/context/InvoiceContext"
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export function CreateInternalInvoice({ show, closeModal }: ModalProps) {
   const [creating, setCreating] = useState<
     "success" | "failed" | "pending" | "default"
   >("default")
+  const { forceRefresh } = useContext(InvoiceContext)
 
   const [invoice, setInvoice] = useState<Invoice | null>(null)
   const { company } = useContext(ProjectContext)
@@ -93,6 +95,7 @@ export function CreateInternalInvoice({ show, closeModal }: ModalProps) {
         amount: "",
         dueDate: "",
       })
+      forceRefresh && forceRefresh()
     } catch (error) {
       console.log(error)
       setCreating("failed")
@@ -201,6 +204,7 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
   const [creating, setCreating] = useState<
     "success" | "failed" | "pending" | "default"
   >("default")
+  const { forceRefresh } = useContext(InvoiceContext)
 
   const [invoice, setInvoice] = useState<Invoice | null>(null)
 
@@ -246,6 +250,16 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
       setInvoice(invoice)
       toast.success("Invoice created successfully")
       setCreating("success")
+      setValues({
+        service: "",
+        clientEmail: "",
+        clientName: "",
+        clientPhone: "",
+        description: "",
+        amount: "",
+        dueDate: "",
+      })
+      forceRefresh && forceRefresh()
     } catch (error: any) {
       console.log(error)
       toast.error(

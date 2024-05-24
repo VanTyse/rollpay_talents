@@ -32,7 +32,14 @@ export const faqs: FAQ[] = [
   },
   {
     question: "Pricing and Fees",
-    answer:
-      "For pricing information, please visit the Rollpay website (link to the pricing page)",
+    answer: (
+      <span>
+        For pricing information, please visit the Rollpay{" "}
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          website
+        </a>
+        .
+      </span>
+    ),
   },
 ]

@@ -3,6 +3,7 @@ import Button from "@/components/general/Button"
 import Modal from "@/components/general/Modal"
 import SendEmail from "@/components/general/SendEmail"
 import { AuthContext } from "@/lib/context/AuthContext"
+import { InvoiceContext } from "@/lib/context/InvoiceContext"
 import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
 import { UtilsContext } from "@/lib/context/UtilsContext"
 import { Invoice } from "@/lib/types"
@@ -25,8 +26,6 @@ const InvoiceModal = ({
   const [showSendEmail, setShowSendEmail] = useState(false)
   const { userDetails } = useContext(AuthContext)
   const { userAccount } = useContext(UserDetailsContext)
-  const { downloadFile } = useContext(UtilsContext)
-
   return (
     <Modal show={show} closeModal={closeModal}>
       <div
@@ -40,19 +39,6 @@ const InvoiceModal = ({
             {/* <button className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-white">
               <Icon name="edit" />
             </button> */}
-            <button
-              className="flex aspect-square h-10 w-10 items-center justify-center rounded-full bg-white"
-              onClick={() =>
-                downloadFile &&
-                downloadFile({
-                  link: invoice.link ?? null,
-                  mode: "link",
-                  download: true,
-                })
-              }
-            >
-              <Icon name="download" />
-            </button>
           </div>
         </div>
         <div className="mb-8 overflow-y-auto rounded-2xl bg-white p-4 py-6 md:max-h-[calc(90dvh-200px)]">

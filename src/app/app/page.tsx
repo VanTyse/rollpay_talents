@@ -40,7 +40,7 @@ export default function HomePage() {
       toast.error(
         "You need to fill your invoice meta details before creating an invoice. Redirecting..."
       )
-      router.push("/app/settings/profile?inv=true")
+      router.push("/app/settings/invoice-meta")
     }
   }
   const [selectedInvoiceType, setSelectedInvoiceType] = useState({
