@@ -11,6 +11,7 @@ import { useSession } from "../useSession"
 import useAxios from "@/lib/hooks/useAxios"
 import newAxios from "axios"
 import { googleLogout, useGoogleLogin } from "@react-oauth/google"
+import PasswordInput from "@/components/forms/PasswordInput"
 
 export interface ISignIn {
   email: string
@@ -39,21 +40,8 @@ export default function SignInPage() {
     onError: (error) => console.log("Login Failed:", error),
   })
 
-  const axios = useAxios({})
-
   const handleSignIn = async () => {
     const { email, password } = values
-
-    // try {
-    //   const { data } = await axios.post(
-    //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-    //     { email, password }
-    //   )
-
-    //   console.log(data)
-    // } catch (error) {
-    //   console.log(error)
-    // }
     setIsLoading(true)
     try {
       const res = await signIn({
@@ -61,10 +49,11 @@ export default function SignInPage() {
         password,
       })
 
-      console.log(res)
-
       if (res?.ok) {
-        router.push("/")
+        const signInData = res.data
+
+        if (signInData?.data.user.emailVerified) router.push("/")
+        else router.push("/auth/signup/verify-email?cb_red=/")
         setIsLoading(false)
       } else {
         toast.error(res?.error)
@@ -104,18 +93,18 @@ export default function SignInPage() {
                 />
               </fieldset>
               <fieldset className="mb-6">
-                <TextInput
+                <PasswordInput
                   value={values.password}
                   onChange={(e) =>
                     setValues((v) => ({ ...v, password: e.target.value }))
                   }
                   label={"Password"}
-                  type="password"
                   id="signin-password"
                   required
                 />
               </fieldset>
               <Button
+                type="submit"
                 variant="primary"
                 className="mb-4 w-full"
                 disabled={isLoading}

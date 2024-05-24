@@ -1,6 +1,7 @@
 "use client"
 
 import Icon from "@/components/Icons/Icon"
+import PasswordInput from "@/components/forms/PasswordInput"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
 import { AuthContext, SignUpData } from "@/lib/context/AuthContext"
@@ -111,13 +112,12 @@ export default function SignUpPage() {
                 />
               </fieldset>
               <fieldset className="mb-6">
-                <TextInput
+                <PasswordInput
                   value={values.password}
                   onChange={(e) =>
                     setValues((v) => ({ ...v, password: e.target.value }))
                   }
                   label={"Password"}
-                  type="password"
                   id="signin-password"
                   required
                 />

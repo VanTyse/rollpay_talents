@@ -8,7 +8,7 @@ import Button from "@/components/general/Button"
 import Image from "next/image"
 import Link from "next/link"
 import { useContext, useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Avatar from "@/components/general/Avatar"
 import { AuthContext, UserDetails } from "@/lib/context/AuthContext"
 import { UtilsContext } from "@/lib/context/UtilsContext"
@@ -69,6 +69,11 @@ export default function ProfilePage() {
 
   const [loading, setLoading] = useState(false)
 
+  const params = useSearchParams()
+  const inv = params.get("inv")
+
+  const shouldInvoicePulse = useMemo(() => inv == "true", [inv])
+
   const [formValues, setFormValues] = useState<FormType>({
     firstName: "",
     lastName: "",
@@ -111,7 +116,7 @@ export default function ProfilePage() {
   }, [userDetails])
 
   const handleFileUpload = async () => {
-    console.log(file)
+    setLoading(true)
     if (file) {
       const fileName = `${file.name}_${Date.now()}`
 
@@ -288,9 +293,16 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex flex-col gap-6 border-b border-b-rp-grey-1600 pb-6 md:px-4">
-          <h1 className="mb-3 !font-space_grotesk text-xl font-medium text-rp-grey-200">
-            Invoice Meta Details
-          </h1>
+          <div>
+            <h1
+              className={`mb-1 !font-space_grotesk text-xl font-medium text-rp-grey-200 ${shouldInvoicePulse && "animate-pulse"}`}
+            >
+              Invoice Meta Details
+            </h1>
+            <h3 className="mb-3 ">
+              Please fill this in order to create invoices.
+            </h3>
+          </div>
 
           {/* Company Name and Country */}
           <div className="flex flex-col gap-6 md:flex-row">
@@ -460,7 +472,11 @@ export default function ProfilePage() {
             >
               Cancel
             </Button>
-            <Button variant="primary" onClick={handleUpdateUserDetails}>
+            <Button
+              variant="primary"
+              disabled={loading}
+              onClick={handleUpdateUserDetails}
+            >
               Save changes
             </Button>
           </div>

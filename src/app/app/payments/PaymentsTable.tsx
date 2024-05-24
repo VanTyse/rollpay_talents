@@ -39,7 +39,7 @@ export default function PaymentsTable({ payments }: Props) {
           Invoice <Icon name="down_arrow" />
         </span>
       ),
-      sortableBy: true,
+      sortableBy: false,
       rowItemProperty: "attachments",
     },
   ]
@@ -122,6 +122,7 @@ function RowItem(payment: Payment) {
   const invoice = attachments[0]
   const [showModal, setShowModal] = useState(false)
   const { downloadFile } = useContext(UtilsContext)
+
   return (
     <tr
       className="[&>td]:py- border-b border-rp-grey-1600 bg-white text-xs last-of-type:border-none hover:cursor-pointer [&>td]:px-6 [&>td]:py-4"

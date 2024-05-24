@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { CUSTOM_EVENTS } from "@/lib/constants"
 import AuthController, { Session } from "./base"
 import { usePathname, useRouter } from "next/navigation"
+import { SignUpData } from "@/lib/context/AuthContext"
 
 interface ReturnType {
   session: Session | null
@@ -10,7 +11,11 @@ interface ReturnType {
   signIn: (credentials: {
     email: string
     password: string
-  }) => Promise<{ ok: boolean; error: string | boolean }>
+  }) => Promise<{
+    ok: boolean
+    error: string | boolean
+    data: SignUpData | null
+  }>
   logout: () => void
 }
 

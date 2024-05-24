@@ -93,9 +93,9 @@ const signIn = async (credentials: { email: string; password: string }) => {
       }
 
       saveSession(sessionData, new Date(token_expire_date))
-      return { ok: true, error: false }
+      return { ok: true, error: false, data }
     } else {
-      return { ok: false, error: "Invalid Credentials" }
+      return { ok: false, error: "Invalid Credentials", data: null }
     }
   } catch (error: any) {
     console.log(error)

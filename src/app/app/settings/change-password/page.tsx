@@ -1,6 +1,8 @@
 "use client"
 
+import { useSession } from "@/app/auth/useSession"
 import Icon from "@/components/Icons/Icon"
+import PasswordInput from "@/components/forms/PasswordInput"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
 import { AuthContext } from "@/lib/context/AuthContext"
@@ -28,6 +30,7 @@ export default function ChangePasswordPage() {
   })
 
   const { userDetails } = useContext(AuthContext)
+  const { logout } = useSession()
 
   const axios = useAxios({})
 
@@ -66,6 +69,8 @@ export default function ChangePasswordPage() {
       return toast.error(`new password must match confirm password`)
     try {
       const { data } = await axios.patch(`/user/password`, values)
+      toast.success("Password reset successful")
+      logout()
     } catch (error: any) {
       console.log(error)
       toast.error(error?.response?.data?.message ?? error.message ?? "")
@@ -108,9 +113,8 @@ export default function ChangePasswordPage() {
       >
         <div className="flex flex-col gap-6 border-b-rp-grey-1600 pb-6 md:px-4">
           <fieldset className="basis-1/2">
-            <TextInput
+            <PasswordInput
               label={"Current password"}
-              type="password"
               value={values.oldPassword}
               onChange={(e) =>
                 setValues((v) => ({ ...v, oldPassword: e.target.value }))
@@ -119,9 +123,8 @@ export default function ChangePasswordPage() {
           </fieldset>
 
           <fieldset className="basis-1/2">
-            <TextInput
+            <PasswordInput
               label={"New password"}
-              type="password"
               value={values.password}
               onChange={(e) =>
                 setValues((v) => ({ ...v, password: e.target.value }))
@@ -129,9 +132,8 @@ export default function ChangePasswordPage() {
             />
           </fieldset>
           <fieldset className="basis-1/2">
-            <TextInput
+            <PasswordInput
               label={"Confirm new password"}
-              type="password"
               value={values.confirmPassword}
               onChange={(e) =>
                 setValues((v) => ({ ...v, confirmPassword: e.target.value }))
@@ -139,11 +141,12 @@ export default function ChangePasswordPage() {
             />
           </fieldset>
 
-          <fieldset className="grid w-full basis-1/2 grid-cols-12 items-end gap-6">
+          <fieldset className="flex w-full basis-1/2 items-end gap-6">
             <TextInput
               label={"OTP"}
               type="text"
-              containerClassName="lg:col-span-9 col-span-6"
+              required
+              containerClassName="lg:col-span-9 col-span-6 flex-1"
               value={values.otp}
               onChange={(e) =>
                 setValues((v) => ({ ...v, otp: e.target.value }))
@@ -151,7 +154,7 @@ export default function ChangePasswordPage() {
             />
             <Button
               variant="secondary"
-              className="col-span-6 block w-full hover:text-rp-primary lg:col-span-3"
+              className="col-span-6 block min-w-min animate-bounce hover:animate-none hover:text-rp-primary lg:col-span-3"
               onClick={requestOtp}
               disabled={otpLoading}
             >

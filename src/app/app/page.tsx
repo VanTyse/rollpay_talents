@@ -20,16 +20,29 @@ import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
 import formatDateString from "@/lib/utils/formatDateString"
 import Link from "next/link"
 import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 type InvoiceType = { external: boolean } | { internal: boolean }
 
 export default function HomePage() {
   const { userDetails } = useContext(AuthContext)
   const { userAccount } = useContext(UserDetailsContext)
+  const router = useRouter()
 
   const [showCreateInvoiceOptionsModal, setShowCreateInvoiceOptionsModal] =
     useState(false)
-  const showCreateInvoiceOptions = () => setShowCreateInvoiceOptionsModal(true)
+  const showCreateInvoiceOptions = () => {
+    const hasInvoiceMeta = !!userDetails?.invoiceMeta
+
+    if (hasInvoiceMeta) setShowCreateInvoiceOptionsModal(true)
+    else {
+      toast.error(
+        "You need to fill your invoice meta details before creating an invoice. Redirecting..."
+      )
+      router.push("/app/settings/profile?inv=true")
+    }
+  }
   const [selectedInvoiceType, setSelectedInvoiceType] = useState({
     external: false,
     internal: false,
@@ -151,26 +164,39 @@ export default function HomePage() {
           Upcoming Payments
         </h1>
         <div className="rounded-2xl bg-white px-4 py-4 md:px-6">
-          {upcomingPaymentRequests.map((payment, index) => (
-            <div
-              className="border-b-[.5px] border-rp-grey-500 py-2 last-of-type:border-none md:py-4"
-              key={index}
-            >
-              <h1 className="mb-1 font-semibold text-rp-grey-1100">
-                N{Number(payment.amount).toLocaleString()}
-              </h1>
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs capitalize">
-                  Due {formatDateString(new Date(payment.dueDate))}
-                </h3>
-                <Button variant="neutral" className="decoration-rp-green-100">
-                  <span className="text-xs font-semibold text-rp-green-100">
-                    View
-                  </span>
-                </Button>
+          {upcomingPaymentRequests.length > 0 ? (
+            upcomingPaymentRequests.map((payment, index) => (
+              <div
+                className="border-b-[.5px] border-rp-grey-500 py-2 last-of-type:border-none md:py-4"
+                key={index}
+              >
+                <h1 className="mb-1 font-semibold text-rp-grey-1100">
+                  N{Number(payment.amount).toLocaleString()}
+                </h1>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs capitalize">
+                    Due {formatDateString(new Date(payment.dueDate))}
+                  </h3>
+                  <Button variant="neutral" className="decoration-rp-green-100">
+                    <span className="text-xs font-semibold text-rp-green-100">
+                      View
+                    </span>
+                  </Button>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="flex h-[300px] w-full flex-col items-center justify-center bg-white py-10">
+              <img
+                src="/images/no_data.png"
+                alt="no data found"
+                className="h-auto w-[90%] max-w-[172px]"
+              />
+              <h1 className="mb-1 text-center font-space_grotesk text-xl font-bold text-rp-grey-200">
+                No Payments Found
+              </h1>
             </div>
-          ))}
+          )}
         </div>
       </div>
       {(!userAccount?.taxId || successfullPayments.length > 0) && (
