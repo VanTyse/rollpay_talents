@@ -93,9 +93,9 @@ const signIn = async (credentials: { email: string; password: string }) => {
       }
 
       saveSession(sessionData, new Date(token_expire_date))
-      return { ok: true, error: false, data }
+      return { ok: true, error: false }
     } else {
-      return { ok: false, error: "Invalid Credentials", data: null }
+      return { ok: false, error: "Invalid Credentials" }
     }
   } catch (error: any) {
     console.log(error)
@@ -113,6 +113,7 @@ const getSession = (): Session | null => {
 
 const refresh = async (session: Session) => {
   const { refresh } = session
+
   try {
     const api = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh/token`
     const myHeaders = new Headers()

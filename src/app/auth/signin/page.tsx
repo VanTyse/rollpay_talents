@@ -49,11 +49,10 @@ export default function SignInPage() {
         password,
       })
 
-      if (res?.ok) {
-        const signInData = res.data
+      console.log(res)
 
-        if (signInData?.data.user.emailVerified) router.push("/")
-        else router.push("/auth/signup/verify-email?cb_red=/")
+      if (res?.ok) {
+        router.push("/")
         setIsLoading(false)
       } else {
         toast.error(res?.error)

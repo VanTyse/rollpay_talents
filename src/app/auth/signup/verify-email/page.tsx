@@ -6,24 +6,19 @@ import Button from "@/components/general/Button"
 import { AuthContext } from "@/lib/context/AuthContext"
 import useAxios from "@/lib/hooks/useAxios"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useContext, useState } from "react"
 import AuthCode from "react-auth-code-input"
 import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
-import { useSession } from "../../useSession"
 
 export default function VerifyEmailPage() {
   const { signUpData } = useContext(AuthContext)
-  const { session, logout } = useSession()
-  const { userDetails } = useContext(AuthContext)
   const [isOTP, setIsOTP] = useState(false)
   const [otp, setOtp] = useState("")
   const handleUpdatePin = async (value: string) => {
     setOtp(value)
   }
-
-  const params = useSearchParams()
 
   const router = useRouter()
 
@@ -36,8 +31,7 @@ export default function VerifyEmailPage() {
       })
 
       toast.success("Email verified. You can login now.")
-      if (session) logout()
-      router.push("/")
+      router.push("/auth/signin")
     } catch (error) {
       console.log(error)
     }
@@ -50,6 +44,7 @@ export default function VerifyEmailPage() {
         email: signUpData?.data.user.email,
         phone: signUpData?.data.user.phone,
       })
+
       toast.success("Please check your email")
       setIsOTP(true)
     } catch (error) {
