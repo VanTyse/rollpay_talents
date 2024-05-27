@@ -47,7 +47,6 @@ const CheckAuth = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname()
 
   if ((!session || !session.access) && pathname.startsWith("/app")) {
-    console.log(session)
     return <PageLoader />
   } else return children
 }
