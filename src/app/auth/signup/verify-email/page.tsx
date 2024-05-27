@@ -32,8 +32,8 @@ export default function VerifyEmailPage() {
         otpId: signUpData?.data.otpId,
       })
       setLoading(false)
-      toast.success("Email verified. You can login now.")
-      router.push("/auth/signin")
+      toast.success("Email verified!")
+      router.push("/")
     } catch (error: any) {
       console.log(error)
       toast.error(

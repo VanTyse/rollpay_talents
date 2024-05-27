@@ -8,7 +8,7 @@ import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
 import { UtilsContext } from "@/lib/context/UtilsContext"
 import { Invoice } from "@/lib/types"
 import formatDateString from "@/lib/utils/formatDateString"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 interface ModalProps {
   show: boolean
@@ -26,6 +26,18 @@ const InvoiceModal = ({
   const [showSendEmail, setShowSendEmail] = useState(false)
   const { userDetails } = useContext(AuthContext)
   const { userAccount } = useContext(UserDetailsContext)
+
+  useEffect(() => {
+    const listener = () => {
+      closeModal()
+    }
+
+    window.addEventListener("close_all_invoice_modals", listener)
+
+    return () =>
+      window.removeEventListener("close_all_invoice_modals", listener)
+  }, [])
+
   return (
     <Modal show={show} closeModal={closeModal}>
       <div
@@ -64,7 +76,7 @@ const InvoiceModal = ({
             </div>
             <div className="flex items-center justify-between text-sm">
               <h5>Client</h5>
-              <h4 className="font-semibold text-rp-grey-1500">
+              <h4 className="font-semibold capitalize text-rp-grey-1500">
                 {invoice.clientName}
               </h4>
             </div>

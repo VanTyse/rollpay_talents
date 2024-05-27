@@ -4,3 +4,4 @@ const isAbsoluteUrl = (url: string): boolean => {
 
   return pattern.test(url)
 }
+export default isAbsoluteUrl

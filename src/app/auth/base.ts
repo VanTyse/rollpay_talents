@@ -103,6 +103,66 @@ const signIn = async (credentials: { email: string; password: string }) => {
   }
 }
 
+const signUp = async (credentials: {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone: string
+  phoneCode: string
+}) => {
+  try {
+    const { email, password, firstName, lastName, phone, phoneCode } =
+      credentials
+    const myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
+
+    const raw = JSON.stringify({
+      email,
+      password,
+      firstName,
+      lastName,
+      phone,
+      phoneCode,
+    })
+
+    const requestOptions: RequestInit = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      cache: "reload",
+      credentials: "omit",
+    }
+    const response = await fetch(
+      "https://rollpay-api.filmmakersmart.com/auth/register",
+      requestOptions
+    )
+
+    const data = await response.json()
+
+    let token_expire_date = new Date(Date.now() + 55 * 60 * 1000).toUTCString()
+
+    const signUpData = data as SignUpData
+
+    if (data.status == 200 || data.status == 201) {
+      const sessionData = {
+        user: signUpData.data.user,
+        access: signUpData.data.tokens.accessToken,
+        refresh: signUpData.data.tokens.refreshToken,
+        token_expire_date,
+      }
+
+      saveSession(sessionData, new Date(token_expire_date))
+      return { ok: true, error: false, data }
+    } else {
+      return { ok: false, error: "Signup failed", data: null }
+    }
+  } catch (error: any) {
+    console.log(error)
+    throw new Error(error)
+  }
+}
+
 const getSession = (): Session | null => {
   const response = CookiesHandler.getCookie(cookieName)
 
@@ -162,6 +222,7 @@ const logout = () => {
 
 const authController = {
   signIn,
+  signUp,
   logout,
   updateUserSession,
   getSession,

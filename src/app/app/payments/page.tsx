@@ -7,10 +7,18 @@ import { useContext, useState } from "react"
 import Button from "@/components/general/Button"
 import Icon from "@/components/Icons/Icon"
 import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
+import usePagination from "@/lib/hooks/usePagination"
+import { useViewPort } from "@/lib/hooks/useViewport"
 
 export default function Payments() {
   const { paymentRequests } = useContext(PaymentRequestContext)
   const [showRequestPaymentModal, setShowRequestPaymentModal] = useState(false)
+  const { width } = useViewPort()
+  const { paginatedItems, currentPage, setPage, lastPage } = usePagination({
+    items: paymentRequests,
+    enabled: width > 768,
+  })
+
   return (
     <main className="relative px-4 py-4 pb-32 md:pb-0 lg:px-0 lg:py-6">
       <header className="mb-4 flex items-start justify-between pt-6 md:mb-4 md:pb-3 lg:bg-inherit lg:px-4">
@@ -33,15 +41,20 @@ export default function Payments() {
       <Button
         variant="primary"
         className="fixed bottom-[120px] left-1/2 flex w-max -translate-x-1/2 items-center gap-1 rounded-full text-sm lg:hidden"
+        onClick={() => setShowRequestPaymentModal(true)}
       >
         <Icon name="plus" />
         <span>Request Payment</span>
       </Button>
 
       <div className="flex flex-col gap-10">
-        <PaymentsTable payments={paymentRequests} />
+        <PaymentsTable payments={paginatedItems} />
         <div className="hidden lg:block">
-          {/* <Pagination currentPage={7} setPage={() => null} lastPage={10} /> */}
+          <Pagination
+            currentPage={currentPage}
+            setPage={setPage}
+            lastPage={lastPage}
+          />
         </div>
       </div>
       <RequestPaymentModal

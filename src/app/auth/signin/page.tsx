@@ -12,6 +12,7 @@ import useAxios from "@/lib/hooks/useAxios"
 import newAxios from "axios"
 import { googleLogout, useGoogleLogin } from "@react-oauth/google"
 import PasswordInput from "@/components/forms/PasswordInput"
+import FadeImagesLoop from "@/components/general/FadeImagesInLoop"
 
 export interface ISignIn {
   email: string
@@ -149,7 +150,20 @@ export default function SignInPage() {
           </div>
         </div>
       </div>
-      <div className="hidden bg-rp-blue lg:block"></div>
+      <div className="hidden items-center justify-center bg-rp-blue lg:flex">
+        <FadeImagesLoop
+          images={[
+            "/images/auth_image_1.png",
+            "/images/auth_image_2.png",
+            "/images/auth_image_3.png",
+            "/images/auth_image_4.png",
+            "/images/auth_image_5.png",
+            "/images/auth_image_6.png",
+          ]}
+          fade={false}
+          intervalDuration={1500}
+        />
+      </div>
     </main>
   )
 }

@@ -56,6 +56,9 @@ export default function ({
     try {
       const { data } = await axios.post(`/invoices/${invoice?.id}/send`, values)
       toast.success("Invoice sent")
+
+      const event = new CustomEvent("close_all_invoice_modals")
+      window.dispatchEvent(event)
       closeModal()
     } catch (error) {
       console.log(error)

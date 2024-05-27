@@ -13,6 +13,8 @@ const Pagination = ({
   const handlePrev = () => currentPage > 1 && setPage(currentPage - 1)
   const handleNext = () => currentPage < lastPage && setPage(currentPage + 1)
 
+  if (lastPage < 2) return
+
   return (
     <div className="flex items-center justify-between gap-3">
       <button

@@ -1,6 +1,5 @@
 "use client"
 
-import { nav_items } from "@/lib/constants"
 import Icon from "../Icons/Icon"
 import SearchInput from "../general/SearchInput"
 import Link from "next/link"
@@ -11,11 +10,36 @@ import Avatar from "../general/Avatar"
 import { useContext } from "react"
 import { AuthContext } from "@/lib/context/AuthContext"
 import { useSession } from "@/app/auth/useSession"
+import { useViewPort } from "@/lib/hooks/useViewport"
+import { NavItem } from "@/lib/types"
 
 export default function Sidebar() {
   const currentPath = usePathname()
   const { userDetails } = useContext(AuthContext)
   const { logout } = useSession()
+  const { width, height } = useViewPort()
+  const nav_items: NavItem[] = [
+    {
+      name: "home",
+      icon_name: "home",
+      href: "/app",
+    },
+    {
+      name: "payments",
+      icon_name: "coins",
+      href: "/app/payments",
+    },
+    {
+      name: "paperwork",
+      icon_name: "paperwork",
+      href: "/app/paperwork",
+    },
+    {
+      name: "settings",
+      icon_name: "settings",
+      href: width > 768 ? "/app/settings/profile" : "/app/settings",
+    },
+  ]
 
   return (
     <aside className="hidden h-dvh flex-col justify-between bg-white lg:flex">

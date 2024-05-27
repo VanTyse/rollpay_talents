@@ -40,7 +40,7 @@ export const PaymentRequestContextProvider = ({
   const fetchPaymentRequests = useCallback(async () => {
     try {
       const { data } = await axios(
-        `/projects/${selectedProject?.id}/payment-requests`
+        `/payment-requests?talentId=${selectedProject?.talentId}`
       )
       return data.data as PaymentRequest[]
     } catch (error) {

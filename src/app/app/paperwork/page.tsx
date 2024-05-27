@@ -3,11 +3,29 @@
 import Icon from "@/components/Icons/Icon"
 import SearchInput from "@/components/general/SearchInput"
 import PaperworkTable from "./PaperworkTable"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { PaperworkContext } from "@/lib/context/PaperworkContext"
+import { useViewPort } from "@/lib/hooks/useViewport"
+import usePagination from "@/lib/hooks/usePagination"
+import Pagination from "@/components/general/Pagination"
+import { UploadPaperworkModal } from "./UploadPaperworkModal"
+import Button from "@/components/general/Button"
 
 export default function PaperworkPage() {
   const { paperworks, query, setQuery } = useContext(PaperworkContext)
+  const { width } = useViewPort()
+  const [showUploadPaperworkModal, setShowUploadPaperworkModal] =
+    useState(false)
+
+  const {
+    paginatedItems: paginatedPaperworks,
+    currentPage,
+    setPage,
+    lastPage,
+  } = usePagination({
+    items: paperworks,
+    enabled: width > 768,
+  })
   return (
     <main className="min-h-dvh px-4 py-4 pb-32 md:pb-0 lg:px-0 lg:py-6">
       <header className="mb-4 flex items-start justify-between pt-6 md:mb-4 md:pb-3 lg:bg-inherit lg:px-4">
@@ -18,13 +36,12 @@ export default function PaperworkPage() {
           <h3>Manage all paperwork here</h3>
         </div>
         <div className="hidden items-center gap-4 md:flex">
-          <button className="flex items-center gap-2 rounded-lg border border-rp-green-mint px-4 py-2.5 shadow-input">
-            <Icon name="import_icon" />
-            <span className="text-sm font-medium text-rp-grey-200">Import</span>
-          </button>
-          <button className="flex items-center gap-2 rounded-lg border border-rp-green-mint px-4 py-2.5 shadow-input">
+          <button
+            className="flex items-center gap-2 rounded-lg border border-rp-green-mint px-4 py-2.5 shadow-input"
+            onClick={() => setShowUploadPaperworkModal(true)}
+          >
             <Icon name="export_icon" />
-            <span className="text-sm font-medium text-rp-grey-200">Export</span>
+            <span className="text-sm font-medium text-rp-grey-200">Upload</span>
           </button>
         </div>
       </header>
@@ -37,7 +54,29 @@ export default function PaperworkPage() {
         placeholder="Search documents in this project"
       />
 
-      <PaperworkTable paperworks={paperworks} />
+      <div className="flex flex-col gap-10">
+        <PaperworkTable paperworks={paginatedPaperworks} />
+        <div className="hidden lg:block">
+          <Pagination
+            currentPage={currentPage}
+            setPage={setPage}
+            lastPage={lastPage}
+          />
+        </div>
+        <Button
+          variant="primary"
+          className="fixed bottom-[120px] left-1/2 flex w-max -translate-x-1/2 items-center gap-2 rounded-full text-sm lg:hidden"
+          onClick={() => setShowUploadPaperworkModal(true)}
+        >
+          <Icon name="export_icon" color="white" />
+
+          <span>Upload Paperwork</span>
+        </Button>
+      </div>
+      <UploadPaperworkModal
+        closeModal={() => setShowUploadPaperworkModal(false)}
+        show={showUploadPaperworkModal}
+      />
     </main>
   )
 }

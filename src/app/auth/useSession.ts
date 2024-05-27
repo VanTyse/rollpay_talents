@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { CUSTOM_EVENTS } from "@/lib/constants"
 import AuthController, { Session } from "./base"
 import { usePathname, useRouter } from "next/navigation"
+import { SignUpData } from "@/lib/context/AuthContext"
 
 interface ReturnType {
   session: Session | null
@@ -11,16 +12,33 @@ interface ReturnType {
     email: string
     password: string
   }) => Promise<{ ok: boolean; error: string | boolean }>
+  signUp: (credentials: {
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    phone: string
+    phoneCode: string
+  }) => Promise<{
+    ok: boolean
+    error: string | boolean
+    data: SignUpData | null
+  }>
   logout: () => void
 }
 
 export const useSession = (): ReturnType => {
   const [session, setSession] = useState(() => AuthController.getSession())
   const signIn = AuthController.signIn
+  const signUp = AuthController.signUp
   const logout = AuthController.logout
   const updateSession = AuthController.updateUserSession
   const router = useRouter()
   const pathname = usePathname()
+
+  useEffect(() => {
+    if (!session && !pathname.startsWith("/auth")) logout()
+  }, [session])
 
   useEffect(() => {
     setSession(AuthController.getSession())
@@ -60,5 +78,5 @@ export const useSession = (): ReturnType => {
     if (!session) logout()
   }, [session])
 
-  return { session, signIn, logout, updateSession }
+  return { session, signIn, logout, updateSession, signUp }
 }

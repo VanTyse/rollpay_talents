@@ -57,6 +57,17 @@ export function CreateInternalInvoice({ show, closeModal }: ModalProps) {
       }))
   }, [company])
 
+  useEffect(() => {
+    const listener = () => {
+      closeModal()
+    }
+
+    window.addEventListener("close_all_invoice_modals", listener)
+
+    return () =>
+      window.removeEventListener("close_all_invoice_modals", listener)
+  }, [])
+
   const amountValue = useMemo(() => {
     return formatAmountString(values.amount)
   }, [values.amount])
@@ -244,8 +255,6 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
         status: "pending",
         amount: +values.amount,
       })
-
-      console.log(data)
       const invoice = data.data as Invoice
       setInvoice(invoice)
       toast.success("Invoice created successfully")
@@ -270,6 +279,17 @@ export function CreateExternalInvoice({ show, closeModal }: ModalProps) {
       setCreating("failed")
     }
   }
+
+  useEffect(() => {
+    const listener = () => {
+      closeModal()
+    }
+
+    window.addEventListener("close_all_invoice_modals", listener)
+
+    return () =>
+      window.removeEventListener("close_all_invoice_modals", listener)
+  }, [])
 
   if (creating === "pending")
     return (

@@ -160,7 +160,7 @@ export default function OverviewPage() {
                 onChange={(e) => setQuery && setQuery(e.target.value)}
                 className="block w-full bg-inherit focus:outline-none"
                 containerClassname="w-full rounded-full mb-4 bg-white"
-                placeholder="Search your invoices"
+                placeholder="Search by client's name phone or email, amount and invoice number"
               />
             </div>
             <InvoiceTable invoices={invoices} />

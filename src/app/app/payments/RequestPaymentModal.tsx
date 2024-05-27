@@ -27,6 +27,7 @@ import { toast } from "sonner"
 import validateObject from "@/lib/utils/validateObject"
 import { PaymentRequestContext } from "@/lib/context/PaymentRequestsContext"
 import { useRouter } from "next/navigation"
+import { FileUpload } from "@/components/general/FileUpload"
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -157,7 +158,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
           setCreating("success")
           toast.success("Payment Request initiated successfully")
           refresh && refresh()
-          router.push('/app/payments')
+          router.push("/app/payments")
         })
         .catch((err) => {
           console.error(err)
@@ -169,7 +170,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
 
   const expenseOptions = useMemo(() => {
     return expenseCategories.map((category) => ({
-      label: category.name,
+      label: `${category.name.charAt(0).toUpperCase()}${category.name.slice(1)}`,
       value: category.id,
     }))
   }, [expenseCategories])
@@ -190,7 +191,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
 
   return (
     <Modal show={show} closeModal={closeModal}>
-      <div className="fixed left-1/2 h-lvh w-dvw max-w-[520px] -translate-x-1/2 overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[90dvh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-8">
+      <div className="fixed left-1/2 h-lvh w-dvw -translate-x-1/2 overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[90dvh] md:w-[90%] md:max-w-[520px] md:-translate-y-1/2 md:rounded-2xl md:py-8">
         <div className="mb-4 flex items-center">
           <button onClick={closeModal}>
             <Icon name="left_arrow" />
@@ -469,68 +470,6 @@ const Scan = ({
       >
         Cancel
       </Button>
-    </div>
-  )
-}
-
-const FileUpload = ({
-  show,
-  close,
-  onFileChange,
-}: {
-  show: boolean
-  close: () => void
-  onFileChange: (file: File) => void
-}) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const fileInput = useMemo(
-    () => fileInputRef.current && fileInputRef.current,
-    [fileInputRef.current]
-  )
-
-  useEffect(() => {
-    if (show && fileInput) fileInput.click()
-  }, [fileInput, show])
-
-  const reselect = () => {
-    fileInput && fileInput.click()
-  }
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0]
-      setSelectedFile(file)
-    }
-  }
-
-  useEffect(() => {
-    if (selectedFile) {
-      onFileChange(selectedFile)
-    }
-  }, [selectedFile])
-
-  return (
-    <div className={`${!show && "hidden"}`}>
-      <input
-        className="hidden"
-        type="file"
-        multiple
-        id="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-      />
-      <div className="flex flex-col gap-4">
-        <h1>File Selected: {selectedFile?.name}</h1>
-        <div className="grid grid-cols-2 gap-4">
-          <Button variant="secondary" onClick={reselect}>
-            Reselect
-          </Button>
-          <Button variant="secondary" onClick={close}>
-            Cancel
-          </Button>
-        </div>
-      </div>
     </div>
   )
 }

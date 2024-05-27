@@ -1,4 +1,11 @@
+import { IconType } from "@/components/Icons/Icons"
 import type { SVGProps } from "react"
+
+export type NavItem = {
+  name: string
+  icon_name: IconType
+  href: string
+}
 
 export interface IconPropTypes extends SVGProps<SVGSVGElement> {
   color?: string

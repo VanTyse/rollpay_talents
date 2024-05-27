@@ -1,11 +1,35 @@
 "use client"
 
-import { nav_items } from "@/lib/constants"
 import Icon from "../Icons/Icon"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useViewPort } from "@/lib/hooks/useViewport"
+import { NavItem } from "@/lib/types"
 export default function BottomMavigation() {
   const currentPath = usePathname()
+  const { width, height } = useViewPort()
+  const nav_items: NavItem[] = [
+    {
+      name: "home",
+      icon_name: "home",
+      href: "/app",
+    },
+    {
+      name: "payments",
+      icon_name: "coins",
+      href: "/app/payments",
+    },
+    {
+      name: "paperwork",
+      icon_name: "paperwork",
+      href: "/app/paperwork",
+    },
+    {
+      name: "settings",
+      icon_name: "settings",
+      href: width > 768 ? "/app/settings/profile" : "/app/settings",
+    },
+  ]
 
   return (
     <nav className="fixed bottom-0 left-0 z-10 w-full rounded-t-3xl bg-white px-6 pb-10 pt-4 shadow-bottom_nav lg:hidden">

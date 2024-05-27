@@ -20,7 +20,7 @@ export function LogoutModal({ show, closeModal }: ModalProps) {
   const { logout } = useSession()
   return (
     <Modal show={show} closeModal={closeModal}>
-      <div className="fixed left-1/2 w-dvw max-w-[376px] -translate-x-1/2 overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[90dvh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-8">
+      <div className="fixed left-1/2 top-1/2 w-[90%] max-w-[376px] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl bg-white p-4 md:max-h-[90dvh] md:py-8">
         <h1 className="mb-4 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200">
           Log Out
         </h1>

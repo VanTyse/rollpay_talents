@@ -126,7 +126,7 @@ export default function ProfilePage() {
       axios
         .patch(`/user/profile`, {
           ...formValues,
-          avatar: res?.url,
+          avatar: res?.url.split("?")[0],
         })
         .then((response) => {
           setLoading(false)
@@ -171,6 +171,7 @@ export default function ProfilePage() {
             firstName={userDetails.firstName}
             avatar={userDetails.avatar}
             size={64}
+            imageClassName="w-16"
           />
         )}
       </div>

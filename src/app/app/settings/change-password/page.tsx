@@ -44,7 +44,7 @@ export default function ChangePasswordPage() {
 
       const otpId = data.data.otpId
       setValues((v) => ({ ...v, otpId }))
-      toast.success("OTP sent!")
+      toast.success("OTP sent! Check your email.")
       setOtpLoading(false)
     } catch (error: any) {
       console.log(error)
@@ -154,11 +154,11 @@ export default function ChangePasswordPage() {
             />
             <Button
               variant="secondary"
-              className="col-span-6 block min-w-min animate-bounce hover:animate-none hover:text-rp-primary lg:col-span-3"
+              className="col-span-6 block min-w-min animate-bounce hover:animate-none lg:col-span-3"
               onClick={requestOtp}
               disabled={otpLoading}
             >
-              Send OTP
+              Request OTP
             </Button>
           </fieldset>
 

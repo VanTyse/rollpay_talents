@@ -3,7 +3,8 @@ import Table, { HeaderItem } from "@/components/general/Table"
 import { UtilsContext } from "@/lib/context/UtilsContext"
 import { Invoice } from "@/lib/types"
 import formatDateString from "@/lib/utils/formatDateString"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
+import { twMerge } from "tailwind-merge"
 
 interface Props {
   invoices: Invoice[]
@@ -75,7 +76,7 @@ export default function InvoiceTable({ invoices }: Props) {
           headerItems={headerItems}
           rowItems={invoices}
           RowItem={RowItem}
-          blankColumns={2}
+          blankColumns={1}
         />
       </div>
     </>
@@ -108,11 +109,50 @@ function RowItem({ invoiceNumber, createdAt, updatedAt, link }: Invoice) {
           <Icon name="download" />
         </button>
       </td>
-      <td>
+      {/* <td>
         <button className="px-2">
           <Icon name="three_dot_menu" />
         </button>
-      </td>
+      </td> */}
     </tr>
+  )
+}
+
+function InvoiceRowOptions({
+  invoice,
+  closeOptions,
+  className,
+}: {
+  invoice: Invoice
+  closeOptions: () => void
+  className?: string
+}) {
+  const { downloadFile } = useContext(UtilsContext)
+  const download = () => {
+    downloadFile &&
+      downloadFile({ link: invoice.link, download: true, mode: "link" })
+  }
+
+  useEffect(() => {
+    window.addEventListener("click", closeOptions)
+
+    return () => window.removeEventListener("click", closeOptions)
+  }, [])
+  return (
+    <div
+      className={twMerge(
+        `absolute right-8 top-14 z-10 flex flex-col gap-2 rounded bg-white px-2 py-3 shadow`,
+        className
+      )}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="flex w-[150px] items-center gap-2 py-2 hover:bg-rp-grey-1000"
+        onClick={download}
+      >
+        <Icon name="download" width={16} height={16} />
+        <h1 className="text-xs font-medium text-rp-blue-dark">Download</h1>
+      </button>
+    </div>
   )
 }

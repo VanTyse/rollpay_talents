@@ -38,7 +38,7 @@ export default function HomePage() {
     if (hasInvoiceMeta) setShowCreateInvoiceOptionsModal(true)
     else {
       toast.error(
-        "You need to fill your invoice meta details before creating an invoice. Redirecting..."
+        "You need to fill your invoice meta details before creating an invoice."
       )
       router.push("/app/settings/invoice-meta")
     }

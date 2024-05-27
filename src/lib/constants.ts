@@ -1,11 +1,5 @@
 import { IconType } from "@/components/Icons/Icons"
-
-type NavItem = {
-  name: string
-  icon_name: IconType
-  href: string
-}
-
+import { NavItem } from "./types"
 interface SettingsNavItem {
   name: string
   href: string
@@ -30,21 +24,21 @@ export const nav_items: NavItem[] = [
   {
     name: "settings",
     icon_name: "settings",
-    href: "/app/settings/profile",
+    href: "/app/settings",
   },
 ]
 
 export const settings_nav_items: SettingsNavItem[] = [
   {
     name: "profile",
-    href: "/app/settings",
+    href: "/app/settings/profile",
   },
   {
     name: "overview",
     href: "/app/settings/overview",
   },
   {
-    name: "invoice meta",
+    name: "invoice details",
     href: "/app/settings/invoice-meta",
   },
   {
@@ -69,3 +63,5 @@ export const CUSTOM_EVENTS = {
   UPDATE_SESSION: "UPDATE_SESSION",
   LOGOUT: "LOGOUT",
 } as const
+
+export const ITEMS_PER_PAGE = 10

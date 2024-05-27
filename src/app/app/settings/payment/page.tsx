@@ -130,7 +130,7 @@ export default function ChangePasswordPage() {
               }
             />
             <p className="text-sm">
-              Rollpay will file 5% with holding taxes on your behalf when you
+              Rollpay will file 5% withholding taxes on your behalf when you
               receive payments
             </p>
           </fieldset>

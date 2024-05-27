@@ -11,10 +11,14 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useContext, useState } from "react"
 import { toast } from "sonner"
+import { useSession } from "../useSession"
+import FadeImagesLoop from "@/components/general/FadeImagesInLoop"
 
 export default function SignUpPage() {
   const router = useRouter()
-  const axios = useAxios({})
+
+  const { signUp } = useSession()
+
   const { updateSignUpData } = useContext(AuthContext)
   const [values, setValues] = useState({
     email: "",
@@ -63,7 +67,7 @@ export default function SignUpPage() {
         )
       }
       try {
-        const { data } = await axios.post(`/auth/register`, {
+        const res = await signUp({
           email,
           firstName,
           lastName,
@@ -73,8 +77,7 @@ export default function SignUpPage() {
         })
         setIsLoading(false)
 
-        const signUpData = data as SignUpData
-        updateSignUpData && updateSignUpData(signUpData)
+        updateSignUpData && res.data && updateSignUpData(res.data)
 
         router.push("/auth/signup/verify-email")
       } catch (error: any) {
@@ -196,7 +199,20 @@ export default function SignUpPage() {
           </div>
         </div>
       </div>
-      <div className="hidden bg-rp-blue lg:block"></div>
+      <div className="hidden items-center justify-center bg-rp-blue lg:flex">
+        <FadeImagesLoop
+          images={[
+            "/images/auth_image_1.png",
+            "/images/auth_image_2.png",
+            "/images/auth_image_3.png",
+            "/images/auth_image_4.png",
+            "/images/auth_image_5.png",
+            "/images/auth_image_6.png",
+          ]}
+          fade={false}
+          intervalDuration={1500}
+        />
+      </div>
     </main>
   )
 }
