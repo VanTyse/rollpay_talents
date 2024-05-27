@@ -153,9 +153,10 @@ const signUp = async (credentials: {
       }
 
       saveSession(sessionData, new Date(token_expire_date))
+      // await requestOtp(signUpData.data.user.email)
       return { ok: true, error: false, data }
     } else {
-      return { ok: false, error: "Signup failed", data: null }
+      return { ok: false, error: data?.message ?? "Signup failed", data: null }
     }
   } catch (error: any) {
     console.log(error)
@@ -220,6 +221,17 @@ const logout = () => {
   }
 }
 
+const requestOtp = async (email: string) => {
+  try {
+    const { data } = await axios.post(`/auth/send/otp/new-email`, {
+      email,
+    })
+
+    const otpId = data.data.otpId
+  } catch (error: any) {
+    console.log(error)
+  }
+}
 const authController = {
   signIn,
   signUp,
@@ -228,6 +240,7 @@ const authController = {
   getSession,
   saveSession,
   refresh,
+  requestOtp,
 }
 
 export default authController

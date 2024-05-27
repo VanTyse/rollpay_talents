@@ -44,7 +44,6 @@ export default function SignUpPage() {
       ])
 
       if (invalidatedFields.length > 0) {
-        console.log(invalidatedFields)
         invalidatedFields.map((f) => toast.error(`Please provide ${f}`))
         setIsLoading(false)
         console.log(email)
@@ -75,11 +74,15 @@ export default function SignUpPage() {
           phone,
           phoneCode,
         })
-        setIsLoading(false)
 
         updateSignUpData && res.data && updateSignUpData(res.data)
 
-        router.push("/auth/signup/verify-email")
+        if (res.ok) {
+          router.push("/auth/signup/verify-email")
+        } else {
+          toast.error(res?.error)
+        }
+        setIsLoading(false)
       } catch (error: any) {
         console.log(error)
         setIsLoading(false)
