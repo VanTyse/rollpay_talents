@@ -56,7 +56,7 @@ export const PaperworkContextProvider = ({
   useEffect(() => {
     fetchPaperworks().then((paperworks) => {
       if (!paperworks) return
-      setPaperworks(paperworks)
+      setPaperworks(paperworks.reverse())
     })
   }, [selectedProject, query, session])
 

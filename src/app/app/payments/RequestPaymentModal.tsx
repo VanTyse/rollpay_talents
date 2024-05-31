@@ -178,7 +178,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
   if (creating === "pending")
     return (
       <Modal show={show} closeModal={closeModal}>
-        <div className="fixed left-1/2 flex h-lvh w-dvw max-w-[520px] -translate-x-1/2 items-center justify-center overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[50dvh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-6">
+        <div className="fixed left-1/2 flex h-svh w-dvw max-w-[520px] -translate-x-1/2 items-center justify-center overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[50dvh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-6">
           <div className="flex flex-col items-center gap-4">
             <Icon name="directory" />
             <span className="font-space_grotesk text-xl font-bold text-rp-blue-dark">
@@ -191,7 +191,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
 
   return (
     <Modal show={show} closeModal={closeModal}>
-      <div className="fixed left-1/2 h-lvh w-dvw -translate-x-1/2 overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[90dvh] md:w-[90%] md:max-w-[520px] md:-translate-y-1/2 md:rounded-2xl md:py-8">
+      <div className="fixed left-1/2 h-svh w-dvw -translate-x-1/2 overflow-y-auto rounded-none bg-white p-4 md:top-1/2 md:max-h-[90dvh] md:w-[90%] md:max-w-[520px] md:-translate-y-1/2 md:rounded-2xl md:py-8">
         <div className="mb-4 flex items-center">
           <button onClick={closeModal}>
             <Icon name="left_arrow" />
@@ -306,7 +306,6 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
               </div>
             )}
           </div>
-
           <Button
             variant="primary"
             className="mt-2 w-full"

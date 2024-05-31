@@ -55,7 +55,7 @@ export const FileUpload = ({
       />
       <div className="flex flex-col gap-6">
         <h1 className="flex flex-col items-center gap-1 text-xs">
-          <h3>File Selected: </h3>
+          <span>File Selected: </span>
           <span className="font-space_grotesk font-semibold text-rp-grey-200">
             {selectedFile?.name}
           </span>

@@ -46,7 +46,6 @@ export default function SignUpPage() {
       if (invalidatedFields.length > 0) {
         invalidatedFields.map((f) => toast.error(`Please provide ${f}`))
         setIsLoading(false)
-        console.log(email)
         return
       }
       const passwordRegex =

@@ -78,9 +78,8 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
           url,
           type: getFileExtension(file.name),
         })
-
-        console.log(data)
         toast.success("Paperwork uploaded successfully")
+        closeModal()
       } catch (error: any) {
         console.log(error)
         toast.error(

@@ -41,7 +41,7 @@ const InvoiceModal = ({
   return (
     <Modal show={show} closeModal={closeModal}>
       <div
-        className={`fixed left-1/2 h-lvh w-dvw max-w-[520px] -translate-x-1/2 rounded-none bg-rp-grey-1400  p-4 py-8 md:top-1/2  md:max-h-[90vh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-6 ${showSendEmail && "md:hidden"}`}
+        className={`fixed left-1/2 h-svh w-dvw max-w-[520px] -translate-x-1/2 rounded-none bg-rp-grey-1400  p-4 py-8 md:top-1/2  md:max-h-[90vh] md:w-[90%] md:-translate-y-1/2 md:rounded-2xl md:py-6 ${showSendEmail && "md:hidden"}`}
       >
         <div className="mb-8 flex w-full items-center justify-between">
           <button onClick={closeModal}>

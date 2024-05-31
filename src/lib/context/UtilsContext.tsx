@@ -140,13 +140,12 @@ export const UtilsContextProvider = ({
     mode: "link" | "name"
     callback?: (err: any, data: string | null) => void
   }) => {
-    console.log("downloading")
     if (mode === "link" && link) {
       if (download) {
         anchorRef.current!.href = link
         anchorRef.current?.click()
       }
-    } else {
+    } else if (mode === "name" && fileName) {
       try {
         const { data } = await axios(
           `/utilities/file-upload?fileName=${fileName}`
