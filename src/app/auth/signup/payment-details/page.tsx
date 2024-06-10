@@ -42,7 +42,7 @@ export default function AddPaymentDetailsPage() {
         </div>
         <div className="flex flex-1 flex-col px-4 pb-16 md:justify-center">
           <div className="mx-auto w-full lg:max-w-[370px]">
-            <h1 className="font-space_grotesk text-rp-grey-200 mb-2 text-2xl font-bold tracking-[-2%] md:mb-3 md:text-4xl">
+            <h1 className="mb-2 font-space_grotesk text-2xl font-bold tracking-[-2%] text-rp-grey-200 md:mb-3 md:text-4xl">
               Add payment details
             </h1>
             <h3 className="mb-8 text-sm">
@@ -110,10 +110,12 @@ export default function AddPaymentDetailsPage() {
           </div>
         </div>
         <div className="hidden items-center justify-between p-8 md:flex">
-          <p>© Rollpay2023</p>
+          <a href="https://www.rollpay.app/privacy-policy" target="_blank">
+            Terms
+          </a>
           <div className="flex items-center gap-2">
             <Icon name="envelope" />
-            <p>help@rollpay.com</p>
+            <a href="mailto:info@rollpay.com">info@rollpay.com</a>
           </div>
         </div>
       </div>

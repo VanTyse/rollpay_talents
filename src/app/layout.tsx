@@ -1,11 +1,9 @@
-import type { Metadata } from "next"
 import { Inter, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { AntdRegistry } from "@ant-design/nextjs-registry"
 import { ConfigProvider } from "antd"
 import theme from "./antd_theme"
 import { Toaster } from "sonner"
-import { AuthContextProvider } from "@/lib/context/AuthContext"
 import Providers from "./providers"
 
 const inter = Inter({ subsets: ["latin"] })

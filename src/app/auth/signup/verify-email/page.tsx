@@ -100,10 +100,12 @@ export default function VerifyEmailPage() {
             </div>
           </div>
           <div className="hidden items-center justify-between p-8 md:flex">
-            <p>© Rollpay2023</p>
+            <a href="https://www.rollpay.app/privacy-policy" target="_blank">
+              Terms
+            </a>
             <div className="flex items-center gap-2">
               <Icon name="envelope" />
-              <p>help@rollpay.com</p>
+              <a href="mailto:info@rollpay.com">info@rollpay.com</a>
             </div>
           </div>
         </div>
@@ -165,10 +167,10 @@ export default function VerifyEmailPage() {
           </div>
         </div>
         <div className="hidden items-center justify-between p-8 md:flex">
-          <p>© Rollpay2023</p>
+          <a href="https://www.rollpay.app/privacy-policy" target="_blank">Terms</a>
           <div className="flex items-center gap-2">
             <Icon name="envelope" />
-            <p>help@rollpay.com</p>
+            <a href="mailto:info@rollpay.com">info@rollpay.com</a>
           </div>
         </div>
       </div>

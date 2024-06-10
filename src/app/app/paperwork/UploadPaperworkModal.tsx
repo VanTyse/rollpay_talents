@@ -19,13 +19,14 @@ interface ModalProps {
 export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
   const [showFileUpload, setShowFileUpload] = useState<boolean>(false)
   const [file, setFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState(false)
   const { selectedProject, company } = useContext(ProjectContext)
   const axios = useAxios({})
 
   const handleFileUpload = async () => {
     if (file) {
       const fileName = file.name
+      setLoading(true)
 
       try {
         const { data } = await axios.post("/utilities/file-upload", {
@@ -60,6 +61,8 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
       }
     } catch (error) {
       console.log(error)
+      toast.error("file upload failed")
+      setLoading(false)
     }
   }
 
@@ -78,6 +81,7 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
           url,
           type: getFileExtension(file.name),
         })
+        setLoading(false)
         toast.success("Paperwork uploaded successfully")
         closeModal()
       } catch (error: any) {
@@ -87,6 +91,7 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
             error?.response?.data?.error?.message ??
             error?.message
         )
+        setLoading(false)
       }
     })
   }
