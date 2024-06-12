@@ -9,7 +9,7 @@ import useAxios from "@/lib/hooks/useAxios"
 import validateObject from "@/lib/utils/validateObject"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import { toast } from "sonner"
 import { useSession } from "../useSession"
 import FadeImagesLoop from "@/components/general/FadeImagesInLoop"
@@ -29,41 +29,51 @@ export default function SignUpPage() {
     phoneCode: "+234",
   })
   const [isLoading, setIsLoading] = useState(false)
-  const handleSignUp = async () => {
-    if (updateSignUpData) {
-      setIsLoading(true)
-      const { email, password, phone, firstName, lastName, phoneCode } = values
+  const passwordError = useMemo(() => {
+    const { password } = values
+    if (password) {
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$/
 
-      const invalidatedFields = validateObject(values, [
+      if (!passwordRegex.test(password)) {
+        return {
+          message: `Password must contain at least one uppercase letter, one lowercase
+            letter, one digit, and a special character. It must be at least 8 characters`,
+        }
+      }
+      return null
+    }
+  }, [values.password])
+
+  const invalidatedFields = useMemo(
+    () =>
+      validateObject(values, [
         "email",
         "password",
         "phone",
         "firstName",
         "lastName",
         "phoneCode",
-      ])
+      ]),
+    [values]
+  )
+
+  const isDisabled = useMemo(
+    () => isLoading || !!passwordError || invalidatedFields.length > 0,
+    [isLoading, passwordError, invalidatedFields]
+  )
+
+  const handleSignUp = async () => {
+    if (updateSignUpData) {
+      setIsLoading(true)
+      const { email, password, phone, firstName, lastName, phoneCode } = values
 
       if (invalidatedFields.length > 0) {
         invalidatedFields.map((f) => toast.error(`Please provide ${f}`))
         setIsLoading(false)
         return
       }
-      const passwordRegex =
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$/
 
-      if (!passwordRegex.test(password)) {
-        setIsLoading(false)
-
-        return toast.error(
-          <div>
-            <span className="mb-1 block">
-              Password must contain at least one uppercase letter, one lowercase
-              letter, one digit, and a special character.
-            </span>
-            <span>Its length must be between 8 and 30 characters.</span>
-          </div>
-        )
-      }
       try {
         const res = await signUp({
           email,
@@ -159,13 +169,14 @@ export default function SignUpPage() {
                   label={"Password"}
                   id="signin-password"
                   required
+                  error={passwordError}
                 />
               </fieldset>
               <Button
                 variant="primary"
                 className="mb-4 w-full"
                 onClick={handleSignUp}
-                disabled={isLoading}
+                disabled={isDisabled}
               >
                 {isLoading ? "Loading..." : "Sign Up"}
               </Button>

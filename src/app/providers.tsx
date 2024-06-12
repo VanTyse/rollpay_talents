@@ -7,7 +7,7 @@ import { PaymentRequestContextProvider } from "@/lib/context/PaymentRequestsCont
 import { ProjectContextProvider } from "@/lib/context/ProjectContext"
 import { UserDetailsContextProvider } from "@/lib/context/UserDetailsContext"
 import { UtilsContextProvider } from "@/lib/context/UtilsContext"
-import { ReactNode } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { useSession } from "./auth/useSession"
 import { usePathname } from "next/navigation"
 import { GoogleOAuthProvider } from "@react-oauth/google"
@@ -21,32 +21,21 @@ export default function Providers({
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <CheckAuth>
-        <UtilsContextProvider>
-          <AuthContextProvider>
-            <ProjectContextProvider>
-              <InvoiceContextProvider>
-                <PaperworkContextProvider>
-                  <UserDetailsContextProvider>
-                    <PaymentRequestContextProvider>
-                      {children}
-                    </PaymentRequestContextProvider>
-                  </UserDetailsContextProvider>
-                </PaperworkContextProvider>
-              </InvoiceContextProvider>
-            </ProjectContextProvider>
-          </AuthContextProvider>
-        </UtilsContextProvider>
-      </CheckAuth>
+      <UtilsContextProvider>
+        <AuthContextProvider>
+          <ProjectContextProvider>
+            <InvoiceContextProvider>
+              <PaperworkContextProvider>
+                <UserDetailsContextProvider>
+                  <PaymentRequestContextProvider>
+                    {children}
+                  </PaymentRequestContextProvider>
+                </UserDetailsContextProvider>
+              </PaperworkContextProvider>
+            </InvoiceContextProvider>
+          </ProjectContextProvider>
+        </AuthContextProvider>
+      </UtilsContextProvider>
     </GoogleOAuthProvider>
   )
-}
-
-const CheckAuth = ({ children }: { children: ReactNode }) => {
-  const { session } = useSession()
-  const pathname = usePathname()
-
-  if ((!session || !session.access) && pathname.startsWith("/app")) {
-    return <PageLoader />
-  } else return children
 }

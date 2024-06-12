@@ -50,7 +50,9 @@ const PasswordInput = ({
       </div>
       {error?.message && (
         <div className="flex gap-2">
-          <p className="text-rp-error-500">{error.message}</p>
+          <p className="font-space_grotesk text-sm text-red-500">
+            {error.message}
+          </p>
         </div>
       )}
     </div>
