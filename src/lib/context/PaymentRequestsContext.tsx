@@ -42,7 +42,7 @@ export const PaymentRequestContextProvider = ({
       const { data } = await axios(
         `/payment-requests?talentId=${selectedProject?.talentId}`
       )
-      return data.data as PaymentRequest[]
+      return data.data.data as PaymentRequest[]
     } catch (error) {
       console.log(error)
     }

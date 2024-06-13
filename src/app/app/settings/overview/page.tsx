@@ -104,7 +104,7 @@ export default function OverviewPage() {
             alt=""
           />
         </div>
-        <div className="relative flex flex-col gap-2 rounded-2xl bg-rp-blue-dark px-4 py-6 text-rp-purple-200 md:gap-16 md:px-20 md:py-12">
+        <div className="relative flex flex-col gap-2 rounded-2xl bg-rp-blue-dark px-4 py-6 text-rp-purple-200 md:gap-16 md:px-6 md:py-12">
           <div className="z-10 flex items-center justify-between">
             <div className="flex flex-col gap-4">
               <h3 className="text-xs md:text-base">Projects</h3>

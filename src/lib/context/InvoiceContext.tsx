@@ -48,7 +48,7 @@ export const InvoiceContextProvider = ({
       const { data } = await axios(`/invoices`, {
         signal,
       })
-      return data.data as Invoice[]
+      return data.data.data as Invoice[]
     } catch (error) {
       console.log(error)
     }

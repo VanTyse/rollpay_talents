@@ -47,7 +47,7 @@ export const PaperworkContextProvider = ({
         `/paperwork?projectId=${selectedProject.id}${query && `&search=${query}`}`,
         { signal }
       )
-      return data.data as Paperwork[]
+      return data.data.data as Paperwork[]
     } catch (error) {
       console.log(error)
     }
