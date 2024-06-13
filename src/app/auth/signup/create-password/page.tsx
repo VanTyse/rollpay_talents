@@ -72,7 +72,7 @@ export default function CreatePasswordPage() {
           </a>
           <div className="flex items-center gap-2">
             <Icon name="envelope" />
-            <a href="mailto:info@rollpay.com">info@rollpay.com</a>
+            <a href="mailto:info@rollpay.app">info@rollpay.app</a>
           </div>
         </div>
       </div>

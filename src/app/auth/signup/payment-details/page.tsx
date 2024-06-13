@@ -22,7 +22,7 @@ export default function AddPaymentDetailsPage() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Icon name="directory" />
-          <span className="font-space_grotesk text-rp-blue-dark text-xl font-bold">
+          <span className="font-space_grotesk text-xl font-bold text-rp-blue-dark">
             Creating Account...
           </span>
         </div>
@@ -115,7 +115,7 @@ export default function AddPaymentDetailsPage() {
           </a>
           <div className="flex items-center gap-2">
             <Icon name="envelope" />
-            <a href="mailto:info@rollpay.com">info@rollpay.com</a>
+            <a href="mailto:info@rollpay.app">info@rollpay.app</a>
           </div>
         </div>
       </div>

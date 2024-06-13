@@ -105,7 +105,7 @@ export default function VerifyEmailPage() {
             </a>
             <div className="flex items-center gap-2">
               <Icon name="envelope" />
-              <a href="mailto:info@rollpay.com">info@rollpay.com</a>
+              <a href="mailto:info@rollpay.app">info@rollpay.app</a>
             </div>
           </div>
         </div>
@@ -167,10 +167,12 @@ export default function VerifyEmailPage() {
           </div>
         </div>
         <div className="hidden items-center justify-between p-8 md:flex">
-          <a href="https://www.rollpay.app/privacy-policy" target="_blank">Terms</a>
+          <a href="https://www.rollpay.app/privacy-policy" target="_blank">
+            Terms
+          </a>
           <div className="flex items-center gap-2">
             <Icon name="envelope" />
-            <a href="mailto:info@rollpay.com">info@rollpay.com</a>
+            <a href="mailto:info@rollpay.app">info@rollpay.app</a>
           </div>
         </div>
       </div>
