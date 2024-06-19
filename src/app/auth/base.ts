@@ -124,6 +124,7 @@ const signUp = async (credentials: {
       lastName,
       phone,
       phoneCode,
+      type: "talent",
     })
 
     const requestOptions: RequestInit = {
