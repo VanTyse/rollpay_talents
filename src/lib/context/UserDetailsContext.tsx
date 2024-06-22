@@ -1,7 +1,7 @@
 "use client"
-import { createContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import useAxios from "../hooks/useAxios"
-import { useSession } from "@/app/auth/useSession"
+import { AuthContext } from "./AuthContext"
 
 type ContextType = {
   userAccount: UserAccount | null
@@ -36,13 +36,14 @@ export const UserDetailsContextProvider = ({
 }) => {
   const [userAccount, setUserAccount] = useState<UserAccount | null>(null)
   const [refreshCount, setRefreshCount] = useState(0)
-  const { session } = useSession()
+  const { accessToken } = useContext(AuthContext)
 
   const axios = useAxios({})
 
   const fetchUserAccount = async () => {
     try {
       const { data } = await axios(`/user/user-account`)
+      console.log(data.data)
       return data.data as UserAccount
     } catch (error) {
       console.log(error)
@@ -51,10 +52,13 @@ export const UserDetailsContextProvider = ({
 
   useEffect(() => {
     fetchUserAccount().then((userAccount) => {
-      if (!userAccount) return
+      if (!userAccount) {
+        setUserAccount(null)
+        return
+      }
       setUserAccount(userAccount)
     })
-  }, [refreshCount, session])
+  }, [refreshCount, accessToken])
 
   const forceRefresh = () => setRefreshCount((x) => x + 1)
 

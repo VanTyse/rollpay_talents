@@ -76,7 +76,9 @@ export const AuthContextProvider = ({
 
   useEffect(() => {
     if (session?.access) setAccessToken(session.access)
+    else setAccessToken(null)
     if (session?.refresh) setRefreshToken(session.refresh)
+    else setRefreshToken(null)
 
     if (session?.access && session?.refresh) {
       const { user } = session

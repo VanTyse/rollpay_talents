@@ -12,7 +12,6 @@ import useAxios from "../hooks/useAxios"
 import { Paperwork } from "../types"
 import { ProjectContext } from "./ProjectContext"
 import { AuthContext } from "./AuthContext"
-import { useSession } from "@/app/auth/useSession"
 
 type ContextType = {
   paperworks: Paperwork[]
@@ -30,7 +29,8 @@ export const PaperworkContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const { session } = useSession()
+  const { accessToken } = useContext(AuthContext)
+
   const axios = useAxios({})
   const [paperworks, setPaperworks] = useState<Paperwork[]>([])
   const [query, setQuery] = useState("")
@@ -55,10 +55,13 @@ export const PaperworkContextProvider = ({
 
   useEffect(() => {
     fetchPaperworks().then((paperworks) => {
-      if (!paperworks) return
+      if (!paperworks) {
+        setPaperworks([])
+        return
+      }
       setPaperworks(paperworks.reverse())
     })
-  }, [selectedProject, query, session])
+  }, [selectedProject, query, accessToken])
 
   return (
     <PaperworkContext.Provider

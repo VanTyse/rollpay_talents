@@ -80,10 +80,10 @@ export default function OverviewPage() {
         md:bg-inherit md:px-0 md:py-0"
     >
       <div className="relative mb-8 flex items-center md:hidden">
-        <Link href={"/app/settings"}>
+        <Link href={"/app/settings"} className="relative z-10">
           <Icon name="left_arrow" />
         </Link>
-        <h1 className="relative -left-4 flex-1 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200">
+        <h1 className="relative -left-6 flex-1 text-center font-space_grotesk text-2xl font-bold text-rp-grey-200">
           Overview
         </h1>
       </div>

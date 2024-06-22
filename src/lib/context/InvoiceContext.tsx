@@ -12,7 +12,6 @@ import useAxios from "../hooks/useAxios"
 import { Invoice } from "../types"
 import { ProjectContext } from "./ProjectContext"
 import { AuthContext } from "./AuthContext"
-import { useSession } from "@/app/auth/useSession"
 
 type ContextType = {
   invoices: Invoice[]
@@ -31,7 +30,8 @@ export const InvoiceContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const { session } = useSession()
+  const { accessToken } = useContext(AuthContext)
+
   const axios = useAxios({})
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [query, setQuery] = useState("")
@@ -56,10 +56,13 @@ export const InvoiceContextProvider = ({
 
   useEffect(() => {
     fetchInvoices().then((invoices) => {
-      if (!invoices) return
+      if (!invoices) {
+        setInvoices([])
+        return
+      }
       setInvoices(invoices.reverse())
     })
-  }, [selectedProject, session, refreshCount])
+  }, [selectedProject, accessToken, refreshCount])
 
   const validInvoices = useMemo(
     () => invoices.filter((i) => !!i.invoiceNumber),

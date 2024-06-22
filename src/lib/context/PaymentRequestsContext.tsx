@@ -32,6 +32,8 @@ export const PaymentRequestContextProvider = ({
   children: React.ReactNode
 }) => {
   const axios = useAxios({})
+  const { accessToken } = useContext(AuthContext)
+
   const [refreshCount, setRefreshCount] = useState(0)
 
   const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([])
@@ -42,11 +44,12 @@ export const PaymentRequestContextProvider = ({
       const { data } = await axios(
         `/payment-requests?talentId=${selectedProject?.talentId}`
       )
+      console.log("PR =>", data.data.data)
       return data.data.data as PaymentRequest[]
     } catch (error) {
       console.log(error)
     }
-  }, [selectedProject])
+  }, [selectedProject, axios])
 
   const earned_amount = useMemo(() => {
     return paymentRequests.reduce(
@@ -63,12 +66,15 @@ export const PaymentRequestContextProvider = ({
   }, [])
 
   useEffect(() => {
-    if (!selectedProject) return
+    if (!selectedProject) {
+      setPaymentRequests([])
+      return
+    }
     fetchPaymentRequests().then((paymentRequests) => {
       if (!paymentRequests) return
       setPaymentRequests(paymentRequests)
     })
-  }, [selectedProject, refreshCount])
+  }, [selectedProject, accessToken, refreshCount])
 
   const refresh = () => setRefreshCount((c) => c + 1)
 

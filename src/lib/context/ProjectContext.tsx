@@ -9,7 +9,6 @@ import {
 } from "react"
 import useAxios from "../hooks/useAxios"
 import { AuthContext } from "./AuthContext"
-import { useSession } from "@/app/auth/useSession"
 import { Project } from "../types"
 
 interface Company {
@@ -60,7 +59,6 @@ export const ProjectContextProvider = ({
 }) => {
   const { accessToken } = useContext(AuthContext)
   const axios = useAxios({})
-  const { session } = useSession()
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [company, setCompany] = useState<Company | null>(null)
@@ -85,11 +83,15 @@ export const ProjectContextProvider = ({
 
   useEffect(() => {
     fetchProjects().then((projects) => {
-      if (!projects) return
+      if (!projects) {
+        setSelectedProject(null)
+        setProjects([])
+        return
+      }
       setProjects(projects)
       setSelectedProject(projects[0])
     })
-  }, [session])
+  }, [accessToken])
 
   useEffect(() => {
     if (!selectedProject) return
