@@ -15,6 +15,7 @@ export default function ChangePasswordPage() {
   const [loading, setLoading] = useState(false)
   const { userAccount, forceRefresh } = useContext(UserDetailsContext)
   const { banks } = useContext(UtilsContext)
+  const [selectedBankCode, setSelectedBankCode] = useState<string | null>(null)
   const [values, setValues] = useState({
     accountNumber: userAccount?.accountNumber,
     accountName: userAccount?.accountName,
@@ -24,7 +25,7 @@ export default function ChangePasswordPage() {
 
   const bankOptions = useMemo(() => {
     return banks.map((bank) => ({
-      value: bank.name,
+      value: bank.code,
       label: bank.name,
     }))
   }, [])
@@ -54,8 +55,40 @@ export default function ChangePasswordPage() {
     } catch (error) {
       console.log(error)
       setLoading(false)
+      toast.error(
+        "Something went wrong. Please try again if details have not been updated."
+      )
     }
   }
+
+  const resolveAcctName = async () => {
+    try {
+      const { data } = await axios.get(
+        `/utilities/resolve-account-number?accountNumber=${values.accountNumber}&bankCode=${selectedBankCode}`
+      )
+      const accountName = data.data.accountName as string
+      console.log(accountName)
+      setValues((v) => ({ ...v, accountName }))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if (
+      !selectedBankCode ||
+      !values.accountNumber ||
+      values.accountNumber.length !== 10
+    ) {
+      setValues((v) => ({ ...v, accountName: "" }))
+      return
+    } else {
+      resolveAcctName()
+    }
+  }, [values.accountNumber, selectedBankCode])
+
+  console.log(values)
+
   return (
     <main
       className="bg-red fixed left-0 top-0 z-10 h-[calc(100lvh-105px)] w-dvw overflow-auto rounded-2xl bg-white px-4 py-6 md:static
@@ -80,6 +113,24 @@ export default function ChangePasswordPage() {
       >
         <div className="flex flex-col gap-6 border-b-rp-grey-1600 pb-6 md:px-4">
           <fieldset className="basis-1/2">
+            <Select
+              showSearch
+              label={"Bank"}
+              className="font-semibold text-rp-grey-1100"
+              options={bankOptions}
+              filterOption={filterOption}
+              defaultValue={values.bankName}
+              value={values.bankName}
+              onSelect={(value, option) => {
+                setSelectedBankCode(value)
+                setValues((v) => ({
+                  ...v,
+                  bankName: (option.label as string) ?? "",
+                }))
+              }}
+            />
+          </fieldset>
+          <fieldset className="basis-1/2">
             <TextInput
               label={"Account Number"}
               type="text"
@@ -97,28 +148,13 @@ export default function ChangePasswordPage() {
               type="text"
               className="text-rp-grey-1100"
               value={values.accountName}
-              onChange={(e) =>
-                setValues((v) => ({ ...v, accountName: e.target.value }))
-              }
+              // onChange={(e) =>
+              //   setValues((v) => ({ ...v, accountName: e.target.value }))
+              // }
+              disabled
             />
           </fieldset>
-          <fieldset className="basis-1/2">
-            <Select
-              showSearch
-              label={"Bank"}
-              className="font-semibold text-rp-grey-1100"
-              options={bankOptions}
-              filterOption={filterOption}
-              defaultValue={values.bankName}
-              value={values.bankName}
-              onSelect={(value) =>
-                setValues((v) => ({
-                  ...v,
-                  bankName: value,
-                }))
-              }
-            />
-          </fieldset>
+
           <fieldset className="basis-1/2">
             <TextInput
               label={"Tax Payers ID"}

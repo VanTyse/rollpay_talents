@@ -52,6 +52,7 @@ export default function SignInPage() {
 
       if (res?.ok) {
         router.push(res.redirect_path ?? "/")
+        localStorage.removeItem("redirect_path") //TODO: refactor redirects/callbackurl to be a query param instead (would probably need to dispatch custom events and pass the url)
         setIsLoading(false)
       } else {
         toast.error(res?.error)

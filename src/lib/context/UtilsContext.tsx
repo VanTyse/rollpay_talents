@@ -64,21 +64,21 @@ interface Countries {
 }
 
 interface Bank {
-  id: 302
-  name: "9mobile 9Payment Service Bank"
-  slug: "9mobile-9payment-service-bank-ng"
-  code: "120001"
-  longcode: "120001"
-  gateway: ""
-  pay_with_bank: false
-  supports_transfer: true
-  active: true
-  country: "Nigeria"
-  currency: "NGN"
-  type: "nuban"
-  is_deleted: false
-  createdAt: "2022-05-31T06:50:27.000Z"
-  updatedAt: "2022-06-23T09:33:55.000Z"
+  id: number
+  name: string
+  slug: string
+  code: string
+  longcode: string
+  gateway: string
+  pay_with_bank: boolean
+  supports_transfer: boolean
+  active: boolean
+  country: string
+  currency: string
+  type: string
+  is_deleted: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export const UtilsContextProvider = ({
