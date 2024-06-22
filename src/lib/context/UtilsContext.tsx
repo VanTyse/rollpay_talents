@@ -10,6 +10,7 @@ type ContextType = {
   expenseCategories: ExpenseCategory[]
   faqs: FAQ[]
   banks: Bank[]
+  departments: Department[]
   downloadFile?: (data: {
     fileName?: string
     link?: string | null
@@ -24,6 +25,7 @@ export const UtilsContext = createContext<ContextType>({
   expenseCategories: [],
   faqs: [],
   banks: [],
+  departments: [],
 })
 
 interface ExpenseCategory {
@@ -34,6 +36,21 @@ interface ExpenseCategory {
   name: string
   description: null
   deleted_at: null
+}
+
+interface Role {
+  id: string
+  name: string
+  description: null
+  slug: null
+}
+
+interface Department {
+  id: string
+  name: string
+  description: string
+  slug: string
+  roles: Role[]
 }
 
 interface Countries {
@@ -75,6 +92,7 @@ export const UtilsContextProvider = ({
   )
   const [faqs, setFaqs] = useState<FAQ[]>(questions)
   const [banks, setBanks] = useState<Bank[]>([])
+  const [departments, setDepartments] = useState<Department[]>([])
   const anchorRef = useRef<HTMLAnchorElement>(null)
 
   const axios = useAxios({})
@@ -106,6 +124,15 @@ export const UtilsContextProvider = ({
     }
   }
 
+  const fetchDepartments = async () => {
+    try {
+      const { data } = await axios(`/utilities/departments`)
+      return data.data as Department[]
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchCountries().then((countries) => {
       if (!countries) return
@@ -124,6 +151,13 @@ export const UtilsContextProvider = ({
     fetchBanks().then((banks) => {
       if (!banks) return
       setBanks(banks)
+    })
+  }, [])
+
+  useEffect(() => {
+    fetchDepartments().then((depts) => {
+      if (!depts) return
+      setDepartments(depts)
     })
   }, [])
 
@@ -170,6 +204,7 @@ export const UtilsContextProvider = ({
         expenseCategories,
         faqs,
         banks,
+        departments,
         downloadFile,
       }}
     >

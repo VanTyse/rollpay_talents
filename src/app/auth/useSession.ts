@@ -8,10 +8,11 @@ import { SignUpData } from "@/lib/context/AuthContext"
 interface ReturnType {
   session: Session | null
   updateSession: (session: Session) => void
-  signIn: (credentials: {
-    email: string
-    password: string
-  }) => Promise<{ ok: boolean; error: string | boolean }>
+  signIn: (credentials: { email: string; password: string }) => Promise<{
+    ok: boolean
+    error: string | boolean
+    redirect_path?: string | null
+  }>
   signUp: (credentials: {
     email: string
     password: string
@@ -24,7 +25,7 @@ interface ReturnType {
     error: string | boolean
     data: SignUpData | null
   }>
-  logout: () => void
+  logout: (args?: { redirect_path: string }) => void
 }
 
 export const useSession = (): ReturnType => {

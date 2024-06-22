@@ -93,7 +93,9 @@ const signIn = async (credentials: { email: string; password: string }) => {
       }
 
       saveSession(sessionData, new Date(token_expire_date))
-      return { ok: true, error: false }
+      const redirect_path = localStorage.getItem("redirect_path")
+
+      return { ok: true, error: false, redirect_path }
     } else {
       return { ok: false, error: "Invalid Credentials" }
     }
@@ -213,10 +215,13 @@ const updateUserSession = (session: Session) => {
   window.dispatchEvent(new Event(CUSTOM_EVENTS.UPDATE_SESSION))
 }
 
-const logout = () => {
+const logout = (args?: { redirect_path?: string }) => {
   try {
     CookiesHandler.deleteCookie(cookieName)
     window.dispatchEvent(new Event(CUSTOM_EVENTS.LOGOUT))
+    const redirect_path = args?.redirect_path
+
+    if (redirect_path) localStorage.setItem("redirect_path", redirect_path)
   } catch (error) {
     console.log(error)
   }

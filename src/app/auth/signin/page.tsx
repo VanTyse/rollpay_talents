@@ -51,7 +51,7 @@ export default function SignInPage() {
       })
 
       if (res?.ok) {
-        router.push("/")
+        router.push(res.redirect_path ?? "/")
         setIsLoading(false)
       } else {
         toast.error(res?.error)
@@ -110,7 +110,7 @@ export default function SignInPage() {
               >
                 Sign In
               </Button>
-              <Button
+              {/* <Button
                 variant="secondary"
                 className="mb-8 w-full"
                 onClick={() => loginWithGoogle()}
@@ -119,7 +119,7 @@ export default function SignInPage() {
                   <Icon name="googleicon" />
                   <span>Continue with Google</span>
                 </div>
-              </Button>
+              </Button> */}
               <Link href={"/auth/forgot-password"}>
                 <Button
                   variant="neutral"
