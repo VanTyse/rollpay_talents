@@ -122,9 +122,7 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
 
         return res
       }
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const handleRequestPayment = async () => {

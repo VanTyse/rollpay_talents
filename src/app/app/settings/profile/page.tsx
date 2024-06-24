@@ -116,9 +116,7 @@ export default function ProfilePage() {
 
         return res
       }
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const handleUpdateUserDetails = async () => {

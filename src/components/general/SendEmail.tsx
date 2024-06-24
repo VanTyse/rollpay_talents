@@ -60,9 +60,7 @@ export default function ({
       const event = new CustomEvent("close_all_invoice_modals")
       window.dispatchEvent(event)
       closeModal()
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   return (

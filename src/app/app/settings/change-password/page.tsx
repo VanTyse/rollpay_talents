@@ -47,7 +47,6 @@ export default function ChangePasswordPage() {
       toast.success("OTP sent! Check your email.")
       setOtpLoading(false)
     } catch (error: any) {
-      console.log(error)
       toast.error(error?.response?.data?.message ?? error.message ?? "")
       setOtpLoading(false)
     }
@@ -72,7 +71,6 @@ export default function ChangePasswordPage() {
       toast.success("Password reset successful")
       logout()
     } catch (error: any) {
-      console.log(error)
       toast.error(error?.response?.data?.message ?? error.message ?? "")
       setOtpLoading(false)
     }

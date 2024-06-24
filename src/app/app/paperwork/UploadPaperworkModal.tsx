@@ -39,9 +39,7 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
           mime: file.type,
           name: fileName,
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
     }
   }
 
@@ -60,7 +58,6 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
         return res
       }
     } catch (error) {
-      console.log(error)
       toast.error("file upload failed")
       setLoading(false)
     }
@@ -85,7 +82,6 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
         toast.success("Paperwork uploaded successfully")
         closeModal()
       } catch (error: any) {
-        console.log(error)
         toast.error(
           error?.response?.data?.message ??
             error?.response?.data?.error?.message ??

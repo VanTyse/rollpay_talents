@@ -49,9 +49,7 @@ export const InvoiceContextProvider = ({
         signal,
       })
       return data.data.data as Invoice[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }, [selectedProject])
 
   useEffect(() => {

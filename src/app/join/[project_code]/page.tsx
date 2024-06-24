@@ -63,7 +63,6 @@ export default function SignInPage() {
       const { data } = await axios.get(`/projects/project-code/${project_code}`)
       setProject(data.data)
     } catch (error: any) {
-      console.log(error)
       if (error?.response?.status === 401)
         logout({ redirect_path: `/join/${project_code}` })
     }
@@ -82,8 +81,6 @@ export default function SignInPage() {
     if (!department) return toast.error("Please select a department")
     if (!_roles || _roles.length < 1) return toast.error("Please select a role")
 
-    console.log(_roles)
-
     setIsLoading(true)
     try {
       const { data } = await axios.post(`/projects/join/${project_code}`, {
@@ -94,7 +91,6 @@ export default function SignInPage() {
       toast.success("Project joined successfully")
       router.push("/app")
     } catch (error: any) {
-      console.log(error)
       toast.error(
         error?.response?.data.message ??
           error?.message ??

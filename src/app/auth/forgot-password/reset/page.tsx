@@ -38,9 +38,7 @@ export default function SetPasswordPage() {
       setPasswordReset(true)
       const tokens = data.data.tokens as { access: string; refresh: string }
       setTokens(tokens)
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const handleMagicalSignIn = () => {

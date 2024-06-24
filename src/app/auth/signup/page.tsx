@@ -93,7 +93,6 @@ export default function SignUpPage() {
         }
         setIsLoading(false)
       } catch (error: any) {
-        console.log(error)
         setIsLoading(false)
         toast.error(
           error?.response?.data?.message ??

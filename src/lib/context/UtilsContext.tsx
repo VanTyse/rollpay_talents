@@ -101,36 +101,28 @@ export const UtilsContextProvider = ({
     try {
       const { data } = await axios(`/utilities/countries`)
       return data.data as Countries[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const fetchExpenseCategories = async () => {
     try {
       const { data } = await axios(`/utilities/expense-category`)
       return data.data as ExpenseCategory[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const fetchBanks = async () => {
     try {
       const { data } = await axios(`/utilities/banks`)
       return data.data as Bank[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const fetchDepartments = async () => {
     try {
       const { data } = await axios(`/utilities/departments`)
       return data.data as Department[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -191,7 +183,6 @@ export const UtilsContextProvider = ({
 
         callback && callback(null, data.data)
       } catch (error) {
-        console.log(error)
         callback && callback(error, null)
       }
     }

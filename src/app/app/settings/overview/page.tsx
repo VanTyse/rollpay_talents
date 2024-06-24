@@ -25,9 +25,7 @@ export default function OverviewPage() {
     try {
       const { data } = await axios(`/projects/${project?.id}/payment-requests`)
       return data.data as PaymentRequest[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   const [projectsWithBalance, setProjectsWithBalance] = useState<
@@ -59,7 +57,6 @@ export default function OverviewPage() {
 
           return { ...project, earned_amount, remaining_balance }
         } catch (error) {
-          console.log(error)
           return { ...project, earned_amount: 0, remaining_balance: 0 }
         }
       })

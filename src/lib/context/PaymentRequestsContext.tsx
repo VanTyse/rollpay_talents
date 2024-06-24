@@ -44,11 +44,8 @@ export const PaymentRequestContextProvider = ({
       const { data } = await axios(
         `/payment-requests?talentId=${selectedProject?.talentId}`
       )
-      console.log("PR =>", data.data.data)
       return data.data.data as PaymentRequest[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }, [selectedProject, axios])
 
   const earned_amount = useMemo(() => {

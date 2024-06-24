@@ -35,7 +35,6 @@ export default function VerifyEmailPage() {
       toast.success("Email verified!")
       router.push("/")
     } catch (error: any) {
-      console.log(error)
       toast.error(
         error?.response?.data?.message ??
           error?.response?.data?.error?.message ??
@@ -55,9 +54,7 @@ export default function VerifyEmailPage() {
       })
 
       toast.success("Please check your email")
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   if (isOTP)

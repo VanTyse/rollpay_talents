@@ -53,7 +53,6 @@ export default function ChangePasswordPage() {
       setLoading(false)
       forceRefresh && forceRefresh()
     } catch (error) {
-      console.log(error)
       setLoading(false)
       toast.error(
         "Something went wrong. Please try again if details have not been updated."
@@ -68,9 +67,7 @@ export default function ChangePasswordPage() {
       )
       const accountName = data.data.accountName as string
       setValues((v) => ({ ...v, accountName }))
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -85,9 +82,7 @@ export default function ChangePasswordPage() {
       resolveAcctName()
     }
   }, [values.accountNumber, selectedBankCode])
-
-  console.log(values)
-
+  
   return (
     <main
       className="bg-red fixed left-0 top-0 z-10 h-[calc(100lvh-105px)] w-dvw overflow-auto rounded-2xl bg-white px-4 py-6 md:static

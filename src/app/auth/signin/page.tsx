@@ -34,11 +34,9 @@ export default function SignInPage() {
           }
         )
         // setTimeout(() => googleLogout(), 5000)
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
     },
-    onError: (error) => console.log("Login Failed:", error),
+    // onError: (error) => console.log("Login Failed:", error),
   })
 
   const handleSignIn = async () => {
@@ -60,7 +58,7 @@ export default function SignInPage() {
       }
     } catch (error: any) {
       setIsLoading(false)
-      console.log(error)
+
       toast.error(error.message)
     }
   }

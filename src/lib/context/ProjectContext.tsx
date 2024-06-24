@@ -67,18 +67,14 @@ export const ProjectContextProvider = ({
     try {
       const { data } = await axios("/user/projects")
       return data.data as Project[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }, [accessToken])
 
   const fetchCompany = useCallback(async () => {
     try {
       const { data } = await axios(`/companies/${selectedProject?.companyId}`)
       return data.data as Company
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }, [selectedProject])
 
   useEffect(() => {

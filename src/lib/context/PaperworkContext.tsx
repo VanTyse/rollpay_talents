@@ -48,9 +48,7 @@ export const PaperworkContextProvider = ({
         { signal }
       )
       return data.data.data as Paperwork[]
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }, [selectedProject, query])
 
   useEffect(() => {

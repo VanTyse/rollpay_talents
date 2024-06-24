@@ -43,11 +43,8 @@ export const UserDetailsContextProvider = ({
   const fetchUserAccount = async () => {
     try {
       const { data } = await axios(`/user/user-account`)
-      console.log(data.data)
       return data.data as UserAccount
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {

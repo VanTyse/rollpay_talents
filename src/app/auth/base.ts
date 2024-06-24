@@ -100,7 +100,6 @@ const signIn = async (credentials: { email: string; password: string }) => {
       return { ok: false, error: "Invalid Credentials" }
     }
   } catch (error: any) {
-    console.log(error)
     throw new Error(error)
   }
 }
@@ -162,7 +161,6 @@ const signUp = async (credentials: {
       return { ok: false, error: data?.message ?? "Signup failed", data: null }
     }
   } catch (error: any) {
-    console.log(error)
     throw new Error(error)
   }
 }
@@ -222,9 +220,7 @@ const logout = (args?: { redirect_path?: string }) => {
     const redirect_path = args?.redirect_path
 
     if (redirect_path) localStorage.setItem("redirect_path", redirect_path)
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 const requestOtp = async (email: string) => {
@@ -234,9 +230,7 @@ const requestOtp = async (email: string) => {
     })
 
     const otpId = data.data.otpId
-  } catch (error: any) {
-    console.log(error)
-  }
+  } catch (error: any) {}
 }
 const authController = {
   signIn,
