@@ -59,14 +59,14 @@ export default function PaymentDetailsModal({
               {payment.amount}
             </h3>
           </div>
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <h1 className="text-sm text-rp-grey-900">PAYE Rate</h1>
             <h3 className="text-sm font-semibold text-rp-grey-1100">2%</h3>
-          </div>
+          </div> */}
           <div className="flex items-center justify-between">
             <h1 className="text-sm text-rp-grey-900">Amount Due</h1>
             <h3 className="text-sm font-semibold text-rp-grey-1100">
-              N148,000
+              {payment.amount}
             </h3>
           </div>
           <div className="flex items-center justify-between">
@@ -75,9 +75,9 @@ export default function PaymentDetailsModal({
             </h1>
           </div>
         </div>
-        <button className="flex h-12 w-full items-center justify-center rounded-lg border border-rp-green-mint text-sm font-medium text-rp-blue-dark shadow-input">
+        {/* <button className="flex h-12 w-full items-center justify-center rounded-lg border border-rp-green-mint text-sm font-medium text-rp-blue-dark shadow-input">
           Edit Request
-        </button>
+        </button> */}
       </div>
     </Modal>
   )
