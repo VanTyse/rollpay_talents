@@ -5,6 +5,7 @@ import { ConfigProvider } from "antd"
 import theme from "./antd_theme"
 import { Toaster } from "sonner"
 import Providers from "./providers"
+import Head from "next/head"
 
 const inter = Inter({ subsets: ["latin"] })
 const space_grotesk = Space_Grotesk({
@@ -25,6 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/rollpay.png"></link>
+      </Head>
       <body
         className={`${inter.className}
           ${space_grotesk.variable}

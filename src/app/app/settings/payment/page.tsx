@@ -67,7 +67,6 @@ export default function ChangePasswordPage() {
         `/utilities/resolve-account-number?accountNumber=${values.accountNumber}&bankCode=${selectedBankCode}`
       )
       const accountName = data.data.accountName as string
-      console.log(accountName)
       setValues((v) => ({ ...v, accountName }))
     } catch (error) {
       console.log(error)
