@@ -95,7 +95,7 @@ export default function Sidebar() {
               </h3>
             </div>
           </div>
-          <button onClick={logout}>
+          <button onClick={() => logout()}>
             <Icon name="logout" />
           </button>
         </div>

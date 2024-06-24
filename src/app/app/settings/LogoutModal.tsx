@@ -41,7 +41,7 @@ export function LogoutModal({ show, closeModal }: ModalProps) {
           <Button
             variant="primary"
             className="border-rp-red-100s w-full basis-1/2 bg-rp-red-100"
-            onClick={logout}
+            onClick={() => logout()}
           >
             Log Out
           </Button>
