@@ -1,6 +1,7 @@
 import Icon from "@/components/Icons/Icon"
 import Button from "@/components/general/Button"
 import Modal from "@/components/general/Modal"
+import NairaSymbol from "@/components/general/NairaSymbol"
 import SendEmail from "@/components/general/SendEmail"
 import { AuthContext } from "@/lib/context/AuthContext"
 import { InvoiceContext } from "@/lib/context/InvoiceContext"
@@ -89,7 +90,7 @@ const InvoiceModal = ({
             <div className="flex items-center justify-between text-sm">
               <h5>Amount</h5>
               <h4 className="font-semibold text-rp-grey-1500">
-                N{Number(invoice.amount).toLocaleString()}
+                <NairaSymbol /> {Number(invoice.amount).toLocaleString()}
               </h4>
             </div>
             <div className="flex items-center justify-between text-sm">

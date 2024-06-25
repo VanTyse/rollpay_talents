@@ -11,6 +11,7 @@ import { Payment as PaymentRequest } from "@/lib/types"
 import { InvoiceContext } from "@/lib/context/InvoiceContext"
 import InvoiceTable from "./InvoicesTable"
 import SearchInput from "@/components/general/SearchInput"
+import NairaSymbol from "@/components/general/NairaSymbol"
 
 export default function OverviewPage() {
   const [selectedTab, setSelectedTab] = useState<"projects" | "invoices">(
@@ -93,7 +94,7 @@ export default function OverviewPage() {
             </div>
           </div>
           <h1 className="text-xl font-semibold text-rp-grey-600 md:text-2xl lg:text-3xl">
-            N{projectsEarnings.toLocaleString()}
+            <NairaSymbol/> {projectsEarnings.toLocaleString()}
           </h1>
           <img
             src="/images/logo_icon_blue.png"

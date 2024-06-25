@@ -39,7 +39,7 @@ export default function Header() {
         Hi, Ayomide
       </h1>
       <div className="flex items-center gap-10">
-        <Icon name="bell" />
+        {/* <Icon name="bell" /> */}
         <Image width={40} height={40} src={"/images/avatar.png"} alt="avatar" />
       </div>
     </header>

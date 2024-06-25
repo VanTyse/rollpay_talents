@@ -7,6 +7,7 @@ import { useContext, useState } from "react"
 import { IconType } from "@/components/Icons/Icons"
 import { UtilsContext } from "@/lib/context/UtilsContext"
 import formatNumberString from "@/lib/utils/formatNumberString"
+import NairaSymbol from "@/components/general/NairaSymbol"
 
 interface Props {
   payments: Payment[]
@@ -93,7 +94,7 @@ function MobileRowItem({ payment }: { payment: Payment }) {
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <h1 className="mb-1 text-sm font-semibold">
-            N{formatNumberString(payment.amount)}
+            <NairaSymbol/> {formatNumberString(payment.amount)}
           </h1>
           <h3 className="flex items-center gap-0.5 text-xs capitalize text-[F0FDF4]">
             <CategoryIcon category={payment.category} width={16} height={16} />
@@ -131,7 +132,9 @@ function RowItem(payment: Payment) {
     >
       <td className="font-medium text-rp-grey-200">
         <h1 className="font-semibold">{payment.subject}</h1>
-        <h3 className="mt-1">N{formatNumberString(amount)}</h3>
+        <h3 className="mt-1">
+          <NairaSymbol /> {formatNumberString(amount)}
+        </h3>
       </td>
       <td className="capitalize">{formatDateString(new Date(createdAt))}</td>
       <td>

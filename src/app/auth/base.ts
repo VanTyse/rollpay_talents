@@ -85,6 +85,7 @@ const signIn = async (credentials: { email: string; password: string }) => {
     const signInData = data as SignUpData
 
     if (data.status == 200 || data.status == 201) {
+      let redirect_path: string | null = null
       const sessionData = {
         user: signInData.data.user,
         access: signInData.data.tokens.accessToken,
@@ -93,7 +94,12 @@ const signIn = async (credentials: { email: string; password: string }) => {
       }
 
       saveSession(sessionData, new Date(token_expire_date))
-      const redirect_path = localStorage.getItem("redirect_path")
+
+      redirect_path = localStorage.getItem("redirect_path")
+
+      if (!sessionData.user.emailVerified) {
+        redirect_path = `/auth/signup/verify-email?os=true`
+      }
 
       return { ok: true, error: false, redirect_path }
     } else {

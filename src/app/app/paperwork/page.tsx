@@ -3,19 +3,23 @@
 import Icon from "@/components/Icons/Icon"
 import SearchInput from "@/components/general/SearchInput"
 import PaperworkTable from "./PaperworkTable"
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import { PaperworkContext } from "@/lib/context/PaperworkContext"
 import { useViewPort } from "@/lib/hooks/useViewport"
 import usePagination from "@/lib/hooks/usePagination"
 import Pagination from "@/components/general/Pagination"
 import { UploadPaperworkModal } from "./UploadPaperworkModal"
 import Button from "@/components/general/Button"
+import { ProjectContext } from "@/lib/context/ProjectContext"
 
 export default function PaperworkPage() {
+  const { selectedProject } = useContext(ProjectContext)
   const { paperworks, query, setQuery } = useContext(PaperworkContext)
   const { width } = useViewPort()
   const [showUploadPaperworkModal, setShowUploadPaperworkModal] =
     useState(false)
+
+  const isButtonDisabled = useMemo(() => !!!selectedProject, [])
 
   const {
     paginatedItems: paginatedPaperworks,
@@ -37,8 +41,10 @@ export default function PaperworkPage() {
         </div>
         <div className="hidden items-center gap-4 md:flex">
           <button
-            className="flex items-center gap-2 rounded-lg border border-rp-green-mint px-4 py-2.5 shadow-input"
+            className="flex items-center gap-2 rounded-lg border border-rp-green-mint px-4 py-2.5 shadow-input 
+            disabled:opacity-50 disabled:hover:cursor-not-allowed"
             onClick={() => setShowUploadPaperworkModal(true)}
+            disabled={isButtonDisabled}
           >
             <Icon name="export_icon" />
             <span className="text-sm font-medium text-rp-grey-200">Upload</span>
@@ -67,8 +73,12 @@ export default function PaperworkPage() {
           variant="primary"
           className="fixed bottom-[120px] left-1/2 flex w-max -translate-x-1/2 items-center gap-2 rounded-full text-sm lg:hidden"
           onClick={() => setShowUploadPaperworkModal(true)}
+          disabled={isButtonDisabled}
         >
-          <Icon name="export_icon" color="white" />
+          <Icon
+            name="export_icon"
+            color={isButtonDisabled ? "#6B7280" : "white"}
+          />
 
           <span>Upload Paperwork</span>
         </Button>

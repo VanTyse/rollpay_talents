@@ -126,6 +126,12 @@ export default function RequestPaymentModal({ show, closeModal }: ModalProps) {
   }
 
   const handleRequestPayment = async () => {
+    if (!selectedProject) {
+      toast.error(
+        "You cannot create a payment request without selecting or belonging to a project."
+      )
+      return
+    }
     const inValidatedKeys = validateObject(formValues, [
       "amount",
       "categoryId",

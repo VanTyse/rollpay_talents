@@ -22,6 +22,7 @@ import Link from "next/link"
 import { UserDetailsContext } from "@/lib/context/UserDetailsContext"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import NairaSymbol from "@/components/general/NairaSymbol"
 
 type InvoiceType = { external: boolean } | { internal: boolean }
 
@@ -103,12 +104,14 @@ export default function HomePage() {
           Hi, {userDetails?.firstName} {userDetails?.lastName}
         </h1>
         <div className="flex items-center gap-10">
-          <Icon name="bell" />
+          {/* <Icon name="bell" /> */}
           {userDetails && (
-            <Avatar
-              avatar={userDetails.avatar}
-              firstName={userDetails.firstName}
-            />
+            <Link href="/app/settings/profile">
+              <Avatar
+                avatar={userDetails.avatar}
+                firstName={userDetails.firstName}
+              />
+            </Link>
           )}
         </div>
       </header>
@@ -121,7 +124,7 @@ export default function HomePage() {
           </div>
         </div>
         <h1 className="text-xl font-semibold text-rp-grey-600 md:text-2xl lg:text-3xl">
-          N{projectEarnings.toLocaleString()}
+          <NairaSymbol /> {projectEarnings.toLocaleString()}
         </h1>
         <img
           src="/images/logo_icon_blue.png"
@@ -171,7 +174,7 @@ export default function HomePage() {
                 key={index}
               >
                 <h1 className="mb-1 font-semibold text-rp-grey-1100">
-                  N{Number(payment.amount).toLocaleString()}
+                  <NairaSymbol /> {Number(payment.amount).toLocaleString()}
                 </h1>
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs capitalize">

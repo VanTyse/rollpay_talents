@@ -65,6 +65,12 @@ export function UploadPaperworkModal({ show, closeModal }: ModalProps) {
 
   const handleUpload = async () => {
     handleFileUploadToS3().then(async (res) => {
+      if (!selectedProject) {
+        toast.error(
+          "You cannot upload a paperwork without selecting or belonging to a project."
+        )
+        return
+      }
       if (!file) return toast.error("Please select a document")
       if (!res) return toast.error("Something went wrong during upload")
       const url = res.name.split("?")[0]
