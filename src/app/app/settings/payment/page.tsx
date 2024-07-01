@@ -67,7 +67,11 @@ export default function ChangePasswordPage() {
       )
       const accountName = data.data.accountName as string
       setValues((v) => ({ ...v, accountName }))
-    } catch (error) {}
+    } catch (error) {
+      toast.error(
+        "Failed to resolve account name. Please verify your bank and account number."
+      )
+    }
   }
 
   useEffect(() => {
@@ -82,7 +86,7 @@ export default function ChangePasswordPage() {
       resolveAcctName()
     }
   }, [values.accountNumber, selectedBankCode])
-  
+
   return (
     <main
       className="bg-red fixed left-0 top-0 z-10 h-[calc(100lvh-105px)] w-dvw overflow-auto rounded-2xl bg-white px-4 py-6 md:static

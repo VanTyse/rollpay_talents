@@ -2,36 +2,8 @@
 
 import CookiesHandler from "@/app/auth/cookie-handler"
 import { CUSTOM_EVENTS } from "@/lib/constants"
-import { SignUpData } from "@/lib/context/AuthContext"
+import { SignUpData, User } from "@/lib/context/AuthContext"
 import axios from "axios"
-
-import { useRouter } from "next/navigation"
-
-interface User {
-  id: string
-  firstName: string
-  lastName: string
-  middleName: string | null
-  email: string
-  phoneCode: string | null
-  phone: string
-  avatar: string | null
-  sex: "male" | "female" | null
-  emailVerified: boolean
-  phoneVerified: boolean
-  region: string | null
-  invoiceMeta: {
-    slogan: string | null
-    companyZip: string | null
-    companyCity: string | null
-    companyName: string | null
-    companyEmail: string | null
-    companyPhone: string | null
-    companyState: string | null
-    companyAddress: string | null
-    companyCountry: string | null
-  } | null
-}
 
 export interface Session {
   user: User
@@ -74,7 +46,7 @@ const signIn = async (credentials: { email: string; password: string }) => {
       credentials: "omit",
     }
     const response = await fetch(
-      "https://rollpay-api.filmmakersmart.com/auth/login",
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       requestOptions
     )
 
@@ -142,7 +114,7 @@ const signUp = async (credentials: {
       credentials: "omit",
     }
     const response = await fetch(
-      "https://rollpay-api.filmmakersmart.com/auth/register",
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
       requestOptions
     )
 

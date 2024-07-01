@@ -13,7 +13,6 @@ import { useContext, useMemo, useState } from "react"
 import { toast } from "sonner"
 import { useSession } from "../useSession"
 
-
 export default function SignUpPage() {
   const router = useRouter()
 
@@ -178,7 +177,7 @@ export default function SignUpPage() {
             >
               {isLoading ? "Loading..." : "Sign Up"}
             </Button>
-            <Button
+            {/* <Button
               variant="secondary"
               className="mb-8 w-full"
               onClick={handleSignUp}
@@ -187,7 +186,7 @@ export default function SignUpPage() {
                 <Icon name="googleicon" />
                 <span>Continue with Google</span>
               </div>
-            </Button>
+            </Button> */}
             <p className="text-center text-sm">
               Already have an account?{" "}
               <Link href={"/auth/signin"}>

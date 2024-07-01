@@ -38,7 +38,9 @@ export const useSession = (): ReturnType => {
   const pathname = usePathname()
 
   useEffect(() => {
-    if ((!session || !session.access) && !pathname.startsWith("/auth")) logout()
+    if ((!session || !session.access) && !pathname.startsWith("/auth")) {
+      logout()
+    }
   }, [session])
 
   useEffect(() => {

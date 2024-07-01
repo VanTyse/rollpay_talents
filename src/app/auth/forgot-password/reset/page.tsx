@@ -4,31 +4,65 @@ import Icon from "@/components/Icons/Icon"
 import TextInput from "@/components/forms/TextInput"
 import Button from "@/components/general/Button"
 import Link from "next/link"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import useAxios from "@/lib/hooks/useAxios"
-import { AuthContext } from "@/lib/context/AuthContext"
+import { AuthContext, User } from "@/lib/context/AuthContext"
 import { useSession } from "../../useSession"
+import PasswordInput from "@/components/forms/PasswordInput"
+import { toast } from "sonner"
+import errorToast from "@/lib/utils/errortoast"
+import { Session } from "../../base"
 
 export default function SetPasswordPage() {
   const [passwordReset, setPasswordReset] = useState(false)
   const [values, setValues] = useState({ password: "", confirmPassword: "" })
   const searchParams = useSearchParams()
   const { updateSession } = useContext(AuthContext)
+  const [isLoading, setIsLoading] = useState(false)
+  const [newSession, setNewSession] = useState<Session | null>(null)
   const { session } = useSession()
 
   const token = searchParams.get("token")
-
-  const [tokens, setTokens] = useState<{
-    refresh: string
-    access: string
-  } | null>(null)
-
   const axios = useAxios({})
   const router = useRouter()
 
+  const passwordError = useMemo(() => {
+    const { password } = values
+    if (password) {
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$/
+
+      if (!passwordRegex.test(password)) {
+        return {
+          message: `Password must contain at least one uppercase letter, one lowercase
+            letter, one digit, and a special character. It must be at least 8 characters`,
+        }
+      }
+      return null
+    }
+  }, [values.password])
+
+  const confirmPasswordError = useMemo(() => {
+    const { password, confirmPassword } = values
+    if (confirmPassword) {
+      if (!password) {
+        return {
+          message: "Please fill password input above",
+        }
+      } else {
+        if (password !== confirmPassword)
+          return {
+            message: "Passwords must match",
+          }
+      }
+    }
+  }, [values.confirmPassword, values.password])
+
   const resetPassword = async () => {
     const { password, confirmPassword } = values
+    if (password !== confirmPassword) return toast.error("Passwords must match")
+    setIsLoading(true)
     try {
       const { data } = await axios.post("/auth/reset/password/link", {
         token,
@@ -36,18 +70,41 @@ export default function SetPasswordPage() {
         confirmPassword,
       })
       setPasswordReset(true)
-      const tokens = data.data.tokens as { access: string; refresh: string }
-      setTokens(tokens)
-    } catch (error) {}
+      const tokens = data.data.tokens as {
+        accessToken: string
+        refreshToken: string
+      }
+      const user = data.data.user as User
+      let token_expire_date = new Date(
+        Date.now() + 55 * 60 * 1000
+      ).toUTCString()
+
+      setNewSession({
+        user: { ...user },
+        access: tokens.accessToken,
+        refresh: tokens.refreshToken,
+        token_expire_date,
+      })
+      setIsLoading(false)
+    } catch (error) {
+      errorToast(error, "Couldn't reset password")
+      setIsLoading(false)
+    }
   }
 
   const handleMagicalSignIn = () => {
-    tokens &&
-      session &&
-      updateSession &&
-      updateSession({ ...session, ...tokens })
-    router.push("/app")
+    toast.success("signing in")
+    newSession && updateSession && updateSession({ ...newSession })
   }
+
+  useEffect(() => {
+    if (
+      session &&
+      session.access &&
+      new Date(session.token_expire_date) > new Date()
+    )
+      router.push("/app")
+  }, [session])
 
   if (passwordReset)
     return (
@@ -106,7 +163,7 @@ export default function SetPasswordPage() {
         </h3>
         <form onClick={(e) => e.preventDefault()}>
           <fieldset className="mb-5 lg:mb-6">
-            <TextInput
+            <PasswordInput
               label={"Create Password"}
               id="signup-password"
               className="mb-2"
@@ -116,22 +173,26 @@ export default function SetPasswordPage() {
               onChange={(e) =>
                 setValues((v) => ({ ...v, password: e.target.value }))
               }
+              error={passwordError}
             />
-            <span className="text-xs">
-              Password must be at least 8 characters.
-            </span>
+            {/* <span className="text-xs">
+              Password must contain at least one uppercase letter, one lowercase
+              letter, one digit, and a special character. <br /> It must be at
+              least 8 characters
+            </span> */}
           </fieldset>
           <fieldset className="mb-5 lg:mb-4">
-            <TextInput
+            <PasswordInput
               label={"Confirm password"}
               id="signup-confirm-password"
               type="password"
               className="mb-2"
               required
-              value={values.password}
+              value={values.confirmPassword}
               onChange={(e) =>
                 setValues((v) => ({ ...v, confirmPassword: e.target.value }))
               }
+              error={confirmPasswordError}
             />
           </fieldset>
 
@@ -139,6 +200,7 @@ export default function SetPasswordPage() {
             variant="primary"
             className="mb-8 w-full font-medium"
             onClick={resetPassword}
+            disabled={isLoading}
           >
             Reset Password
           </Button>

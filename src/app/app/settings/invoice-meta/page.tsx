@@ -10,7 +10,7 @@ import Link from "next/link"
 import { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Avatar from "@/components/general/Avatar"
-import { AuthContext, UserDetails } from "@/lib/context/AuthContext"
+import { AuthContext, User } from "@/lib/context/AuthContext"
 import { UtilsContext } from "@/lib/context/UtilsContext"
 import validateObject from "@/lib/utils/validateObject"
 import useAxios from "@/lib/hooks/useAxios"
@@ -96,7 +96,7 @@ export default function InvoiceMetaPage() {
         setLoading(false)
 
         toast.success("Invoice meta updated successfully")
-        const newUserDetails = response.data.data as UserDetails
+        const newUserDetails = response.data.data as User
         if (session) {
           const newSession = {
             ...session,

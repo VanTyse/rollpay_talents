@@ -11,7 +11,7 @@ type ContextType = {
   accessToken: string | null
   refreshToken: string | null
   signUpData: SignUpData | null
-  userDetails: UserDetails | null
+  userDetails: User | null
   updateSignUpData?: (data: SignUpData) => void
   updateSession?: UpdateSession
 }
@@ -23,7 +23,7 @@ export const AuthContext = createContext<ContextType>({
   userDetails: null,
 })
 
-export interface UserDetails {
+export interface User {
   id: string
   firstName: string
   lastName: string
@@ -53,7 +53,7 @@ export interface SignUpData {
   status: number
   message: "Resource created"
   data: {
-    user: UserDetails
+    user: User
     tokens: {
       accessToken: string
       refreshToken: string
@@ -72,7 +72,7 @@ export const AuthContextProvider = ({
   const [accessToken, setAccessToken] = useState(session?.access ?? null)
   const [refreshToken, setRefreshToken] = useState(session?.refresh ?? null)
   const [signUpData, setSignUpData] = useState<SignUpData | null>(null)
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null)
+  const [userDetails, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     if (session?.access) setAccessToken(session.access)
@@ -82,7 +82,7 @@ export const AuthContextProvider = ({
 
     if (session?.access && session?.refresh) {
       const { user } = session
-      setUserDetails(user)
+      setUser(user)
     }
   }, [session, session?.access])
 

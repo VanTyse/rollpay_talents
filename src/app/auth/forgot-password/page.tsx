@@ -6,6 +6,7 @@ import Button from "@/components/general/Button"
 import useAxios from "@/lib/hooks/useAxios"
 import Link from "next/link"
 import { useState } from "react"
+import { toast } from "sonner"
 
 export default function ForgotPasswordPage() {
   const [emailSent, setEmailSent] = useState(false)
@@ -14,11 +15,20 @@ export default function ForgotPasswordPage() {
 
   const axios = useAxios({})
 
+  
+
   const sendEmail = async () => {
+    setIsLoading(true)
     try {
-      const { data } = await axios.post("/auth/forgot/password/link", { email })
+      const { data } = await axios.post("/auth/forgot/password/link", {
+        email,
+        url: "http://localhost:3000/auth/forgot-password/reset",
+      })
+      setIsLoading(false)
       setEmailSent(true)
+      toast.success("Password reset link sent to your email")
     } catch (error) {
+      setIsLoading(true)
       console.error(error)
     }
   }
@@ -39,11 +49,10 @@ export default function ForgotPasswordPage() {
           </h1>
           <h3 className="mb-8 text-center">
             We sent a password reset link to <br />{" "}
-            <span className="font-medium">olivia@gmail.com</span>
+            <span className="font-medium">{email}</span>
           </h3>
 
-          <Link href={"/auth/forgot-password/set"}>
-            {/* <Link href={"mailto:#"}> */}
+          <Link href={"mailto:#"}>
             <Button variant="primary" className="mb-8 w-full font-medium">
               Open email app
             </Button>
@@ -52,6 +61,7 @@ export default function ForgotPasswordPage() {
           <p className="mb-8 text-center text-sm">
             Didn’t receive the email?{" "}
             <Button
+              onClick={sendEmail}
               variant="neutral"
               className="mx-auto inline-block text-sm font-medium text-rp-blue-dark"
             >
