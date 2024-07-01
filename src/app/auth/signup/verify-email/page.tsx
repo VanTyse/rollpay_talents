@@ -153,7 +153,7 @@ export default function VerifyEmailPage() {
             onClick={handleVerification}
             disabled={otp.length !== 6 || loading}
           >
-            Verify email
+            {loading ? "Loading..." : "Verify email"}
           </Button>
           <p className="text-center text-sm">
             Didn’t receive the email?{" "}

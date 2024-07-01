@@ -8,8 +8,6 @@ import {
   CreateExternalInvoice,
   CreateInternalInvoice,
 } from "./CreateInvoiceModals"
-import Image from "next/image"
-import { Project } from "@/lib/types"
 
 import { ProfileLetter } from "@/components/layouts/Projects"
 import RequestPaymentModal from "./payments/RequestPaymentModal"
